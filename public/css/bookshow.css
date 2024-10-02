@@ -1,0 +1,152 @@
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevents scrolling */
+}
+
+.all {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Prevents internal scrolling */
+}
+
+.content {
+    flex: 1; /* Allows the content area to expand and take available space */
+    overflow: hidden; /* Prevents internal scrolling */
+}
+
+.flipbook-viewport {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    
+}
+
+.flipbook {
+    width: 100%;
+    height: 100%;
+}
+
+#nextButton {
+    display: none;
+    position: absolute;
+    top: 98%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 768px) {
+    #nextButton {
+        bottom: auto;
+        top: 530px; /* Adjust this value as needed */
+        left: 160px; /* Adjust this value as needed */
+    }
+}
+
+.page-2-background {
+    background-image: url('{{ asset('book/bookbg.png') }}');
+    background-size: 1000px 650px; /* Width and height in pixels */
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 700px;
+}
+@media (max-width: 992px) {
+    .page-2-background {
+        background-size: 800px 520px; /* Adjust size for medium screens */
+        margin-top: 500px; /* Adjust margin for medium screens */
+    }
+}
+
+/* Small screens (phones) */
+@media (max-width: 768px) {
+    .page-2-background {
+        background-size: 600px 390px; /* Adjust size for small screens */
+        margin-top: 300px; /* Adjust margin for small screens */
+    }
+}
+
+/* Extra small screens (small phones) */
+@media (max-width: 576px) {
+    .page-2-background {
+        background-size: 400px 260px; /* Adjust size for extra small screens */
+        margin-top: 150px; /* Adjust margin for extra small screens */
+    }
+}
+
+.swal2-popup.responsive-swal-dialog {
+    width: 90%;
+    max-width: 400px;
+    padding: 1rem; /* Adjust padding as needed */
+}
+
+@media (max-width: 576px) {
+    .swal2-popup.responsive-swal-dialog {
+        width: 95%;
+        max-width: 300px;
+        padding: 0.5rem; /* Adjust padding as needed */
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .swal2-popup.responsive-swal-dialog {
+        width: 90%;
+        max-width: 350px;
+        padding: 0.75rem; /* Adjust padding as needed */
+    }
+}
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it's above other content */
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.overlay-message {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    border-radius: 10px;
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 992px) {
+    .overlay-message {
+        font-size: 20px;
+        margin-left: 40px; /* Adjust margin for medium screens */
+      
+    }
+}
+
+/* Small screens (phones) */
+@media (max-width: 768px) {
+    .overlay-message {
+        font-size: 18px;
+        margin-left: 100px; /* Adjust margin for small screens */
+       
+    }
+}
+
+/* Extra small screens (small phones) */
+@media (max-width: 576px) {
+    .overlay-message {
+        font-size: 14px;
+        margin-left: -80px;
+        margin-top:-140px; /* Adjust margin for extra small screens */
+        
+    }
+}

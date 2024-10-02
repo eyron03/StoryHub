@@ -1,0 +1,110 @@
+/* Common button styles */
+#nextPage, #prevPage {
+    position: fixed;
+    bottom: 20px;
+    z-index: 1000;
+    padding: 10px 20px;
+    font-size: 16px;
+   
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+#prevPage {
+    display: none; 
+}
+
+
+#nextPage {
+   display:none;
+    bottom: 400px;
+    right: 400px;
+    position: fixed;
+    z-index: 1000;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#prevPage {
+    left: 400px;
+    bottom:350px;
+}
+
+
+.page-2-background #nextPage {
+    bottom:350px;
+    right: 150px;
+   
+
+    transform: translateY(-50%);
+}
+
+.page-2-background #prevPage {
+  
+    left: 150px;
+    bottom:350px;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    #nextPage {
+        right: 20px;
+    }
+
+    #prevPage {
+        left: 20px;
+    }
+
+    .page-2-background #nextPage {
+        right: 50px;
+        bottom: auto;
+        transform: translateY(-50%);
+    }
+
+    .page-2-background #prevPage {
+        left: 50px;
+        bottom: auto;
+        transform: translateY(-50%);
+    }
+}
+
+
+@media (max-width: 576px) {
+    #nextPage, #prevPage {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    #nextPage {
+        right: 325px;
+        bottom: 550px; 
+    }
+    
+
+    #prevPage {
+        left: 150px;
+        bottom: 500px; 
+    }
+
+    
+    .page-2-background #nextPage {
+        right: 300px;
+        bottom: 550px; 
+        transform: translateY(-50%);
+    }
+
+    .page-2-background #prevPage {
+        left: 120px;
+        bottom: 550px; 
+        transform: translateY(-50%);
+    }
+}

@@ -1,0 +1,52 @@
+   /* Pagination Container */
+   .pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Pagination List */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Pagination Items */
+.pagination li {
+    margin: 0 5px;
+}
+
+/* Pagination Links */
+.pagination a, .pagination span {
+    display: block;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #007bff; /* Bootstrap primary color */
+    text-decoration: none;
+    border: 1px solid #dee2e6; /* Bootstrap border color */
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Active Pagination Link */
+.pagination .active span {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Hover Effect */
+.pagination a:hover {
+    background-color: #e9ecef; /* Light gray background */
+    color: #0056b3; /* Darker blue for better contrast */
+}
+
+/* Disabled Links */
+.pagination .disabled span {
+    color: #6c757d; /* Bootstrap secondary color */
+    cursor: not-allowed;
+    background-color: #f8f9fa; /* Light background for disabled state */
+    border-color: #dee2e6;
+}

@@ -1,0 +1,200 @@
+body {
+    font-family: "Hammersmith One", sans-serif;
+    background-color: #fcfbe8 !important;
+
+}
+.all{
+    font-family: "Hammersmith One", sans-serif;
+}
+/*header*/
+.header{
+    background: #fcfbe8;
+    box-shadow: 0px 0px 3px black;
+    color:black;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.logo{
+    height:auto;
+    width:40px;
+}
+.title{
+    font-family: "Madimi One", sans-serif;
+    font-size:28px;
+    margin-left: 10px;
+    text-decoration: none;
+    color:black;
+
+}
+.account{
+    height:auto;
+    width:35px;
+}
+/*sidebar*/
+.sidebar {
+    width: 220px;
+    position: fixed;
+    background-color: #ffc107;
+    padding-top: 20px;
+    top: 60px;
+    bottom: 0;
+}
+.sidebar a {
+    padding: 15px;
+    text-decoration: none;
+    color: black;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+.sidebar a:hover {
+    background-color: #fcfbe8;
+    text-decoration: none;
+    color:black;
+}
+
+.sidebar img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+/*content*/
+.content {
+    padding: 20px;
+    margin-left: 220px;
+    margin-top: 70px;
+    margin-bottom: 20px;
+}
+
+
+/*tablet styles*/
+@media (max-width: 768px) {
+    .sidebar {
+        width: 180px;
+    }
+    .sidebar a {
+        font-size:14px;
+    }
+    .content {
+        padding: 20px;
+        margin-left: 180px;
+    }
+    .sidebar img {
+        width: 25px;
+        height: 25px;
+    }
+
+}
+/*phone styles*/
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding-top: 0;
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap onto the next line */
+        justify-content: flex-start; /* Align items at the start of the flex container */
+        align-items: center; /* Center items vertically */
+        top: auto; /* Reset top position */
+    }
+    .content {
+        margin-left: 0px;
+        padding: 10px;
+        margin-bottom: 70px;
+    }
+
+    .sidebar a {
+        display: flex;
+        flex-direction: column; /* Stack text and image vertically */
+        align-items: center; /* Center items horizontally */
+        text-align: center; /* Center text horizontally */
+        flex: 1 0 auto; /* Allow items to grow and shrink equally */
+        padding: 5px;
+        font-size: 12px;
+    }
+    .sidebar img {
+        width: 25px;
+        height: 25px;
+    }
+    .header{
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    .logo{
+        height:auto;
+        width:30px;
+    }
+    .title{
+        font-size:22px;
+        margin-left: 5px;
+    }
+    .account{
+        height:auto;
+        width:25px;
+    }
+
+}
+.search-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#search-input {
+    padding: 10px;
+    width: 300px; /* Adjust the width as needed */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#search-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #af9427; /* Example color, adjust as needed */
+}
+.search-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#search-input {
+    padding: 10px;
+    width: 300px; /* Adjust the width as needed */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#search-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Example color, adjust as needed */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #0056b3; /* Example color, adjust as needed */
+}
+
+

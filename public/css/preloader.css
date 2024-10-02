@@ -1,0 +1,4 @@
+#gifLoader img {
+  width: 100px; /* Adjust the size of the GIF loader */
+  height: auto;
+}

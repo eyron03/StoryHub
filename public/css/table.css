@@ -1,0 +1,37 @@
+   /* Responsive font size for mobile devices */
+   @media (max-width: 576px) {
+    .table thead th, .table tbody td {
+        font-size: 7px; /* Adjust this value as needed */
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .table thead th, .table tbody td {
+        font-size: 14px; /* Adjust this value as needed */
+    }
+}
+
+@media (min-width: 769px) {
+    .table thead th, .table tbody td {
+        font-size: 16px; /* Default font size for larger screens */
+    }
+}
+
+/* Responsive font size for buttons */
+@media (max-width: 576px) {
+    .btn-group .btn {
+        font-size: 7px; /* Adjust this value as needed */
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .btn-group .btn {
+        font-size: 14px; /* Adjust this value as needed */
+    }
+}
+
+@media (min-width: 769px) {
+    .btn-group .btn {
+        font-size: 16px; /* Default font size for larger screens */
+    }
+}
