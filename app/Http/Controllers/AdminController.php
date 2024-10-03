@@ -56,11 +56,11 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Admin registered successfully!');
     }
-    public function parentDashboard(Request $request)
+    public function parentDashboard(Request $request, $id = null) // Optional ID parameter
     {
         $today = now()->toDateString();
         $search = $request->input('search'); // Get the search term
-    
+        
         // Build the query to fetch parents with search functionality
         $query = Parents::query();
     
@@ -68,38 +68,21 @@ class AdminController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('pFname', 'LIKE', "%{$search}%")
                   ->orWhere('pLname', 'LIKE', "%{$search}%");
-                
             });
         }
     
         $parents = $query->paginate(5)->appends(['search' => $search]); // Preserve search term in pagination
     
+        // If an ID is provided, fetch the specific parent
+        $parent = $id ? Parents::find($id) : null;
+    
         return view('admin.parentDashboard', [
             'parents' => $parents,
+            'parent' => $parent, // Pass the specific parent if found
             'today' => $today,
             'search' => $search // Pass search term to the view
         ]);
     }
-    
-    public function viewParent($id)
-{
-    // Fetch the parent by ID and include the related children
-    $parent = Parents::with('children')->findOrFail($id);
-
-    // Prepare the response data
-    $response = [
-        'pFname' => $parent->pFname,
-        'pLname' => $parent->pLname,
-        'pAge' => $parent->pAge,
-        'pDob' => $parent->pDob,
-        'pAddress' => $parent->pAddress,
-        'pGender' => $parent->pGender,
-        'email' => $parent->email,
-        'childrenNames' => $parent->children->pluck('childFirstName')->toArray() // Collect children names
-    ];
-
-    return response()->json($response);
-}
 
 
 public function editParent($id)
@@ -113,7 +96,6 @@ public function updateParent(Request $request, $id)
     // Fetch the parent record by ID
     $parent = Parents::findOrFail($id);
 
-    // Validate the request input fields
     $request->validate([
         'pFname' => 'required|string|max:255',
         'pLname' => 'required|string|max:255',
@@ -138,7 +120,7 @@ public function updateParent(Request $request, $id)
     ]);
 
     // Redirect back to the parent's list or dashboard with a success message
-    return redirect()->route('admin.parentDashboard')->with('success', 'Parent details updated successfully');
+    return redirect()->route('admin.parentDashboard',compact('parent'))->with('success', 'Parent details updated successfully');
 }
 
 
@@ -463,49 +445,48 @@ public function storeTeacher(Request $request)
             ]);
         }
         
-    public function updateTeacher(Request $request, $id)
-    {
-        // Validate the request data
-        $request->validate([
-            'TeacherFirstName' => 'required|string|max:255',
-            'TeacherLastName' => 'required|string|max:255',
-            'TeacherAge' => 'required|integer',
-            'TeacherDob' => 'required|date',
-            'TeacherAddress' => 'required|string|max:255',
-            'TeacherGender' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:teachers,email,' . $id,
-            'GradeLvl' => 'required|string|max:255', // Add validation for Grade Level
-        ]);
-    
-        // Find the teacher record by ID and update it
-        $teacher = Teachers::findOrFail($id);
-        $teacher->TeacherFirstName = $request->TeacherFirstName;
-        $teacher->TeacherLastName = $request->TeacherLastName;
-        $teacher->TeacherAge = $request->TeacherAge;
-        $teacher->TeacherDob = $request->TeacherDob;
-        $teacher->TeacherAddress = $request->TeacherAddress;
-        $teacher->TeacherGender = $request->TeacherGender;
-        $teacher->email = $request->email;
-    
-        // Save the teacher record
-        $teacher->save();
-    
-        // Update the grade level in the related table
-        $teacher->gradeLevel()->updateOrCreate(
-            ['teacher_id' => $teacher->id], // Assuming there's a `teacher_id` foreign key in the grade level table
-            ['GradeLvl' => $request->GradeLvl] // Update the column name here
-        );
-    
-        // Set success message
-        session()->flash('success', 'Teacher updated successfully!');
-    
-        return redirect()->route('admin.teacherDashboard')->with('success', 'Teacher updated successfully.');
-    }
-    
-    
-
-    public function destroyTeacher($id)
-    {
+        public function updateTeacher(Request $request, $id)
+        {
+            // Validate the request data
+            $request->validate([
+                'TeacherFirstName' => 'required|string|max:255',
+                'TeacherLastName' => 'required|string|max:255',
+                'TeacherDob' => 'required|date',
+                'TeacherAddress' => 'required|string|max:255',
+                'TeacherGender' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:teachers,email,' . $id,
+                'GradeLvl' => 'required|string|max:255', // Add validation for Grade Level
+            ]);
+        
+            // Auto compute age from date of birth
+            $teacherAge = Carbon::parse($request->TeacherDob)->age;
+        
+            // Find the teacher record by ID and update it
+            $teacher = Teachers::findOrFail($id);
+            $teacher->TeacherFirstName = $request->TeacherFirstName;
+            $teacher->TeacherLastName = $request->TeacherLastName;
+            $teacher->TeacherAge = $teacherAge; // Set computed age
+            $teacher->TeacherDob = $request->TeacherDob;
+            $teacher->TeacherAddress = $request->TeacherAddress;
+            $teacher->TeacherGender = $request->TeacherGender;
+            $teacher->email = $request->email;
+        
+            // Save the teacher record
+            $teacher->save();
+        
+            // Update the grade level in the related table
+            $teacher->gradeLevel()->updateOrCreate(
+                ['teacher_id' => $teacher->id], // Assuming there's a `teacher_id` foreign key in the grade level table
+                ['GradeLvl' => $request->GradeLvl] // Update the column name here
+            );
+        
+            // Set success message
+            session()->flash('success', 'Teacher updated successfully!');
+        
+            return redirect()->route('admin.teacherDashboard')->with('success', 'Teacher updated successfully.');
+        }
+            public function destroyTeacher($id)
+         {
         // Find the teacher record by ID and delete it
         $teacher = Teachers::findOrFail($id);
         $teacher->delete();

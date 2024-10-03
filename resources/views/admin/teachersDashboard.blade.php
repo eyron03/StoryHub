@@ -452,7 +452,7 @@
         if (teacher) {
             $('#editTeacherFirstName').val(teacher.TeacherFirstName);
             $('#editTeacherLastName').val(teacher.TeacherLastName);
-            $('#editTeacherAge').val(teacher.TeacherAge);
+         
             $('#editTeacherDob').val(teacher.TeacherDob);
             $('#editTeacherAddress').val(teacher.TeacherAddress);
             $('#editTeacherGender').val(teacher.TeacherGender);
@@ -471,7 +471,7 @@
             $teacher->id => [
                 'TeacherFirstName' => $teacher->TeacherFirstName,
                 'TeacherLastName' => $teacher->TeacherLastName,
-                'TeacherAge' => $teacher->TeacherAge,
+               
                 'TeacherDob' => $teacher->TeacherDob,
                 'TeacherAddress' => $teacher->TeacherAddress,
                 'TeacherGender' => $teacher->TeacherGender,

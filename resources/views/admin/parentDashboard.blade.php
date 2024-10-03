@@ -225,45 +225,46 @@
                     </div>
                     <div  class="modal-body">
                         <!-- Parent information editing form will be loaded here -->
-
-                          <form id="editParentForm" action="/admin/parent/update/{{ $parent->id }}" method="post">
-                            @csrf
-                          @method('PUT')
+                        @if($parent)
                            
-                            <div class="mb-3">
-                                <label for="pFname" class="form-label">First Name:</label>
-                                <input type="text" class="form-control" id="pFname" name="pFname">
-                            </div>
-                            <div class="mb-3">
-                                <label for="pLname" class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" id="pLname" name="pLname">
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="pDob" class="form-label">Date of Birth:</label>
-                                <input type="date" class="form-control" id="pDob" name="pDob">
-                            </div>
-                            <div class="mb-3">
-                                <label for="pAddress" class="form-label">Address:</label>
-                                <input type="text" class="form-control" id="pAddress" name="pAddress">
-                            </div>
-                                 <div class="mb-3">
-                                <label for="pGender" class="form-label">Gender:</label>
-                                <select class="form-control" id="pGender" name="pGender">
-                                    <option value="Male" {{ $parent->pGender == 'Male' ? 'selected' : '' }}>Male</option>
-                                    <option value="Female" {{ $parent->pGender == 'Female' ? 'selected' : '' }}>Female</option>
-                                </select>
-                            </div>
-    
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="text" class="form-control" id="email" name="email">
-                            </div>
-                            <!-- Include other input fields for editing parent information -->
-                            <!-- Add more input fields as needed -->
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <form method="POST" action="{{ route('admin.parent.update', ['id' => $parent->id]) }}">
+                                @csrf
+                                @method('PUT')
 
-                        </form>
+                                <div class="mb-3">
+                                    <label for="pFname" class="form-label">First Name:</label>
+                                    <input type="text" class="form-control" id="pFname" name="pFname" value="{{ old('pFname', $parent->pFname) }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pLname" class="form-label">Last Name:</label>
+                                    <input type="text" class="form-control" id="pLname" name="pLname" value="{{ old('pLname', $parent->pLname) }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pDob" class="form-label">Date of Birth:</label>
+                                    <input type="date" class="form-control" id="pDob" name="pDob" value="{{ old('pDob', $parent->pDob) }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pAddress" class="form-label">Address:</label>
+                                    <input type="text" class="form-control" id="pAddress" name="pAddress" value="{{ old('pAddress', $parent->pAddress) }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pGender" class="form-label">Gender</label>
+                                    <select class="form-select" id="pGender" name="pGender" required>
+                                        <option value="Male" {{ $parent->pGender === 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ $parent->pGender === 'Female' ? 'selected' : '' }}>Female</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $parent->email) }}">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        @else
+                            <h3>No parent found with this ID.</h3>
+                        @endif
+
 
 
                     </div>
