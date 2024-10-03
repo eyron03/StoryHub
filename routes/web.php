@@ -18,7 +18,7 @@ use FontLib\Table\Type\name;
 //     return view('welcome');
 // });
 
-Route::get('/', action: function () {
+Route::get('/index', action: function () {
     return view('index');
 })->name('index');
 
@@ -143,7 +143,7 @@ Route::get('password/reset', function () {
     return view('auth.passwords.email');
 })->name('password.request');
 
-// Route to handle the password reset link request
+
 Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
 Route::get('password/reset/{token}', function ($token) {

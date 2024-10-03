@@ -39,12 +39,13 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.gmail.com'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+            'port' => env('MAIL_PORT', default: 587),
+            'encryption' => env('MAIL_ENCRYPTION', default: 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
+            'verify_peer' => false,
         ],
 
         'sendmail' => [
