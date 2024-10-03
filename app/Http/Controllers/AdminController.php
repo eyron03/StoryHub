@@ -83,7 +83,23 @@ class AdminController extends Controller
             'search' => $search // Pass search term to the view
         ]);
     }
-
+    public function viewParent($id)
+{
+    // Fetch the parent by ID and include the related children
+    $parent = Parents::with('children')->findOrFail($id);
+    // Prepare the response data
+    $response = [
+        'pFname' => $parent->pFname,
+        'pLname' => $parent->pLname,
+        'pAge' => $parent->pAge,
+        'pDob' => $parent->pDob,
+        'pAddress' => $parent->pAddress,
+        'pGender' => $parent->pGender,
+        'email' => $parent->email,
+        'childrenNames' => $parent->children->pluck('childFirstName')->toArray() // Collect children names
+    ];
+    return response()->json($response);
+}
 
 public function editParent($id)
 {
