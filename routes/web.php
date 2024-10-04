@@ -89,7 +89,7 @@ Route::get('/index', action: function () {
     Route::post('/flipbookstore', [FlipBookController::class, 'store'])->name('flipbookstore');
   
     Route::get('/{id}/edit', [FlipBookController::class, 'edit'])->name('editbook');
-    Route::put('/{id}', [FlipBookController::class, 'update'])->name('flipbook.update');
+    Route::put('/audioBook/{id}', [FlipBookController::class, 'update'])->name('flipbook.update');
     Route::delete('/{id}/edit', [FlipBookController::class, 'destroy'])->name('flipbook.destroy');
 
     
@@ -111,6 +111,8 @@ Route::get('/index', action: function () {
 });
 
     Route::get('/{id}', [FlipBookController::class, 'show'])->name('showbook');
+    Route::get('/audio/{id}', [FlipBookController::class, 'AudioBook'])->name('AudioBook');
+    Route::get('/admin/audioBook', action: [FlipBookController::class, 'indexAudioBook'])->name('flipbook.indexAudioBook');
     Route::get('/quiz/{id}', [FlipBookController::class, 'showquiz'])->name('showquiz');
 
     Route::middleware(['teacher'])->group(function(){

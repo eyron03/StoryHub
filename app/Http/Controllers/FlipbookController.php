@@ -14,24 +14,38 @@ class FlipbookController extends Controller
 {
     public function index(Request $request)
 {
-    // Get the search input from the request
+    // Get the search input and book type from the request
     $search = $request->input('search');
+    $bookType = $request->input('book_type'); // New filter for book type
     
-    // Build the query to fetch flipbooks with search functionality
+    // Build the query to fetch flipbooks with search and filter functionality
     $query = Flipbook::query();
 
+    // Apply search filter if present
     if ($search) {
         $query->where('book_name', 'LIKE', "%{$search}%");
     }
+
+    // Apply book type filter if present
+    if ($bookType) {
+        $query->where('book_type', $bookType);
+    }
     
-    $flipbooks = $query->paginate(12)->appends(['search' => $search]);
+    // Paginate the results, appending search and filter parameters
+    $flipbooks = $query->paginate(12)->appends([
+        'search' => $search,
+        'book_type' => $bookType, // Persist the selected book type
+    ]);
+
+    // Get today's date
     $today = now()->toDateString();
     
     // Pass the data to the view
     return view('bookindex', [
         'flipbooks' => $flipbooks,
         'today' => $today,
-        'search' => $search, // Pass search term to the view
+        'search' => $search,      // Pass search term to the view
+        'bookType' => $bookType,  // Pass book type filter to the view
     ]);
 }
 
@@ -43,77 +57,72 @@ class FlipbookController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $input = $request->all();
-        $images = "";
+{
+    $input = $request->all();
+    $images = "";
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $uploadedFile) {
-               
-                $filename = time() . '_' . uniqid() . '.' . $uploadedFile->getClientOriginalExtension();
-             
-                $uploadedFile->move(public_path('storyhub/images/'), $filename);
-                
-                $path = 'storyhub/images/' . $filename;
-             
-                $images .= $path . ",";
-            }
-            // Remove the trailing comma
-            $images = rtrim($images, ",");
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $uploadedFile) {
+            $filename = time() . '_' . uniqid() . '.' . $uploadedFile->getClientOriginalExtension();
+            $uploadedFile->move(public_path('storyhub/images/'), $filename);
+            $path = 'storyhub/images/' . $filename;
+            $images .= $path . ",";
         }
-    
-        // Assign concatenated image paths to the 'images' attribute
-        $input['images'] = $images;
-        $input['name'] = $input['book_name'];
-        // Create the flipbook
-        $flipbook = Flipbook::create($input);
-    
-        // Validate quiz data
-        $counter = $request->counter;
-    
-        // Validate and save quiz data
-        for ($i = 1; $i <= $request->counter; $i++) {
-            // Validate each quiz question
-            $validatedQuizData = $request->validate([
-                "quiz_question_$i" => 'required|string',
-                "option_a_$i" => 'required|string',
-                "option_b_$i" => 'required|string',
-                "option_c_$i" => 'required|string',
-                "option_d_$i" => 'required|string',
-                "correct_answer_$i" => 'required|string',
-            ]);
-    
-            // Create a new quiz associated with the flipbook
-            $quiz = new Quiz([
-                'quiz_question' => $validatedQuizData["quiz_question_$i"],
-                'option_a' => $validatedQuizData["option_a_$i"],
-                'option_b' => $validatedQuizData["option_b_$i"],
-                'option_c' => $validatedQuizData["option_c_$i"],
-                'option_d' => $validatedQuizData["option_d_$i"],
-                'correct_answer' => $validatedQuizData["correct_answer_$i"],
-            ]);
-    
-            // Save the quiz associated with the flipbook
-            $flipbook->quizzes()->save($quiz);
-        }
-    
-        // Log the successful addition of the flipbook
-        Log::info('Book added successfully:', [
-            
-            'BookTitle' => $flipbook->book_name, 
-            'BookDescription' => $flipbook->desc,// Assuming there's a title field
-            
-        ]);
-    
-        // Redirect back to the index page
-        return redirect()->route('flipbook.index');
+        $images = rtrim($images, ","); // Remove the trailing comma
     }
+
+    // Assign concatenated image paths and book type to the input
+    $input['images'] = $images;
+    $input['name'] = $input['book_name'];
+    $input['book_type'] = $request->input('book_type'); // Add book type
+
+    // Create the flipbook
+    $flipbook = Flipbook::create($input);
+
+    // Validate and save quiz data
+    for ($i = 1; $i <= $request->counter; $i++) {
+        $validatedQuizData = $request->validate([
+            "quiz_question_$i" => 'required|string',
+            "option_a_$i" => 'required|string',
+            "option_b_$i" => 'required|string',
+            "option_c_$i" => 'required|string',
+            "option_d_$i" => 'required|string',
+            "correct_answer_$i" => 'required|string',
+        ]);
+
+        $quiz = new Quiz([
+            'quiz_question' => $validatedQuizData["quiz_question_$i"],
+            'option_a' => $validatedQuizData["option_a_$i"],
+            'option_b' => $validatedQuizData["option_b_$i"],
+            'option_c' => $validatedQuizData["option_c_$i"],
+            'option_d' => $validatedQuizData["option_d_$i"],
+            'correct_answer' => $validatedQuizData["correct_answer_$i"],
+        ]);
+
+        $flipbook->quizzes()->save($quiz);
+    }
+
+    Log::info('Book added successfully:', [
+        'BookTitle' => $flipbook->book_name,
+        'BookDescription' => $flipbook->desc,
+    ]);
+
+    return redirect()->route('flipbook.index');
+}
+
         public function show($id)
     {
         $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
         $images = explode(",", $flipbooks->images);
 
         return view('showbook', compact('flipbooks', 'images'));
+    }
+    public function AudioBook($id)
+    {
+        $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
+        $images = explode(",", $flipbooks->images);
+
+        return view('audiobook', data: compact('flipbooks', 'images'));
     }
     public function showquiz($id) {
         $quizQuestions = Quiz::where('flipbook_id', $id)->get();
