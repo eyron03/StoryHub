@@ -157,17 +157,29 @@
         <div class="flipbook-viewport">
             <div class="container">
                 <div class="flipbook">
-                    @foreach($images as $page)
-                    <video id="portraitVideo" controls>
-                        <source src="{{ asset($page) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    
-                    
-                        
-                        
+                    @foreach($images as $index => $page)
+                        @if ($index == 0)
+                            <!-- Content for the first page (non-video) -->
+                            <div class="first-page-content">
+                                <img src="{{ asset($page) }}" alt="First Page" style="width: 100%; height: 100%;">
+                                <!-- You can replace <img> with any other HTML content you want -->
+                            </div>
+                        @elseif ($index == count($images) - 1)
+                            <!-- Content for the last page (non-video) -->
+                            <div class="last-page-content">
+                                <img src="{{ asset($page) }}" alt="Last Page" style="width: 100%; height: auto;">
+                                <!-- You can replace <img> with any other HTML content you want -->
+                            </div>
+                        @else
+                            <!-- Video content for middle pages -->
+                            <video id="portraitVideo" controls>
+                                <source src="{{ asset($page) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        @endif
                     @endforeach
                 </div>
+                
             </div>
         </div>
         <div class="d-flex justify-content-between">

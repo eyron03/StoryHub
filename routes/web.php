@@ -59,6 +59,7 @@ Route::get('/index', action: function () {
     Route::post('/parent/change-password', [ParentsController::class, 'changePassword'])->name('parent.changePassword');
     Route::get('/parent/storybook/{childId}',[ParentsController::class,'storybook'])->name('parent.storybook');
     Route::get('/parent/storybook/bookshow/{id}/{childId}', [ParentsController::class, 'bookshow'])->name('parent.bookshow');
+    Route::get('/parent/storybook/bookshowAudio/{id}/{childId}', [ParentsController::class, 'bookshowAudio'])->name('parent.bookshowAudio');
     Route::get('/parent/storybook/bookshow/quiz/{id}/{childId}', [QuizController::class, 'quizshow'])->name('parent.quizshow');
     Route::post('parent/storybook/bookshow/quiz/child/{id}/{childId}', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
 

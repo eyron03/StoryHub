@@ -250,10 +250,7 @@
         @if($fb->book_type == 'video')
         <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
             <a href="{{ route('AudioBook', $fb->id) }}" style="float: left; clear: both;">
-            <video class="img-thumbnail" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" controls>
-                <source src="{{ asset(explode(',', $fb->images)[0]) }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
             </a>
             <br>
             <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>

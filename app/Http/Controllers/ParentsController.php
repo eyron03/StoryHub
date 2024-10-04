@@ -204,6 +204,25 @@ public function bookshow(Request $request, $id,$child)
     // Return the view with the flipbook, images, and child ID
     return view('parents.bookshow', compact('flipbook', 'images', 'childId','readingProgress','today'));
 }
+public function bookshowAudio(Request $request, $id,$child)
+{
+    
+    // Retrieve the flipbook with the given ID and its associated quizzes
+    $flipbook = Flipbook::with('quizzes')->find($id);
+    $today = now()->toDateString();
+    // Retrieve the parent ID from the session
+    $parentId = $request->session()->get('logged_in_parent_id');
+
+    // Retrieve the child associated with the parent and flipbook
+    $childId=Children::find($child);
+
+    // Extract images from the flipbook
+    $images = explode(",", optional($flipbook)->images);
+    $readingProgress = $request->session()->get('readingProgress');
+
+    // Return the view with the flipbook, images, and child ID
+    return view('parents.bookshowAudio', compact('flipbook', 'images', 'childId','readingProgress','today'));
+}
 public function editChild($id)
 {
     // Find the child by ID or fail if not found

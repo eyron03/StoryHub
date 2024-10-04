@@ -7,7 +7,6 @@
     <link rel="icon" href="{{ asset('book\icon.png') }}" type="image/png">
     <!-- Bootstrap core CSS -->
 
-
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{{ asset('css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
 
@@ -123,6 +122,19 @@
          
     
             <br>
+            <div class="mt-3 d-flex justify-content-center">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter Books
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <li><a class="dropdown-item" href="#" id="showAll">Show All</a></li>
+                        <li><a class="dropdown-item" href="#" id="showVideos">Show Videos</a></li>
+                        <li><a class="dropdown-item" href="#" id="showGifs">Show GIFs</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
             <br>
             <br>
             <form action="{{ route('parent.storybook',['childId' => $childId]) }}" method="GET">
@@ -145,26 +157,40 @@
             </div>
     
             <div class="row" id="bookList">
-                <!-- Book elements -->
                 @foreach($flipbooks as $fb)
-                    <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book" >
+                    <!-- Video Display -->
+                    @if($fb->book_type == 'video')
+                    <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
                         <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
-                            <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px; margin-left:-15px; " src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
-                         
-                            
+                            <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
                         </a>
-                        <br><br>
-                        <span style="font-size: 13px; font-weight: bold; color: #333;  margin-left:-20px;">{{ $fb->book_name }}</span>
-              
-                        <p style="font-size: 12px; color: #666; text-align: left; margin-left: 0px;">
+                        <br>
+                        <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
+                        <p style="font-size: 11px; color: #666;">
                             <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
                             <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
                             <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
                         </p>
-                        
-                        
-                        
+                       
                     </div>
+                    @endif
+            
+                    <!-- GIF Display -->
+                    @if($fb->book_type == 'gif')
+                    <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
+                        <a href="{{ route('parent.bookshowAudio', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
+                            <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+                        </a>
+                        <br><br><br><br><br><br><br><br><br>
+                        <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
+                        <p style="font-size: 11px; color: #666;">
+                            <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
+                            <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
+                            <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
+                        </p>
+                       
+                    </div>
+                    @endif
                 @endforeach
             </div>
             <div class="mt-4 pagination-wrapper d-flex justify-content-center">
@@ -193,7 +219,39 @@
         });
     </script>
     
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const showAllBtn = document.getElementById('showAll');
+            const showVideosBtn = document.getElementById('showVideos');
+            const showGifsBtn = document.getElementById('showGifs');
+            const books = document.querySelectorAll('.book');
+        
+            showAllBtn.addEventListener('click', function () {
+                books.forEach(book => book.style.display = 'block'); // Show all books
+            });
+        
+            showVideosBtn.addEventListener('click', function () {
+                books.forEach(book => {
+                    if (book.classList.contains('video-item')) {
+                        book.style.display = 'block'; // Show videos
+                    } else {
+                        book.style.display = 'none'; // Hide GIFs
+                    }
+                });
+            });
+        
+            showGifsBtn.addEventListener('click', function () {
+                books.forEach(book => {
+                    if (book.classList.contains('gif-item')) {
+                        book.style.display = 'block'; // Show GIFs
+                    } else {
+                        book.style.display = 'none'; // Hide videos
+                    }
+                });
+            });
+        });
+        
+    </script>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -211,7 +269,3 @@
 
 </body>
 </html>
-
-
-
-
