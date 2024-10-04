@@ -15,7 +15,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-   
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,92 +23,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
 </head>
 <style>
+
     .dashboard-items {
-    border: 1px solid black; /* Add a black border */
-    border-radius: 5px; /* Optional: Add rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
-    
-}
-.dashboard-icons {
-    margin-left: 16px; /* Adjust this value to move the icon to the right */
-}
-.bold-text {
-    font-weight: bold;
-}
-.filter-container {
-    background-image: url('{{ asset('book/background1.jpg') }}');
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 3px solid orange;
-    width: 100%;
-    heigth:800px;
-    padding: 20px;
-}
-
-.filter-container h3, .filter-container h1, .filter-container p {
-    color: black;
-    margin: 0; /* Remove extra margins */
-}
-.filter-container h3, 
-.filter-container h1, 
-.filter-container p {
-    color: black;
-    margin: 0; /* Remove extra margins */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Added text shadow for visibility */
-}
-
-.filter-container h3, 
-.filter-container h1, 
-.filter-container p {
-    padding: 15px;
-}
-
-.filter-container h3, .filter-container h1, .filter-container p {
-    color: black;
-    padding: 15px;
-}
-/* Responsive styling for screens below 600px */
-@media only screen and (max-width: 600px) {
-    
+        border: 1px solid black; /* Add a black border */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
+        
+    }
+    .dashboard-icons {
+        margin-left: 16px; /* Adjust this value to move the icon to the right */
+    }
     .filter-container {
-        background-size: contain;
-        padding: 20px;
-        border: 2px solid orange;
+        background-image: url('{{ asset('book/background1.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        border: 3px solid orange;
         width: 100%;
-        height: 100%;
-        max-width: 800px;
-    }
-
-    .filter-container h3 {
-        font-size: 8px; /* Smaller heading size */
-        padding: 1px;
-    }
-
-    .filter-container h1 {
-        font-size: 10px; /* Smaller title */
-        padding: 1px;
-    }
-
-    .filter-container p {
-        font-size: 8.4px; /* Smaller paragraph text */
-        line-height: 1.2; /* Reduced line height to fit more text */
-        padding: 1px;
-        margin: 0; /* Remove margins to save space */
-    }
-
-    /* Compress table cell padding */
-    .filter-container td {
-        padding: 1px;
+        heigth:800px;
+        padding: 20px;
     }
     
-    /* Text shadow for smaller screens */
+    .filter-container h3, .filter-container h1, .filter-container p {
+        color: black;
+        margin: 0; /* Remove extra margins */
+    }
     .filter-container h3, 
     .filter-container h1, 
     .filter-container p {
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Text shadow for visibility */
-        padding: 1px;
+        color: black;
+        margin: 0; /* Remove extra margins */
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Added text shadow for visibility */
     }
-}
+    
+    .filter-container h3, 
+    .filter-container h1, 
+    .filter-container p {
+        padding: 15px;
+    }
+    
+    .filter-container h3, .filter-container h1, .filter-container p {
+        color: black;
+        padding: 15px;
+    }
+    /* Responsive styling for screens below 600px */
+    @media only screen and (max-width: 600px) {
+        
+        .filter-container {
+            background-size: contain;
+            padding: 20px;
+            border: 2px solid orange;
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+        }
+    
+        .filter-container h3 {
+            font-size: 8px; /* Smaller heading size */
+            padding: 1px;
+        }
+    
+        .filter-container h1 {
+            font-size: 10px; /* Smaller title */
+            padding: 1px;
+        }
+    
+        .filter-container p {
+            font-size: 8.4px; /* Smaller paragraph text */
+            line-height: 1.2; /* Reduced line height to fit more text */
+            padding: 1px;
+            margin: 0; /* Remove margins to save space */
+        }
+    
+        /* Compress table cell padding */
+        .filter-container td {
+            padding: 1px;
+        }
+        
+        /* Text shadow for smaller screens */
+        .filter-container h3, 
+        .filter-container h1, 
+        .filter-container p {
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Text shadow for visibility */
+            padding: 1px;
+        }
+    }
+    
 </style>
 <body>
    

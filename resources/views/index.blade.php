@@ -368,11 +368,9 @@
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
                         <h1 class="mb-4">About Us</h1>
-                        <p>Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-                        <p class="mb-4">Stet no et lorem dolor et diam, amet duo ut dolore vero eos. No stet est diam rebum amet diam ipsum. Clita clita labore, dolor duo nonumy clita sit at, sed sit sanctus dolor eos, ipsum labore duo duo sit no sea diam. Et dolor et kasd ea. Eirmod diam at dolor est vero nonumy magna.</p>
-                        <div class="row g-4 align-items-center">
-
-                        </div>
+                <p>Dinalaoan Centro is a vibrant community located in the heart of Calasiao, Pangasinan. Rich in cultural heritage and known for its close-knit neighborhood, our barangay serves as a hub of unity and cooperation among residents.</p>
+            <p class="mb-4">We take pride in preserving our traditions while embracing growth and development. From local festivities that highlight our culture to initiatives aimed at improving our community's quality of life, Dinalaoan Centro thrives on collaboration and shared values. We welcome everyone with open arms, making this barangay not just a place, but a home to all who visit.</p>
+      
                     </div>
                     <div class="col-lg-6 about-img wow fadeInUp" data-wow-delay="0.5s">
                         <div class="row">

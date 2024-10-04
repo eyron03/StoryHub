@@ -14,9 +14,9 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\TeachersController;
 use FontLib\Table\Type\name;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::get('/index', action: function () {
     return view('index');

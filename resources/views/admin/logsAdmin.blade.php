@@ -105,7 +105,7 @@
             <i class="fa fa-calendar" style="font-size: 24px; margin-left: 10px;"></i>
         </div>
   <h1 style="text-align: center;">Log Reports</h1>
-  <br>
+  <br>  <br><br>
       <div class="table-responsive">
                 <table class="table table-striped table-bordered" id="reportsTable">
                     <thead class="thead-dark">
