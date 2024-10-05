@@ -207,6 +207,18 @@
         </a>
     </div>
 </div>
+  <div class="mt-3 d-flex justify-content float-end">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Filter Books
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                <li><a class="dropdown-item" href="#" id="showAll">Show All</a></li>
+                <li><a class="dropdown-item" href="#" id="showVideos">Show Videos</a></li>
+                <li><a class="dropdown-item" href="#" id="showGifs">Show GIFs</a></li>
+            </ul>
+        </div>
+    </div>
 
 
         <br>   <br>   
@@ -229,19 +241,7 @@
 
     <div class="container">
     <!-- Filter Dropdown -->
-    <div class="mt-3 d-flex justify-content-center">
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Filter Books
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                <li><a class="dropdown-item" href="#" id="showAll">Show All</a></li>
-                <li><a class="dropdown-item" href="#" id="showVideos">Show Videos</a></li>
-                <li><a class="dropdown-item" href="#" id="showGifs">Show GIFs</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+  
 
 <!-- Books Listing -->
 <div class="row" id="bookList">

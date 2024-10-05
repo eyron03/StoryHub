@@ -161,7 +161,7 @@
                     <!-- Video Display -->
                     @if($fb->book_type == 'video')
                     <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
-                        <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
+                        <a href="{{ route('parent.bookshowAudio', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
                             <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
                         </a>
                         <br>
@@ -178,7 +178,7 @@
                     <!-- GIF Display -->
                     @if($fb->book_type == 'gif')
                     <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
-                        <a href="{{ route('parent.bookshowAudio', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
+                        <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
                             <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
                         </a>
                         <br><br><br><br><br><br><br><br><br>
