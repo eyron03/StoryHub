@@ -240,7 +240,8 @@
                         <div class="p-3 dashboard-items d-flex align-items-center"  style="border: 3px solid orange;">
                             <div class="dashboard-text me-3">
                                 <div class="h1-dashboard">{{ $parentsCount }}</div>
-                                <div class="h3-dashboard"> Parents</div>
+                               <div class="h3-dashboard">Kid's Parents</div>
+
                             </div>
                             <div class="dashboard-icons">
                                 <i class="fas fa-user-friends fa-2x"></i>

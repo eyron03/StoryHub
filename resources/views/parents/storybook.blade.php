@@ -164,7 +164,7 @@
                         <a href="{{ route('parent.bookshowAudio', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
                             <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
                         </a>
-                        <br>
+                        <br> <br>
                         <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
                         <p style="font-size: 11px; color: #666;">
                             <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
@@ -181,7 +181,7 @@
                         <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
                             <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
                         </a>
-                        <br><br><br><br><br><br><br><br><br>
+                        <br><br>
                         <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
                         <p style="font-size: 11px; color: #666;">
                             <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>

@@ -36,6 +36,41 @@
 .bold-text {
     font-weight: bold;
 }
+body, html {
+    overflow: hidden; /* Disable scrolling */
+    height: 100%; /* Full height to ensure no scrolling */
+}
+@media (max-width: 576px) {
+    .pagination {
+        
+        justify-content: center; /* Center the pagination links */
+    }
+
+    .pagination li {
+        margin: 0 5px; /* Reduce margin for pagination items */
+    }
+
+    .pagination li a {
+     /* Adjust padding for smaller touch targets */
+        font-size: 12px; /* Reduce font size */
+    }
+}
+
+@media (max-width: 768px) {
+    .pagination {
+     
+        justify-content: center;
+    }
+
+    .pagination li {
+        margin: 0 2px;
+    }
+
+    .pagination li a {
+       
+        font-size: 10px;
+    }
+}
 
 
 </style>

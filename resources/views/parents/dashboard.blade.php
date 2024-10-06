@@ -17,6 +17,7 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
+    
   
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -214,12 +215,13 @@
                        
                     </div>
                 </div>
-                <div class="mt-4 row">
+                <div class="mt-4 row" >
                     <div class="mb-4 col-md-3 col-6">
-                        <div class="p-3 dashboard-items d-flex align-items-center"  style="border: 3px solid orange;">
+                        <div class="p-3 dashboard-items d-flex align-items-center" style="border: 3px solid orange;">
                             <div class="dashboard-text me-3">
                                 <div class="h1-dashboard">{{ $teachersCount }}</div>
-                                <div class="h3-dashboard">Teachers</div>
+                               <div class="h3-dashboard">Kid's Teachers</div>
+
                             </div>
                             <div class="dashboard-icons">
                                 <i class="fas fa-chalkboard-teacher fa-2x"></i>

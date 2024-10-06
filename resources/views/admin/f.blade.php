@@ -30,11 +30,9 @@
 
     <style>
         body, html {
-            height: 100%;
             overflow: hidden; /* Disable scrolling */
-            margin: 0; /* Remove default margins */
+            height: 100%; /* Full height to ensure no scrolling */
         }
-    
         @media (max-width: 576px) {
             body, html {
                 overflow: hidden; /* No scrolling on small screens */

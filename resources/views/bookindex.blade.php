@@ -220,7 +220,7 @@
         </div>
     </div>
 
-
+    <br>   <br>   
         <br>   <br>   
         
          <form action="{{ route('flipbook.index') }}" method="GET">
@@ -250,9 +250,9 @@
         @if($fb->book_type == 'video')
         <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
             <a href="{{ route('AudioBook', $fb->id) }}" style="float: left; clear: both;">
-                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
             </a>
-            <br>
+            <br><br><br><br><br><br><br><br><br>
             <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
             <p style="font-size: 11px; color: #666;">
                 <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
@@ -269,7 +269,7 @@
         @if($fb->book_type == 'gif')
         <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
             <a href="{{ route('showbook', $fb->id) }}" style="float: left; clear: both;">
-                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
             </a>
             <br><br><br><br><br><br><br><br><br>
             <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>

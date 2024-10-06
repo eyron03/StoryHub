@@ -151,7 +151,21 @@
             </div>
 
           
-            <br>   <br>   
+           <div class="mt-3 d-flex justify-content float-end">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Filter Books
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                <li><a class="dropdown-item" href="#" id="showAll">Show All</a></li>
+                <li><a class="dropdown-item" href="#" id="showVideos">Show Videos</a></li>
+                <li><a class="dropdown-item" href="#" id="showGifs">Show GIFs</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <br>   <br>   
+        <br>   <br>      
 
         
           <form action="{{ route('teacher.books') }}" method="GET">
@@ -165,29 +179,58 @@
     </div>
 </form>
 
-      
-              <div class="text-center starter-template">
-                  <h1>View All Books</h1>
-              </div>
-      
-              <div class="row" id="bookList">
-                  @foreach($flipbooks as $fb)
-                    <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book">
-          <a href="{{ route('showbook', $fb->id) }}" style="float: left; clear: both;">
-              <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
-          </a>
-          <br><br><br><br><br><br><br><br><br>
-          <span style="font-size: 12px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
-          <p style="font-size: 12px; color: #666;">
-              <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
-              <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
-              <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
-          </p>
-        
-      </div>
-      
-                  @endforeach
-              </div>
+
+        <div class="text-center starter-template">
+            <h1>View All Books</h1>
+        </div>
+
+    <div class="container">
+    <!-- Filter Dropdown -->
+  
+
+<!-- Books Listing -->
+<div class="row" id="bookList">
+    @foreach($flipbooks as $fb)
+        <!-- Video Display -->
+        @if($fb->book_type == 'video')
+        <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
+            <a href="{{ route('AudioBook', $fb->id) }}" style="float: left; clear: both;">
+                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+            </a>
+            <br><br><br><br><br><br><br><br><br>
+            <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
+            <p style="font-size: 11px; color: #666;">
+                <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
+                <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
+                <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
+            </p>
+            <a href="{{ route('editbook', $fb->id) }}" class="mt-2 w-100 d-block">
+                <button id="add_files" class="btn btn-warning btn-medium btn-general input-block-level fs-5 w-100" type="submit">Edit</button>
+            </a>
+        </div>
+        @endif
+
+        <!-- GIF Display -->
+        @if($fb->book_type == 'gif')
+        <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
+            <a href="{{ route('showbook', $fb->id) }}" style="float: left; clear: both;">
+                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+            </a>
+            <br><br><br><br><br><br><br><br><br>
+            <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
+            <p style="font-size: 11px; color: #666;">
+                <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
+                <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
+                <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
+            </p>
+            <a href="{{ route('editbook', $fb->id) }}" class="mt-2 w-100 d-block">
+                <button id="add_files" class="btn btn-warning btn-medium btn-general input-block-level fs-5 w-100" type="submit">Edit</button>
+            </a>
+        </div>
+        @endif
+    @endforeach
+</div>
+
               <div class="d-flex justify-content-center">
           {{ $flipbooks->appends(['search' => $search])->links() }}
         </div>
@@ -212,6 +255,40 @@
                   });
               });
           });
+          document.addEventListener('DOMContentLoaded', function () {
+    const showAllBtn = document.getElementById('showAll');
+    const showVideosBtn = document.getElementById('showVideos');
+    const showGifsBtn = document.getElementById('showGifs');
+    const books = document.querySelectorAll('.book');
+
+    showAllBtn.addEventListener('click', function () {
+        books.forEach(book => book.style.display = 'block'); // Show all books
+    });
+
+    showVideosBtn.addEventListener('click', function () {
+        books.forEach(book => {
+            if (book.classList.contains('video-item')) {
+                book.style.display = 'block'; // Show videos
+            } else {
+                book.style.display = 'none'; // Hide GIFs
+            }
+        });
+    });
+
+    showGifsBtn.addEventListener('click', function () {
+        books.forEach(book => {
+            if (book.classList.contains('gif-item')) {
+                book.style.display = 'block'; // Show GIFs
+            } else {
+                book.style.display = 'none'; // Hide videos
+            }
+        });
+    });
+});
+
+
+
+
       </script>
       
       

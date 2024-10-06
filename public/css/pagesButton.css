@@ -58,6 +58,7 @@
 @media (max-width: 768px) {
     #nextPage {
         right: 20px;
+        bottom: 200px;
     }
 
     #prevPage {
@@ -79,6 +80,10 @@
 
 
 @media (max-width: 576px) {
+    body, html {
+        overflow: hidden; /* Disable scrolling */
+        height: 100%; /* Full height to ensure no scrolling */
+    }
     #nextPage, #prevPage {
         padding: 8px 16px;
         font-size: 14px;
@@ -86,7 +91,7 @@
 
     #nextPage {
         right: 325px;
-        bottom: 550px; 
+        bottom: 450px; 
     }
     
 
@@ -98,13 +103,13 @@
     
     .page-2-background #nextPage {
         right: 300px;
-        bottom: 550px; 
+        bottom: 450px; 
         transform: translateY(-50%);
     }
 
     .page-2-background #prevPage {
         left: 120px;
-        bottom: 550px; 
+        bottom: 450px; 
         transform: translateY(-50%);
     }
 }
