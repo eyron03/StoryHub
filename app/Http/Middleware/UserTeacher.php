@@ -25,6 +25,6 @@ class UserTeacher
                 return $next($request);
             }
         }
-          return redirect("/index");
+          return redirect("/");
     }
 }

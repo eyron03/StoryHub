@@ -25,7 +25,7 @@ class UserParent
                 return $next($request);
             }
         }
-          return redirect("/index");
+          return redirect("/");
     }
 
 }

@@ -94,6 +94,15 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-3">
+                    <label><span class="required">*</span> Book Type</label>
+                </div>
+                <div class="col-lg-3">
+                    <input class="input-block-level" type="text" name="book_type" value="{{ $flipbooks->book_type }}">
+                </div>
+            </div>
+            
+            <div class="row">
                 @foreach($images as $page)
                 <div class="col-md-1">
                     <img src="{{ asset($page) }}" width="100" height="100" />
@@ -106,7 +115,8 @@
                         <label><span class="required">*</span> Select Image </label>
                     </div>
                     <div class="col-lg-9">
-                        <input type="file" name="images" />
+                        <input type="file" name="files[]" multiple />
+
                     </div>
                 </div>
             </div>

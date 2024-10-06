@@ -26,6 +26,6 @@ class Admin
                 return $next($request);
             }
         }
-        return redirect("/index");
+        return redirect("/");
     }
 }

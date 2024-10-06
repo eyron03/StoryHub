@@ -163,6 +163,7 @@ class FlipbookController extends Controller
         $fb->images = rtrim($fb->images, ",");
         $fb->book_name = $input['book_name'];
         $fb->desc = $input['desc'];
+        $fb->book_type = $input['book_type'];
         $fb->save();
     
         // Handle quiz updates
@@ -186,17 +187,16 @@ class FlipbookController extends Controller
             }
         }
     
-        // Log the successful update
         Log::info('Book updated successfully:', [
-       
             'BookTitle' => $fb->book_name,
             'BookDescription' => $fb->desc,
         ]);
     
-        return redirect()->route('flipbook.index')->with('success', 'Book updated successfully!');;
+        // Flash message for SweetAlert
+        return redirect()->route('flipbook.index')->with('success', 'Book updated successfully!');
     }
     
-    public function destroy($id)
+            public function destroy($id)
     {
         $fb = Flipbook::find($id);
     

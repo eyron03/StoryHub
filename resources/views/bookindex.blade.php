@@ -336,6 +336,11 @@
         text: "{{ session('success') }}",
         icon: 'success',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Reload the window when "OK" is clicked
+            location.reload();
+        }
     });
 @endif
 document.addEventListener('DOMContentLoaded', function () {
