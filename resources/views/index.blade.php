@@ -61,6 +61,17 @@
             font-weight: bold;
             color: #ff0000; /* Change color as desired */
         }
+        @media (max-width: 992px) {
+            .navbar-nav {
+                text-align: center; /* Center links on small screens */
+            }
+            .navbar-collapse {
+                margin-top: 15px; /* Add space above collapsed links */
+            }
+            .btn {
+                margin-top: 15px; /* Add space above button on small screens */
+            }
+        }
     </style>
 </head>
 
@@ -75,33 +86,23 @@
         </div>
         <!-- Spinner End -->
 <div id="index"></div>
-
-        <!-- Navbar Start -->
-        <nav class="px-4 bg-white navbar navbar-expand-lg navbar-light sticky-top px-lg-5 py-lg-0">
-            <a href="index" class="navbar-brand">
-                <h1  class="m-0 text-primary"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
-            </a>
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div   class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="mx-auto navbar-nav">
-                    <a  href="#index" class="nav-item nav-link ">Home</a>
-                    <a href="#about" class="nav-item nav-link">About Us</a>
-                    <a href="#contactus" class="nav-item nav-link">Contact Us</a>
-                    <a href="#"  id="existingAccount" class="nav-item nav-link">Login</a>
-                    {{--  <div class="nav-item dropdown">
-                        <a href="#"  id="existingAccount" class="nav-link dropdown-toggle" id="loginDropdown" data-bs-toggle="dropdown">Login/Register</a>
-                        <div class="m-0 border-0 shadow-sm dropdown-menu rounded-0 rounded-bottom">
-                            <a href="#" class="dropdown-item" id="existingAccount">Existing Account</a>
-                            <a href="#" class="dropdown-item" id="createAccount">Create Account</a>
-                        </div>
-                    </div  --}}
-<div></div>
-                </div>
-                <a href="" id="learnNowBtn" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now<i class="fa fa-arrow-right ms-3"></i></a>
-            </div>
-        </nav>
+<nav class="px-4 bg-white navbar navbar-expand-lg navbar-light sticky-top px-lg-5 py-lg-0">
+    <a href="index" class="navbar-brand">
+        <h1 class="m-0 text-primary"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
+    </a>
+    <button type="button" class="navbar-toggler" id="navbarToggle" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="mx-auto navbar-nav">
+            <a href="#index" class="nav-item nav-link">Home</a>
+            <a href="#about" class="nav-item nav-link">About Us</a>
+            <a href="#contactus" class="nav-item nav-link">Contact Us</a>
+            <a href="#" id="existingAccount" class="nav-item nav-link">Login</a>
+        </div>
+        <a href="" id="learnNowBtn" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
+    </div>
+</nav>
        
 
 
@@ -488,6 +489,27 @@
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+        // JavaScript to handle navbar toggle
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarCollapse = document.getElementById('navbarCollapse');
+
+        // Toggle the navbar
+        navbarToggle.addEventListener('click', function () {
+            // Toggle the 'show' class on the navbar collapse
+            navbarCollapse.classList.toggle('show');
+        });
+
+        // Close the navbar when a link is clicked
+        const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        navbarLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Close the navbar
+                navbarCollapse.classList.remove('show');
+            });
+        });
+        
+    </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('forgotPasswordForm');

@@ -337,7 +337,7 @@ public function logout()
     // Clear all session data related to the admin
     session()->flush();
 
-    return redirect('index');  // Redirect to a desired route or page
+    return redirect('/');  // Redirect to a desired route or page
 }
 
 

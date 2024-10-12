@@ -617,7 +617,7 @@ public function storeTeacher(Request $request)
         // Log out the admin user from the 'admin' guard
        session::flush();
         // Redirect to a desired route or page
-        return redirect('index');
+        return redirect('/');
     }
     
     

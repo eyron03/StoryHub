@@ -619,7 +619,7 @@ public function removeAllFromGradeLevels()
 
     session()->flush();
 
-    return redirect('index');  
+    return redirect('/');  
 }
 
 }

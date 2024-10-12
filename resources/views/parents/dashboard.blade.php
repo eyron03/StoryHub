@@ -24,95 +24,65 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-
-
     <style>
+
         .dashboard-items {
-        border: 1px solid black; /* Add a black border */
-        border-radius: 5px; /* Optional: Add rounded corners */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
-        
-    }
-    .dashboard-icons {
-        margin-left: 16px; /* Adjust this value to move the icon to the right */
-    }
-    .filter-container {
-    background-image: url('{{ asset('book/background1.jpg') }}');
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 3px solid orange;
-    width: 100%;
-    heigth:800px;
-    padding: 20px;
-}
-
-.filter-container h3, .filter-container h1, .filter-container p {
-    color: black;
-    margin: 0; /* Remove extra margins */
-}
-.filter-container h3, 
-.filter-container h1, 
-.filter-container p {
-    color: black;
-    margin: 0; /* Remove extra margins */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Added text shadow for visibility */
-}
-
-.filter-container h3, 
-.filter-container h1, 
-.filter-container p {
-    padding: 15px;
-}
-
-.filter-container h3, .filter-container h1, .filter-container p {
-    color: black;
-    padding: 15px;
-}
-/* Responsive styling for screens below 600px */
-@media only screen and (max-width: 600px) {
-    
-    .filter-container {
-        background-size: contain;
-        padding: 20px;
-        border: 2px solid orange;
+            border: 1px solid black; /* Add a black border */
+            border-radius: 5px; /* Optional: Add rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
+            
+        }
+        .dashboard-icons {
+            margin-left: 16px; /* Adjust this value to move the icon to the right */
+        }
+      .filter-container {
+        background-image: url('{{ asset('book/background1.jpg') }}');
+        background-size: cover; /* Ensures the background covers the whole div */
+        background-repeat: no-repeat;
+        border: 3px solid orange;
         width: 100%;
-        height: 100%;
-        max-width: 800px;
-    }
-
-    .filter-container h3 {
-        font-size: 10px; /* Smaller heading size */
-        padding: 1px;
-    }
-
-    .filter-container h1 {
-        font-size: 11px; /* Smaller title */
-        padding: 1px;
-    }
-
-    .filter-container p {
-        font-size: 7.6px; /* Smaller paragraph text */
-        line-height: 1.1; /* Reduced line height to fit more text */
-        padding: 1px;
-        margin: 0; /* Remove margins to save space */
-    }
-
-    /* Compress table cell padding */
-    .filter-container td {
-        padding: 1px;
+        height: auto; /* Allow height to adjust automatically */
+        padding: 20px; /* Padding for inner content */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
-    /* Text shadow for smaller screens */
-    .filter-container h3, 
-    .filter-container h1, 
-    .filter-container p {
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Text shadow for visibility */
-        padding: 1px;
+    /* Responsive styling for all screen sizes */
+    @media only screen and (max-width: 768px) {
+        .filter-container {
+            padding: 15px; /* Adjust padding for smaller screens */
+        }
+    
+        .filter-container h3,
+        .filter-container h1,
+        .filter-container p {
+            font-size: 16px; /* Adjust font size for smaller screens */
+            text-align: center; /* Center-align text for smaller screens */
+        }
     }
-}
-
-</style>
+    
+    @media only screen and (max-width: 576px) {
+        .filter-container {
+            padding: 10px; /* Further reduce padding on extra small screens */
+        }
+    
+        .filter-container h3 {
+            font-size: 14px; /* Smaller heading size */
+        }
+    
+        .filter-container h1 {
+            font-size: 16px; /* Smaller title */
+        }
+    
+        .filter-container p {
+            font-size: 14px; /* Smaller paragraph text */
+            line-height: 1.3; /* Reduced line height to fit more text */
+        }
+    }
+    
+    </style>
 </head>
 <body>
 <div class="all">
@@ -180,8 +150,10 @@
 
        
 <center>
-  <table class="filter-container">
-      <tr>
+ <div class="filter-container d-flex justify-content-center align-items-center">
+    <div class="content p-4 text-black col-12 col-md-10 col-lg-8">
+  
+        <tr>
             <td style="padding: 20px; color: black;">
                 <h3>Welcome!</h3>
                 <h1>{{ $pFname }}</h1>
@@ -205,67 +177,62 @@
     </table>
 </center>
 
-
-            <div class="mt-5 dash-body">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-between align-items-center">
-                        <div class="status-title">
-                            <h3>Status</h3>
-                        </div>
-                       
-                    </div>
+<div class="mt-5 dash-body">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="status-title">
+                <h3>Status</h3>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 row">
+        <div class="mb-4 col-lg-3 col-md-6 col-12">
+            <div class="p-3 dashboard-items d-flex align-items-center justify-content-between" style="border: 3px solid orange;">
+                <div class="dashboard-text me-3">
+                    <div class="h1-dashboard">{{ $teachersCount }}</div>
+                    <div class="h3-dashboard">Kid's Teachers</div>
                 </div>
-                <div class="mt-4 row" >
-                    <div class="mb-4 col-md-3 col-6">
-                        <div class="p-3 dashboard-items d-flex align-items-center" style="border: 3px solid orange;">
-                            <div class="dashboard-text me-3">
-                                <div class="h1-dashboard">{{ $teachersCount }}</div>
-                               <div class="h3-dashboard">Kid's Teachers</div>
-
-                            </div>
-                            <div class="dashboard-icons">
-                                <i class="fas fa-chalkboard-teacher fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                      <div class="mb-4 col-md-3 col-6">
-                        <div class="p-3 dashboard-items d-flex align-items-center"  style="border: 3px solid orange;">
-                            <div class="dashboard-text me-3">
-                                <div class="h1-dashboard">{{ $parentsCount }}</div>
-                                <div class="h3-dashboard">All Parents</div>
-                            </div>
-                            <div class="dashboard-icons">
-                                <i class="fas fa-user-friends fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <div class="mb-4 col-md-3 col-6">
-                        <div class="p-3 dashboard-items d-flex align-items-center"  style="border: 3px solid orange;">
-                            <div class="dashboard-text me-3">
-                                <div class="h1-dashboard">{{ $childrenCount }}</div>
-                                <div class="h3-dashboard">My Childrens</div>
-                            </div>
-                            <div class="dashboard-icons">
-                                <i class="fas fa-users fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-4 col-md-3 col-6">
-                        <div class="p-3 dashboard-items d-flex align-items-center"  style="border: 3px solid orange;">
-                            <div class="dashboard-text me-3">
-                                <div class="h1-dashboard">{{ $booksCount }}</div>
-                                <div class="h3-dashboard">All Books</div>
-                            </div>
-                            <div class="dashboard-icons">
-                                <i class="fas fa-book fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
+                <div class="dashboard-icons">
+                    <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4 col-lg-3 col-md-6 col-12">
+            <div class="p-3 dashboard-items d-flex align-items-center justify-content-between" style="border: 3px solid orange;">
+                <div class="dashboard-text me-3">
+                    <div class="h1-dashboard">{{ $parentsCount }}</div>
+                    <div class="h3-dashboard">All Parents</div>
+                </div>
+                <div class="dashboard-icons">
+                    <i class="fas fa-user-friends fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4 col-lg-3 col-md-6 col-12">
+            <div class="p-3 dashboard-items d-flex align-items-center justify-content-between" style="border: 3px solid orange;">
+                <div class="dashboard-text me-3">
+                    <div class="h1-dashboard">{{ $childrenCount }}</div>
+                    <div class="h3-dashboard">My Childrens</div>
+                </div>
+                <div class="dashboard-icons">
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4 col-lg-3 col-md-6 col-12">
+            <div class="p-3 dashboard-items d-flex align-items-center justify-content-between" style="border: 3px solid orange;">
+                <div class="dashboard-text me-3">
+                    <div class="h1-dashboard">{{ $booksCount }}</div>
+                    <div class="h3-dashboard">All Books</div>
+                </div>
+                <div class="dashboard-icons">
+                    <i class="fas fa-book fa-2x"></i>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
