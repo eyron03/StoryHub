@@ -11,80 +11,66 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="img/favicon.ico" rel="icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/overlay.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pagesButton.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mediaQuery.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('extras/modernizr.2.5.3.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/basic.css') }}">
+    @vite(['resources/css/app.css'])
     <style>
      
-        @media (max-width: 768px) {
-            #quizButton {
-                bottom: auto;
-                top: 530px; /* Adjust this value as needed */
-                left: 170px; /* Adjust this value as needed */
-            }
+      
+        body, html {
+            height: 100%;
+            overflow: hidden; /* Disable scrolling */
+            margin: 0; /* Remove default margins */
+            position: relative;
         }
-
-         /* Background for the first page */
-         .page-1-background {
-            background-image: url('{{ asset('book/front1.png') }}');
-            background-size: 530px 610px; /* Width and height in pixels */
-             background-position: 50% 74.5%;
-            background-repeat: no-repeat;
-            margin-top: 800px;
-            margin-left:800px
-        }
-
-        /* Background for the last page */
-        .page-last-background {
-            background-image: url('{{ asset('book/back1.png') }}');
-            background-size: 530px 610px; /* Width and height in pixels */
-            background-position: 52% 74.5%; /* Move the background 20% from the left */
-            background-repeat: no-repeat;
-            margin-top: 800px;
-            margin-left:800px
-          
-        }
-
-        .page-2-background {
-            background-image: url('{{ asset('book/pages1.png') }}');
-            background-size: 1010px 665px; /* Width and height in pixels */
-            background-position: 52% 95%; /* Move the background 20% from the left */
-            background-repeat: no-repeat;
-            margin-top: 800px;
-        }
-       
         
-        /* Extra small screens (small phones) */
-        @media (max-width: 576px) {
-            .page-2-background {
-                background-size: 358px 235px; /* Adjust size for extra small screens */
-                background-position: 10% 51%;
-            }
-            .page-1-background 
-            {
-                background-size: 190px 210px; /* Adjust size for extra small screens */
-                background-position: 45% 51%;
-                
-            }
-            .page-last-background
-            {
-                background-size: 190px 210px; /* Adjust size for extra small screens */
-                background-position: 50% 51%;
-                
-            }
+        #background {
+            position: absolute;
+            top: 9%; /* Align to the top */
+            left: 0; /* Align to the left */
+            width: 100%;
+            height: 90%; /* Changed to full height */
+            background-size: contain; /* Ensure the background image is contained */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Avoid repeating */
+            z-index: -1; /* Position it behind other elements */
+            transition: background-image 0.5s ease;
         }
-
-       
-        #overlay {
+        
+        .flipbook-viewport {
+            position: relative; /* Ensure the viewport is positioned above the background */
+            z-index: 1;
+            display: flex; /* Center the flipbook */
+            justify-content: center;
+            align-items: center;
+            top: -6.3%;
+            height: 100vh; /* Ensure full height for viewport */
+        }
+        
+        .flipbook {
+            max-width: 100%; /* Prevent overflow */
+            max-height: 100%; /* Prevent overflow */
+        }
+        
+        .flipbook div {
+            background-size: contain; /* Change this to fit the content appropriately */
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100%; /* Make flipbook pages fill the parent */
+            height: 100%; /* Make flipbook pages fill the parent */
+        }
+        /* Extra small screens (small phones) */
+                #overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -156,20 +142,28 @@
         <a href="{{ route('parent.storybook', [ 'childId' => $childId]) }}" class="btn btn-primary" style="position: fixed; top:90px; left: 20px;">  <i class="fa fa-arrow-left"></i> Back       </a>
         
         <div class="content">
-            <div class="flipbook-viewport">
-                <div class="container">
-                    <div class="flipbook">
-                        @foreach($images as $page)
-                        <div class="flipbook-page" style="background-image: url({{ asset($page) }});"></div>
-                        @endforeach
+            <a href="javascript:history.back()" class="btn btn-primary" style="position: fixed; top: 90px; left: 20px;">
+                <i class="fa fa-arrow-left"></i> Back
+            </a>
+            <div id="background" class="absolute inset-0 z-0 bg-center bg-cover">
+                <div class="flex items-center justify-center h-screen flipbook-viewport">
+                    <div class="flex items-center justify-center w-full h-full">
+                        <div class="flex items-center justify-center flipbook">
+                            @foreach($images as $page)
+                                <div class="flex items-center justify-center w-full h-full" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="d-flex justify-content-between">
-            <button class="btn btn-primary" id="prevPage"  ><i class="fa fa-arrow-left"> </button>
-            <button class="btn btn-primary" id="nextPage"  > <i class="fa fa-arrow-right"></button>
-        </div>
+    
+            <div class="d-flex">
+                <button class="btn btn-primary" id="prevPage"><i class="fa fa-arrow-left"></i></button>
+                <button class="btn btn-primary" id="nextPage"><i class="fa fa-arrow-right"></i></button>
+            </div>
+    
         <div class="button-container">
             <a href="#" class="btn btn-primary" id="quizButton">Quiz now?</a>
         </div>
@@ -187,9 +181,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
         $(document).ready(function() {
-            var currentPage = 0;
             var childId = "{{ $childId }}";
             var flipbookId = "{{ $flipbook->id }}";
+            var currentPage = 1; // Start on page 1
     
             function storeReadingProgress() {
                 localStorage.setItem('readingProgress_' + childId + '_' + flipbookId, currentPage);
@@ -198,7 +192,7 @@
             function loadReadingProgress() {
                 if (typeof(Storage) !== "undefined") {
                     var readingProgress = localStorage.getItem('readingProgress_' + childId + '_' + flipbookId);
-                    if (readingProgress && parseInt(readingProgress) !==1) {
+                    if (readingProgress && parseInt(readingProgress) !== 1) {
                         Swal.fire({
                             title: 'Continue Reading?',
                             text: 'You left off at page ' + readingProgress + '. Do you want to continue from where you left off?',
@@ -220,7 +214,7 @@
                         });
                     }
                 } else {
-                    console.log("error.");
+                    console.log("Error: Local storage is not supported.");
                 }
             }
     
@@ -228,90 +222,93 @@
                 storeReadingProgress();
             });
     
-            $('body').addClass('page-1-background');
+            function calculateDimensions() {
+                const windowWidth = $(window).width();
+                const windowHeight = $(window).height();
+                let bookWidth, bookHeight;
     
-            function loadApp() {
-                function calculateDimensions() {
-                    var windowWidth = $(window).width();
-                    var windowHeight = $(window).height();
-                    var bookWidth, bookHeight;
-    
-                    if (windowWidth >= 992) {
-                        bookWidth = 922;
-                        bookHeight = 600;
-                    } else {
-                        bookWidth = windowWidth * 0.9;
-                        bookHeight = bookWidth * (600 / 922);
-                    }
-    
-                    return {
-                        width: Math.floor(bookWidth),
-                        height: Math.floor(bookHeight)
-                    };
+                if (windowWidth >= 992) {
+                    bookWidth = 922; // Desktop size
+                    bookHeight = 600;
+                } else {
+                    bookWidth = windowWidth * 0.9; // Scale down for smaller screens
+                    bookHeight = bookWidth * (600 / 922); // Maintain aspect ratio
                 }
     
-                $('.flipbook').turn({
+                return { width: Math.floor(bookWidth), height: Math.floor(bookHeight) };
+            }
+    
+            function loadApp() {
+                const flipbook = $('.flipbook');
+    
+                flipbook.turn({
                     width: calculateDimensions().width,
                     height: calculateDimensions().height,
                     elevation: 50,
                     gradients: true,
                     autoCenter: true,
-                    duration: 1000, 
+                    duration: 1000,
                     when: {
-                        turning: function (e, page, view) {
-                            var totalPages = $('.flipbook').turn('pages');
-                            var secondToLastPage = totalPages - 1;
-                            
-                            $('body').removeClass('page-1-background page-last-background');
+                        turning: function(event, page) {
+                            currentPage = page; // Update current page
+                            const totalPages = flipbook.turn('pages');
+                            let backgroundImage;
     
+                            // Ensure the same sizing and aspect ratio for all images
                             if (page === 1) {
-                                $('body').addClass('page-1-background');
-                                $('body').removeClass('page-2-background'); 
+                                // backgroundImage = '{{ asset('book/front1.png') }}';
                             } else if (page === totalPages) {
-                                $('body').addClass('page-last-background');
-                                $('body').removeClass('page-2-background'); 
-                            } else if (page >= 2 && page <= secondToLastPage) {
-                                $('body').addClass('page-2-background');
-                            }
-    
-                            // Update navigation buttons on page turn
-                            updateNavigationButtons(page, totalPages);
-                        },
-                        turned: function (e, page, view) {
-                            currentPage = page;
-                            var totalPages = $('.flipbook').turn('pages');
-    
-                            if (page === totalPages) {
-                                $('#quizButton').show();
+                                // backgroundImage = '{{ asset('book/back1.png') }}';
                             } else {
-                                $('#quizButton').hide();
+                                backgroundImage = '{{ asset('book/pages1.png') }}';
                             }
+    
+                            // Set background uniformly
+                            $('#background').css({
+                                'background-image': `url(${backgroundImage})`,
+                                'background-size': 'contain',
+                                'background-position': 'center',
+                                'background-repeat': 'no-repeat'
+                            });
+                        },
+                        turned: function(event, page) {
+                            currentPage = page; // Update current page on turn
+                            const totalPages = flipbook.turn('pages');
+                            $('#quizButton').toggle(page === totalPages);
+                            $('#prevPage').toggle(page !== 1);
+                            $('#nextPage').toggle(page !== totalPages);
                         }
                     }
                 });
     
-                $(window).on('resize', function () {
-                    var dimensions = calculateDimensions();
-                    $('.flipbook').turn('size', dimensions.width, dimensions.height);
+                $('#nextPage').on('click', () => flipbook.turn('next'));
+                $('#prevPage').on('click', () => flipbook.turn('previous'));
+    
+                $(window).on('resize', () => {
+                    const { width, height } = calculateDimensions();
+                    flipbook.turn('size', width, height);
                 });
     
-                var totalPages = $('.flipbook').turn('pages');
-                updateNavigationButtons(currentPage, totalPages);
+                // Ensure overlay is hidden on click
+                $('#overlay').on('click', function() {
+                    off();
+                });
+            }
     
-                $('#overlay').show();
+            function off() {
+                $('#overlay').hide(); // Hides the overlay
             }
     
             yepnope({
                 test: Modernizr.csstransforms,
                 yep: ['{{ asset('lib/turn.js') }}'],
                 nope: ['{{ asset('lib/turn.html4.min.js') }}'],
-                both: ['{{ asset('css/basic.css') }}'],
                 complete: loadApp
             });
     
             loadReadingProgress();
     
-            $('#quizButton').on('click', function () {
+            $('#quizButton').on('click', function() {
                 Swal.fire({
                     title: 'Quiz Now?',
                     text: 'Do you want to start the quiz now?',
@@ -332,39 +329,10 @@
                     }
                 });
             });
-    
-            $('#overlay').on('click', function () {
-                off();
-            });
-    
-            function off() {
-                $('#overlay').hide();
-            }
-    
-           
-            $('#nextPage').on('click', function() {
-                $('.flipbook').turn('next');
-            });
-    
-            $('#prevPage').on('click', function() {
-                $('.flipbook').turn('previous');
-            });
-    
-            function updateNavigationButtons(page, totalPages) {
-                if (page === 1) {
-                    $('#prevPage').hide();
-                } else {
-                    $('#prevPage').show();
-                }
-    
-                if (page === totalPages) {
-                    $('#nextPage').hide();
-                } else {
-                    $('#nextPage').show();
-                }
-            }
         });
     </script>
+    
+    
     
     <script>
         $(document).ready(function() {

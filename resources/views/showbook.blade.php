@@ -43,7 +43,7 @@
         display: flex; /* Center the flipbook */
         justify-content: center;
         align-items: center;
-        top: -6%;
+        top: -6.3%;
         height: 100vh; /* Ensure full height for viewport */
     }
     
@@ -113,7 +113,7 @@
             let bookWidth, bookHeight;
         
             if (windowWidth >= 992) {
-                bookWidth = 927; // Larger size for desktops
+                bookWidth = 922; // Larger size for desktops
                 bookHeight = 600;
             } else {
                 bookWidth = windowWidth * 0.9; // Scale down for smaller screens
