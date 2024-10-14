@@ -216,3 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#loginModal').modal('show');
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    var spinner = document.getElementById("spinner");
+    spinner.classList.add("d-none");
+  });

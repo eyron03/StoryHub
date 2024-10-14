@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User  as Authenticatable;
 class Flipbook extends Authenticatable
 {
     use HasFactory;
-    protected $fillable = ['book_name', 'desc', 'images','book_type'];
+    protected $fillable = ['book_name', 'desc', 'images'];
 
 
     public function quizzes()

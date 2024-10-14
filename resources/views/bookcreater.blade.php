@@ -29,7 +29,7 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/question.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/overlay.css') }}" rel="stylesheet">
+   
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,7 +57,7 @@
         }
         #gifLoader img {
             width: 250px; /* Adjust the width */
-            height: 120px; /* Maintain aspect ratio */
+            height: 200px; /* Maintain aspect ratio */
             margin-top:200px;
         }
         
@@ -84,7 +84,7 @@
      
        </div>
        <div id="gifLoader" class="text-center mb-3 d-none justify-content-center min-vh-100">
-        <img src="{{ asset('book/preloader.gif') }}" alt="Loading..." class="img-fluid">
+        <img src="{{ asset('book/bookloader.gif') }}" alt="Loading..." class="img-fluid">
     </div>
        <form id="bookForm" class="register-form" method="POST" action="{{ route('flipbookstore') }}" enctype="multipart/form-data">
         @csrf
@@ -104,15 +104,7 @@
                 <input class="input-block-level" type="text" placeholder="*  Book Desc" name="desc" value="" required>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Book Type</label>
-            </div>
-            <div class="col-lg-9">
-                <input class="input-block-level" type="text" placeholder="*  Book Type" name="book_type" value="" required>
-            </div>
-        </div>
-
+       
         <div id="browse_file">
             <div class="row">
                 <div class="col-lg-3">

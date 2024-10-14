@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('book_name');
             $table->longText('desc');
-            $table->string('book_type');
+           
             $table->string('images', 3000);
            
            

@@ -79,6 +79,11 @@
     </style>
 </head>
 <body>
+    <div id="spinner" class=" show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 <div class="all">
     <div class="header d-flex justify-content-between align-items-center fixed-top">
         <a href="#" style="text-decoration: none;"class="d-flex align-items-center">
@@ -151,22 +156,9 @@
             </div>
 
           
-           <div class="mt-3 d-flex justify-content float-end">
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Filter Books
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                <li><a class="dropdown-item" href="#" id="showAll">Show All</a></li>
-                <li><a class="dropdown-item" href="#" id="showVideos">Show Videos</a></li>
-                <li><a class="dropdown-item" href="#" id="showGifs">Show GIFs</a></li>
-            </ul>
-        </div>
-    </div>
+      
 
-    <br>   <br>   
-        <br>   <br>      
-
+  
         
           <form action="{{ route('teacher.books') }}" method="GET">
     <div class="row justify-content-center">
@@ -191,27 +183,9 @@
 <!-- Books Listing -->
 <div class="row" id="bookList">
     @foreach($flipbooks as $fb)
-        <!-- Video Display -->
-        @if($fb->book_type == 'video')
-        <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book video-item">
-            <a href="{{ route('AudioBook', $fb->id) }}" style="float: left; clear: both;">
-                <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
-            </a>
-            <br><br><br><br><br><br><br><br><br>
-            <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
-            <p style="font-size: 11px; color: #666;">
-                <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
-                <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
-                <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
-            </p>
-            <a href="{{ route('editbook', $fb->id) }}" class="mt-2 w-100 d-block">
-                <button id="add_files" class="btn btn-warning btn-medium btn-general input-block-level fs-5 w-100" type="submit">Edit</button>
-            </a>
-        </div>
-        @endif
+      
 
-        <!-- GIF Display -->
-        @if($fb->book_type == 'gif')
+       
         <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
             <a href="{{ route('showbook', $fb->id) }}" style="float: left; clear: both;">
                 <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 10px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
@@ -227,7 +201,7 @@
                 <button id="add_files" class="btn btn-warning btn-medium btn-general input-block-level fs-5 w-100" type="submit">Edit</button>
             </a>
         </div>
-        @endif
+     
     @endforeach
 </div>
 
@@ -255,39 +229,7 @@
                   });
               });
           });
-          document.addEventListener('DOMContentLoaded', function () {
-    const showAllBtn = document.getElementById('showAll');
-    const showVideosBtn = document.getElementById('showVideos');
-    const showGifsBtn = document.getElementById('showGifs');
-    const books = document.querySelectorAll('.book');
-
-    showAllBtn.addEventListener('click', function () {
-        books.forEach(book => book.style.display = 'block'); // Show all books
-    });
-
-    showVideosBtn.addEventListener('click', function () {
-        books.forEach(book => {
-            if (book.classList.contains('video-item')) {
-                book.style.display = 'block'; // Show videos
-            } else {
-                book.style.display = 'none'; // Hide GIFs
-            }
-        });
-    });
-
-    showGifsBtn.addEventListener('click', function () {
-        books.forEach(book => {
-            if (book.classList.contains('gif-item')) {
-                book.style.display = 'block'; // Show GIFs
-            } else {
-                book.style.display = 'none'; // Hide videos
-            }
-        });
-    });
-});
-
-
-
+        
 
       </script>
       
@@ -305,7 +247,12 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-      
+ <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var spinner = document.getElementById("spinner");
+        spinner.classList.add("d-none");
+      });
+</script>
       </body>
       </html>
       

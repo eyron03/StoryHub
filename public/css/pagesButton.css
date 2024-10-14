@@ -5,111 +5,115 @@
     z-index: 1000;
     padding: 10px 20px;
     font-size: 16px;
-   
     color: white;
+
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-
-#prevPage {
-    display: none; 
+/* Hide buttons by default */
+#prevPage, #nextPage {
+    display: none;
 }
 
-
+/* Specific styles for buttons positioning on large screens */
 #nextPage {
-   display:none;
-    bottom: 400px;
-    right: 400px;
-    position: fixed;
-    z-index: 1000;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    bottom: 20px;
+    right: 40px; /* Floating to the right */
 }
 
 #prevPage {
-    left: 400px;
-    bottom:350px;
+    bottom: 20px;
+    left: 40px; /* Floating to the left */
+}
+#quizButton {
+    display: none;
+    position: fixed;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
 }
 
+/* Adjust button positioning for larger screens (desktops) */
+@media (min-width: 1200px) {
+    #nextPage {
+        right: 150px;
+        bottom: 50px;
+    }
 
-.page-2-background #nextPage {
-    bottom:350px;
-    right: 150px;
-   
-
-    transform: translateY(-50%);
+    #prevPage {
+        left: 150px;
+        bottom: 50px;
+    }
 }
 
-.page-2-background #prevPage {
-  
-    left: 150px;
-    bottom:350px;
-    transform: translateY(-50%);
-}
-
-@media (max-width: 768px) {
+/* For medium screens (tablets) */
+@media (max-width: 992px) {
     #nextPage {
         right: 20px;
-        bottom: 200px;
+        bottom: 60px;
     }
 
     #prevPage {
         left: 20px;
-    }
-
-    .page-2-background #nextPage {
-        right: 50px;
-        bottom: auto;
-        transform: translateY(-50%);
-    }
-
-    .page-2-background #prevPage {
-        left: 50px;
-        bottom: auto;
-        transform: translateY(-50%);
+        bottom: 60px;
     }
 }
 
-
-@media (max-width: 576px) {
-    body, html {
-        overflow: hidden; /* Disable scrolling */
-        height: 100%; /* Full height to ensure no scrolling */
-    }
-    #nextPage, #prevPage {
-        padding: 8px 16px;
+/* For smaller screens (phones) */
+@media (max-width: 768px) {
+    #nextPage {
+        right: 20px;
+        bottom: 40px;
         font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    #prevPage {
+        left: 20px;
+        bottom: 40px;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 576px) {
+    #nextPage, #prevPage {
+        font-size: 12px;
+        padding: 6px 12px;
     }
 
     #nextPage {
-        right: 325px;
-        bottom: 450px; 
+        right: 10px;
+        bottom: 30px;
     }
-    
 
     #prevPage {
-        left: 150px;
-        bottom: 500px; 
+        left: 10px;
+        bottom: 30px;
     }
+}
 
-    
-    .page-2-background #nextPage {
-        right: 300px;
-        bottom: 450px; 
-        transform: translateY(-50%);
-    }
+/* Display buttons when relevant (Page 2 background) */
+.page-2-background #nextPage {
+    display: block;
+    right: 40px;
+    bottom: 20px;
+    transform: translateY(-50%);
+}
 
-    .page-2-background #prevPage {
-        left: 120px;
-        bottom: 450px; 
-        transform: translateY(-50%);
-    }
+.page-2-background #prevPage {
+    display: block;
+    left: 40px;
+    bottom: 20px;
+    transform: translateY(-50%);
+}
+
+/* Change button background color on hover */
+#nextPage:hover, #prevPage:hover {
+    background-color: #0056b3;
 }

@@ -25,14 +25,34 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/question.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/overlay.css') }}" rel="stylesheet">
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('extras/modernizr.2.5.3.min.js') }}"></script>
-   
+
+    <style>
+        #gifLoader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+           
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #gifLoader img {
+            width: 250px; /* Adjust the width */
+            height: 200px; /* Maintain aspect ratio */
+            margin-top:200px;
+        }
+        
+        .d-none { display: none; }
+        .d-flex { display: flex; }
+    </style>
 
    
 </head>
@@ -67,14 +87,18 @@
             </ul>
         </div>
     </div>
-
+ <div id="gifLoader" class="text-center mb-3 d-none justify-content-center min-vh-100">
+            <img src="{{ asset('book/bookloader.gif') }}" alt="Loading..." class="img-fluid">
+        </div>
 
         <br><br><br><br>
         <div class="starter-template">
             <h1>Edit Book & Questions</h1>
+           
 
         </div>
-        <form class="register-form" method="POST" action="{{ route('flipbook.update',$flipbooks->id) }}" enctype="multipart/form-data">
+       
+        <form  class="register-form" method="POST" action="{{ route('flipbook.update',$flipbooks->id) }}" enctype="multipart/form-data">
             {!! csrf_field() !!}
             <input type="hidden" name="_method" value="put" />
             <div class="row">
@@ -93,14 +117,7 @@
                     <input class="input-block-level" type="text"  name="desc" value="{{ $flipbooks->desc }}">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <label><span class="required">*</span> Book Type</label>
-                </div>
-                <div class="col-lg-3">
-                    <input class="input-block-level" type="text" name="book_type" value="{{ $flipbooks->book_type }}">
-                </div>
-            </div>
+          
             
             <div class="row">
                 @foreach($images as $page)
@@ -109,10 +126,11 @@
                 </div>
                 @endforeach
             </div>
+            <br><br>
             <div id="browse_file">
                 <div class="row">
                     <div class="col-lg-3">
-                        <label><span class="required">*</span> Select Image </label>
+                        <label><span class="required">*</span> Add More Image </label>
                     </div>
                     <div class="col-lg-9">
                         <input type="file" name="files[]" multiple />
@@ -120,11 +138,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            {{--  <div class="row">
                 <div class="col-lg-offset-6">
                     <button id="add_files"  class="btn btn-sm btn-primary" type="button">Add More Image</button>
                 </div>
-            </div>
+            </div>  --}}
            <hr>
            @foreach($flipbooks->quizzes as $index => $quiz)
         <div class="row">
@@ -221,12 +239,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        // Check if there's a success message from Laravel's session flash data
-      
-
         // Handle form submission with SweetAlert confirmation
         $('form.register-form').on('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
+
+            const form = this; // Reference to the form element
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -235,11 +252,59 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, save it!'
+                confirmButtonText: 'Yes, save it!',
+                willOpen: () => {
+                    // Add an ID to the confirm button
+                    $('.swal2-confirm').attr('id', 'swalSaveButton');
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    $(this).off('submit').submit();
+                    // Optionally, you can handle the click event here
+                    $('#swalSaveButton').on('click', function() {
+                        console.log('Save button clicked');
+                    });
+
+                    // Show the loader
+                    $('#gifLoader').removeClass('d-none');
+
+                    // Submit the form via AJAX or normal submission
+                    // For AJAX submission, use the following code
+                    $.ajax({
+                        url: $(form).attr('action'),
+                        method: $(form).attr('method'),
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Hide loader after AJAX call
+                            $('#gifLoader').addClass('d-none');
+
+                            // Show SweetAlert success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Book updated successfully!',
+                                text: 'Your changes have been saved.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '{{ route('flipbook.index') }}'; // Redirect after success
+                            });
+
+                            // Reset the form
+                            form.reset();
+                        },
+                        error: function(xhr, status, error) {
+                            // Hide loader in case of error
+                            $('#gifLoader').addClass('d-none');
+
+                            // Show SweetAlert error message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'There was an issue updating the book. Please try again.',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
                 }
             });
         });
@@ -295,11 +360,11 @@
             }
         });
 
-      
-
         // Handle delete button with SweetAlert confirmation
         $('form.delete-form').on('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
+
+            const deleteForm = this; // Reference to the form element
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -308,17 +373,25 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, delete it!',
+                willOpen: () => {
+                    // Add an ID to the confirm button
+                    $('.swal2-confirm').attr('id', 'swalDeleteButton');
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    $(this).off('submit').submit();
+                    // Optionally, you can handle the click event here
+                    $('#swalDeleteButton').on('click', function() {
+                        console.log('Delete button clicked');
+                    });
+
+                    // Submit the delete form
+                    $(deleteForm).off('submit').submit();
                 }
             });
         });
     });
 </script>
 
-    
 </body>
 </html>

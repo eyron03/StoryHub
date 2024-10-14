@@ -46,6 +46,11 @@
 </head>
 <body>
     @Include('sweetalert::alert')
+    <div id="spinner" class=" show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 <div class="all">
     <div class="header d-flex justify-content-between align-items-center fixed-top">
         <a href="{{ route('admin.dashboard') }}" style="text-decoration: none;" class="d-flex align-items-center">
@@ -225,6 +230,12 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var spinner = document.getElementById("spinner");
+        spinner.classList.add("d-none");
+      });
+</script>
 <!-- Bootstrap JS and dependencies -->
 <script src="{{ asset('js/settingsShowPassword.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>

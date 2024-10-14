@@ -74,7 +74,7 @@ class FlipbookController extends Controller
     // Assign concatenated image paths and book type to the input
     $input['images'] = $images;
     $input['name'] = $input['book_name'];
-    $input['book_type'] = $request->input('book_type'); // Add book type
+   
 
     // Create the flipbook
     $flipbook = Flipbook::create($input);
@@ -117,13 +117,7 @@ class FlipbookController extends Controller
 
         return view('showbook', compact('flipbooks', 'images'));
     }
-    public function AudioBook($id)
-    {
-        $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
-        $images = explode(",", $flipbooks->images);
-
-        return view('audiobook', data: compact('flipbooks', 'images'));
-    }
+ 
     public function showquiz($id) {
         $quizQuestions = Quiz::where('flipbook_id', $id)->get();
     
@@ -163,7 +157,7 @@ class FlipbookController extends Controller
         $fb->images = rtrim($fb->images, ",");
         $fb->book_name = $input['book_name'];
         $fb->desc = $input['desc'];
-        $fb->book_type = $input['book_type'];
+     
         $fb->save();
     
         // Handle quiz updates
