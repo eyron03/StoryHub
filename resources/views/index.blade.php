@@ -21,7 +21,7 @@
     <link rel="icon" href="{{ asset('book\icon.png') }}" type="image/png">
 
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.new.css') }}" rel="stylesheet">
     <link href="{{ asset('lib/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('lib/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
@@ -98,90 +98,16 @@
             <a href="#index" class="nav-item nav-link">Home</a>
             <a href="#about" class="nav-item nav-link">About Us</a>
             <a href="#contactus" class="nav-item nav-link">Contact Us</a>
-            <a href="#" id="existingAccount" class="nav-item nav-link">Login</a>
+            <a href="{{ route('LoginIndex') }}"  class="nav-item nav-link">Login</a>
         </div>
-        <a href="" id="learnNowBtn" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
+        <a href="{{ route('LoginIndex') }}" id="learnNowBtn" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
     </div>
 </nav>
        
 
 
 <div class="container">
-    <div id="loginModal" class="modal fade">
-        <div class="modal-dialog modal-dialog-centered flip-container">
-            <div class="modal-content rounded-content flip-content">
-                <!-- Front: Login Modal -->
-                <div class="modal-front">
-                    <!-- Modal Header -->
-                    <div class="text-center modal-header">
-                        <h5 class="modal-title">Login</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <!-- Modal Body -->
-                    <div class="modal-body">
-                        <!-- Your login form goes here -->
-                        <form id="loginForm" method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
-                            @csrf
-                            <div class="form-group">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control rounded-input" id="email" name="email" placeholder="Email" required>
-                                <div class="invalid-feedback">Please provide a valid email.</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="form-label">Password:</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control rounded-input" id="password" name="password" placeholder="Password" required>
-                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="cursor: pointer;">📗</button>
-                                </div>
-                                <div class="invalid-feedback">Please provide a password.</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
-                        </form>
-                        <br>
-                        <div class="text-center">
-                            <a href="#" class="forgot-password-link" id="forgotPasswordLink">Forgot Password?</a>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Back: Forgot Password Modal -->
-                <div class="modal-back">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Forgot Password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Success Text -->
-                        <div id="successText" class="alert alert-success d-none">
-                            <span id="successMessage"></span>
-                        </div>
-    
-                        <!-- Error Text -->
-                        <div id="errorText" class="alert alert-danger d-none">
-                            <span id="errorMessage"></span>
-                        </div>
-    
-                        <div id="gifLoader" class="text-center mb-3 d-none">
-                            <img src="{{ asset('book/preloader.gif') }}" alt="Loading..." class="img-fluid">
-                        </div>
-    
-                        <form id="forgotPasswordForm" method="POST" action="{{ route('password.email') }}">
-                            @csrf
-                            <div class="form-group">
-                                <label for="forgot-email" class="form-label">Email:</label>
-                                <input type="email" class="form-control" id="forgot-email" name="email" placeholder="Enter your email" required>
-                                <div class="invalid-feedback">Please provide a valid email.</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Send Reset Link</button>
-                        </form>
-                        <br>
-                        <div class="text-center">
-                            <a href="#" class="loginLink" id="loginLink">Back to Login</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+   
     </div>
     
     <!-- Error message for invalid credentials -->
@@ -450,14 +376,7 @@
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    {{--  <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>  --}}
 
     <script src="{{ asset('lib/wow.js') }}"></script>
     <script src="{{ asset('lib/wow.min.js') }}"></script>
@@ -467,11 +386,10 @@
     <script src="{{ asset('lib/easing.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('js/showPassword.js') }}"></script>
-    <script src="{{ asset('js/forgotPassword.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -589,6 +507,8 @@
     });
     
 </script>
+
+
 
 </body>
 

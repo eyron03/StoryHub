@@ -88,11 +88,24 @@
                 <div class="flex items-center justify-center h-screen flipbook-viewport">
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
-                            @foreach($images as $page)
+                            @foreach($images as $index => $page)
+                            @if($index === 0) 
+                                <!-- First page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                </div>
+                            @elseif($index === count($images) - 1)
+                                <!-- Last page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                </div>
+                            @else
+                                <!-- Middle pages -->
                                 <div class="flex items-center justify-center w-full h-full" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                 </div>
-                            @endforeach
+                            @endif
+                        @endforeach
                         </div>
                     </div>
                 </div>
@@ -146,7 +159,7 @@
                     const totalPages = flipbook.turn('pages');
                     let backgroundImage;
         
-                    // Ensure the same sizing and aspect ratio for all images
+            
                     if (page === 1) {
                       //  backgroundImage = '{{ asset('book/front1.png') }}';
                     } else if (page === totalPages) {

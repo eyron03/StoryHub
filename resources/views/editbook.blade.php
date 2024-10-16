@@ -87,7 +87,7 @@
             </ul>
         </div>
     </div>
- <div id="gifLoader" class="text-center mb-3 d-none justify-content-center min-vh-100">
+ <div id="gifLoader" class="mb-3 text-center d-none justify-content-center min-vh-100">
             <img src="{{ asset('book/bookloader.gif') }}" alt="Loading..." class="img-fluid">
         </div>
 
@@ -309,13 +309,8 @@
             });
         });
 
-        // Handle adding more files and questions
-        var i = 2;
-        $("#add_files").on('click', function() {
-            var data = '<div class="row"><div class="col-lg-3"><label><span class="required">*</span> Select Flipbook Image </label></div><div class="col-lg-9"><input type="file" name="images' + i + '" /></div></div>';
-            i++;
-            $('#browse_file').append(data);
-        });
+  
+      
 
         var counter = 0; 
         $("#add_question").on('click', function() {

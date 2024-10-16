@@ -154,7 +154,7 @@
                     @endforeach
                     @else
                     <tr>
-                        <td colspan="9" class="text-center">No data found</td>
+                        <td colspan="10" class="text-center">No data found</td>
                     </tr>
                 @endif
                 </tbody>
@@ -234,7 +234,7 @@
                     </div>
                     <div  class="modal-body">
                         <!-- Parent information editing form will be loaded here -->
-
+                @foreach($parents as $parent)
                       <form action="{{ route('teacher.parent.update', $parent->id) }}" method="post">
                             @csrf
                             @method('PUT')
@@ -272,7 +272,7 @@
                             <button type="submit" class="btn btn-primary">Update</button>
 
                         </form>
-
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
     //
-
+    public function LoginIndex()
+        {
+            return view('login');
+            
+        }
     public function login(Request $request)
     {
         $validated = $request->validate([

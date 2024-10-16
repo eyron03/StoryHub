@@ -11,7 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="img/favicon.ico" rel="icon">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
@@ -120,7 +120,32 @@
                 
             }
         }
-        
+        body.swal2-shown .flipbook-viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999; /* Ensure the flipbook stays visible */
+        }
+        #audio-toggle {
+            position: fixed; /* Fix position to bottom right */
+            bottom: 20px; /* 20px from the bottom */
+            right: 20px; /* 20px from the right */
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text color */
+            border: none; /* No border */
+            border-radius: 50%; /* Circular button */
+            width: 60px; /* Width of the button */
+            height: 60px; /* Height of the button */
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center icon */
+            align-items: center; /* Center icon */
+            cursor: pointer; /* Pointer cursor */
+            font-size: 24px; /* Font size for icon */
+            transition: background-color 0.3s; /* Smooth transition */
+            pointer-events: auto; /* Add pointer-events to make the button clickable */
+        }
     </style>
 </head>
 <body>
@@ -129,10 +154,19 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <audio autoplay loop hidden>
+    <button id="audio-toggle" aria-label="Toggle audio" onclick="toggleAudio()" style="z-index: 1000;"> <!-- Added z-index -->
+        <i class="fa fa-volume-off" aria-hidden="true" id="audio-icon"></i>
+    </button>
+    
+    <audio id="background-audio" loop>
         <source src="{{ asset('audio/backgroundMusic.mp3') }}" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    
+    
+  
+    
+    
     <div class="all">
         <div class="header d-flex justify-content-between align-items-center fixed-top">
             <a href="{{ route('parent.storybook', [ 'childId' => $childId]) }}" style="text-decoration: none;" class="d-flex align-items-center">
@@ -144,21 +178,31 @@
             </div>
             @endif
         </div>
-        <a href="{{ route('parent.storybook', [ 'childId' => $childId]) }}" class="btn btn-primary" style="position: fixed; top:90px; left: 20px;">  <i class="fa fa-arrow-left"></i> Back       </a>
-        
+     
         <div class="content">
-            <a href="javascript:history.back()" class="btn btn-primary" style="position: fixed; top: 90px; left: 20px;">
-                <i class="fa fa-arrow-left"></i> Back
-            </a>
+         
             <div id="background" class="absolute inset-0 z-0 bg-center bg-cover">
                 <div class="flex items-center justify-center h-screen flipbook-viewport">
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
-                            @foreach($images as $page)
+                            @foreach($images as $index => $page)
+                            @if($index === 0) 
+                                <!-- First page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                </div>
+                            @elseif($index === count($images) - 1)
+                                <!-- Last page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                </div>
+                            @else
+                                <!-- Middle pages -->
                                 <div class="flex items-center justify-center w-full h-full" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                 </div>
-                            @endforeach
+                            @endif
+                        @endforeach
                         </div>
                     </div>
                 </div>
@@ -252,7 +296,7 @@
                     elevation: 50,
                     gradients: true,
                     autoCenter: true,
-                    duration: 1000,
+                    duration: 1100,
                     when: {
                         turning: function(event, page) {
                             currentPage = page; // Update current page
@@ -338,40 +382,27 @@
     </script>
     
     
-    
     <script>
-        $(document).ready(function() {
-            
-            const audio = document.getElementById('background-audio');
-
-            
-            const isPlaying = localStorage.getItem('isAudioPlaying') === 'true';
-            if (isPlaying) {
-                const savedTime = localStorage.getItem('audioCurrentTime');
-                if (savedTime) {
-                    audio.currentTime = parseFloat(savedTime);
-                }
-                audio.play();
+        function toggleAudio() {
+            var audio = document.getElementById('background-audio');
+            var icon = document.getElementById('audio-icon');
+        
+            if (audio.paused) {
+                audio.play().then(() => {
+                    icon.classList.remove('fa-volume-off');
+                    icon.classList.add('fa-volume-up');
+                    console.log("Audio is playing."); // Debugging log
+                }).catch(error => {
+                    console.error("Audio play failed:", error);
+                });
             } else {
                 audio.pause();
+                icon.classList.remove('fa-volume-up');
+                icon.classList.add('fa-volume-off');
+                console.log("Audio is paused."); // Debugging log
             }
-
-           
-            setInterval(() => {
-                localStorage.setItem('audioCurrentTime', audio.currentTime);
-            }, 1000);
-
-
-            window.addEventListener('beforeunload', () => {
-                localStorage.setItem('audioCurrentTime', audio.currentTime);
-                localStorage.setItem('isAudioPlaying', !audio.paused);
-            });
-
-           
-            audio.addEventListener('ended', () => {
-                localStorage.setItem('isAudioPlaying', 'false');
-            });
-        });
+        }
+        
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
