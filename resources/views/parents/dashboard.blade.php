@@ -35,19 +35,30 @@
         .dashboard-icons {
             margin-left: 16px; /* Adjust this value to move the icon to the right */
         }
-      .filter-container {
-        background-image: url('{{ asset('book/background1.jpg') }}');
-        background-size: cover; /* Ensures the background covers the whole div */
-        background-repeat: no-repeat;
-        border: 3px solid orange;
-        width: 100%;
-        height: auto; /* Allow height to adjust automatically */
-        padding: 20px; /* Padding for inner content */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        .filter-container {
+            background-image: url('{{ asset('book/background1.jpg') }}');
+            background-size: cover; /* Ensures the background covers the whole div */
+            background-repeat: no-repeat;
+            border: 3px solid orange;
+            width: 100%;
+            height: auto; /* Allow height to adjust automatically */
+            padding: 20px; /* Padding for inner content */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FED172; /* Change text color */
+            text-shadow: 4px 4px 6px black; /* Add black text shadow */
+        }
+        
+        .text-center {
+            text-align: center; /* Center align text for all screen sizes */
+        }
+        
+        .welcome-text {
+            color: #FED172; /* Change text color to white */
+            text-shadow: 4px 4px 6px black; /* Add black text shadow */
+        }
     
     /* Responsive styling for all screen sizes */
     @media only screen and (max-width: 768px) {
@@ -156,12 +167,12 @@
        
 <center>
  <div class="filter-container d-flex justify-content-center align-items-center">
-    <div class="p-4 text-black content col-12 col-md-10 col-lg-8">
+    <div class="p-4 content col-12 col-md-10 col-lg-8">
   
         <tr>
             <td style="padding: 20px; color: black;">
-                <h3>Welcome!</h3>
-                <h1>{{ $pFname }}</h1>
+                <h3 class="welcome-text">Welcome!</h3>
+                <h1 class="welcome-text">{{ $pFname }}</h1>
                 <p>
                     As a parent, you have important tools to support your child's education:
                 </p>

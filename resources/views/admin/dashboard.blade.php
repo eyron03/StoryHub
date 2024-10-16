@@ -30,7 +30,7 @@
 </head>
 <style>
 .text-overlay {
-    background-color: rgba(255, 255, 255, 0.7); /* White with 70% transparency */
+    
     padding: 10px;
     border-radius: 5px;
 }
@@ -43,7 +43,7 @@
     .dashboard-icons {
         margin-left: 16px; /* Adjust this value to move the icon to the right */
     }
-  .filter-container {
+.filter-container {
     background-image: url('{{ asset('book/background1.jpg') }}');
     background-size: cover; /* Ensures the background covers the whole div */
     background-repeat: no-repeat;
@@ -55,6 +55,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #FED172; /* Change text color */
+    text-shadow: 4px 4px 6px black; /* Add black text shadow */
+}
+
+.text-center {
+    text-align: center; /* Center align text for all screen sizes */
+}
+
+.welcome-text {
+    color: #FED172; /* Change text color to white */
+    text-shadow: 4px 4px 6px black; /* Add black text shadow */
 }
 
 /* Responsive styling for all screen sizes */
@@ -170,35 +181,30 @@
 </div>
 <br>
 
-       
-<center>
- <div class="filter-container d-flex justify-content-center align-items-center">
-    <div class="p-4 text-black content col-12 col-md-10 col-lg-8">
-  <div class="">
-        <tr>
-            <td style="padding: 20px; color: black;">
-                <h3>Welcome!</h3>
-                <h1>Admin</h1>
-              <p>
+   <center>
+    <div class="filter-container d-flex justify-content-center align-items-center">
+        <div class="p-4 text-center content col-12 col-md-10 col-lg-8">
+            <h3 class="welcome-text">Welcome!</h3>
+            <h1 class="welcome-text">Admin</h1>
+            <p>
                 As an admin, you have full control over the platform's content and users. This dashboard helps you manage various tasks efficiently:
             </p>
             <p>
                 - <strong>Manage Books:</strong> Add, edit, or remove books to keep content up-to-date.
             </p>
             <p>
-                - <strong>Manage Teachers:</strong> Add, update, or delete teacher profiles easily.
+                - <strong>Manage Teachers:</strong> Add, update, or delete teacher information easily.
             </p>
             <p>
-                - <strong>View Children:</strong> Track children, their profiles, grade levels, and performance.
+                - <strong>View Children:</strong> Track children, grade levels, and performance.
             </p>
             <p>
-                - <strong>Monitor Reports:</strong> Access reports to track children's progress and outcomes.
+                - <strong>Monitor Reports:</strong> Access reports to track children's progress.
             </p>
-            </td>
-        </tr>
-    </table>
-  </div>
+        </div>
+    </div>
 </center>
+
 
 
         <div class="mt-5 dash-body">
