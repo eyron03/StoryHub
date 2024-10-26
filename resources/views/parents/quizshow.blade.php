@@ -94,6 +94,26 @@
                 opacity: 0;
             }
         }
+        #audio-toggle {
+            position: fixed; /* Fix position to top right */
+            top: 80px; /* 20px from the top */
+            right: 20px; /* 20px from the right */
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text color */
+            border: none; /* No border */
+            border-radius: 50%; /* Circular button */
+            width: 50px; /* Width of the button */
+            height: 50px; /* Height of the button */
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center icon */
+            align-items: center; /* Center icon */
+            cursor: pointer; /* Pointer cursor */
+            font-size: 24px; /* Font size for icon */
+            transition: background-color 0.3s; /* Smooth transition */
+            pointer-events: auto; /* Add pointer-events to make the button clickable */
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+        
     </style>
 </head>
 <body>
@@ -102,13 +122,14 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <audio autoplay loop hidden>
+    <button id="audio-toggle" aria-label="Toggle audio" onclick="toggleAudio()" style="z-index: 1000;"> <!-- Added z-index -->
+        <i class="fa fa-volume-off" aria-hidden="true" id="audio-icon"></i>
+    </button>
+    
+    <audio id="background-audio" loop>
         <source src="{{ asset('audio/backgroundMusic.mp3') }}" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <div class="falling-books">
-        <div class="falling-book" style="background-image: url('{{ asset('book/bookclose.png') }}');"></div>
-    </div>
     
 
 <div class="all">
@@ -123,7 +144,7 @@
         </div>
         @endif
     </div>
-
+<br><br>
     <div class="quiz-container">
         <h1>Quiz</h1>
 
@@ -247,39 +268,26 @@
     });
 </script>
 <script>
-    const audio = document.getElementById('background-audio');
-    $(document).ready(function() {
-        // Get the audio element
-        const audio = document.getElementById('background-audio');
-
-        // Check if the audio was previously playing
-        const isPlaying = localStorage.getItem('isAudioPlaying') === 'true';
-        if (isPlaying) {
-            const savedTime = localStorage.getItem('audioCurrentTime');
-            if (savedTime) {
-                audio.currentTime = parseFloat(savedTime);
-            }
-            audio.play();
+    function toggleAudio() {
+        var audio = document.getElementById('background-audio');
+        var icon = document.getElementById('audio-icon');
+    
+        if (audio.paused) {
+            audio.play().then(() => {
+                icon.classList.remove('fa-volume-off');
+                icon.classList.add('fa-volume-up');
+                console.log("Audio is playing."); // Debugging log
+            }).catch(error => {
+                console.error("Audio play failed:", error);
+            });
         } else {
             audio.pause();
+            icon.classList.remove('fa-volume-up');
+            icon.classList.add('fa-volume-off');
+            console.log("Audio is paused."); // Debugging log
         }
-
-        // Save audio position every second
-        setInterval(() => {
-            localStorage.setItem('audioCurrentTime', audio.currentTime);
-        }, 1000);
-
-        // Save audio playing status on unload
-        window.addEventListener('beforeunload', () => {
-            localStorage.setItem('audioCurrentTime', audio.currentTime);
-            localStorage.setItem('isAudioPlaying', !audio.paused);
-        });
-
-        // Add event listener to handle audio play/pause
-        audio.addEventListener('ended', () => {
-            localStorage.setItem('isAudioPlaying', 'false');
-        });
-    });
+    }
+    
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {

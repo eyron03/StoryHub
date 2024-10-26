@@ -17,7 +17,7 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pagesButton.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/mediaQuery.css') }}" rel="stylesheet">
+  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
@@ -25,8 +25,6 @@
     <script src="{{ asset('extras/modernizr.2.5.3.min.js') }}"></script>
     @vite(['resources/css/app.css'])
     <style>
-     
-      
         body, html {
             height: 100%;
             overflow: hidden; /* Disable scrolling */
@@ -69,7 +67,6 @@
             width: 100%; /* Make flipbook pages fill the parent */
             height: 100%; /* Make flipbook pages fill the parent */
         }
-        /* Extra small screens (small phones) */
                 #overlay {
             position: fixed;
             top: 0;
@@ -129,15 +126,15 @@
             z-index: 999; /* Ensure the flipbook stays visible */
         }
         #audio-toggle {
-            position: fixed; /* Fix position to bottom right */
-            bottom: 20px; /* 20px from the bottom */
+            position: fixed; /* Fix position to top right */
+            top: 100px; /* 20px from the top */
             right: 20px; /* 20px from the right */
             background-color: #4CAF50; /* Green background */
             color: white; /* White text color */
             border: none; /* No border */
             border-radius: 50%; /* Circular button */
-            width: 60px; /* Width of the button */
-            height: 60px; /* Height of the button */
+            width: 50px; /* Width of the button */
+            height: 50px; /* Height of the button */
             display: flex; /* Use flexbox */
             justify-content: center; /* Center icon */
             align-items: center; /* Center icon */
@@ -145,7 +142,9 @@
             font-size: 24px; /* Font size for icon */
             transition: background-color 0.3s; /* Smooth transition */
             pointer-events: auto; /* Add pointer-events to make the button clickable */
+            z-index: 1000; /* Ensure it's above other elements */
         }
+        
     </style>
 </head>
 <body>
@@ -208,13 +207,22 @@
                 </div>
             </div>
     
-            <div class="d-flex">
-                <button class="btn btn-primary" id="prevPage"><i class="fa fa-arrow-left"></i></button>
-                <button class="btn btn-primary" id="nextPage"><i class="fa fa-arrow-right"></i></button>
-            </div>
+            <div class="mt-3 col-12 d-flex justify-content-between flex-column flex-md-row">
+                <!-- Prev Button -->
+                <button class="order-1 mb-2 btn btn-primary mb-md-0 order-md-0" id="prevPage">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
     
+                <!-- Next Button -->
+                <button class="order-3 mt-2 btn btn-primary mt-md-0 order-md-0" id="nextPage">
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    <br>
         <div class="button-container">
-            <a href="#" class="btn btn-primary" id="quizButton">Quiz now?</a>
+            <br>  <br>
+            <a href="#" class="btn btn-primary btn-sm" id="quizButton">Quiz now?</a>
         </div>
     </div>
     <div id="overlay" onclick="off()">
@@ -275,17 +283,18 @@
                 const windowWidth = $(window).width();
                 const windowHeight = $(window).height();
                 let bookWidth, bookHeight;
-    
+            
                 if (windowWidth >= 992) {
-                    bookWidth = 922; // Desktop size
+                    bookWidth = 940; // Larger size for desktops
                     bookHeight = 600;
                 } else {
                     bookWidth = windowWidth * 0.9; // Scale down for smaller screens
-                    bookHeight = bookWidth * (600 / 922); // Maintain aspect ratio
+                    bookHeight = bookWidth * (600 / 922); // Maintain the aspect ratio
                 }
-    
+            
                 return { width: Math.floor(bookWidth), height: Math.floor(bookHeight) };
             }
+            
     
             function loadApp() {
                 const flipbook = $('.flipbook');

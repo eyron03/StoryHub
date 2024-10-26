@@ -19,9 +19,9 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,7 +106,7 @@
                                             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                                             <div class="invalid-feedback">Please enter your password.</div>
                                         </div>
-                                        
+
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary">Login</button>
                                         </div>
@@ -123,21 +123,29 @@
                                     <h3>Forgot Password</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form id="forgot-password-form" method="POST" action="{{ route('password.email') }}" class="needs-validation" novalidate>
+                                    <form method="POST" action="{{ route('password.email') }}" id="request-reset-link-form">
                                         @csrf
-                                                                            
-                                    <div id="gifLoader" class="mb-3 text-center d-none justify-content-center min-vh-100 ">
-                                        <img src="{{ asset('book/bookloader.gif') }}" alt="Loading..." class="img-fluid">
-                                    </div> 
-                                        <div class="mb-3">
-                                            <label for="forgot-email" class="form-label">Email address</label>
-                                            <input type="email" class="form-control" id="forgot-email" name="email" placeholder="Enter email" required>
-                                            <div class="invalid-feedback">Please enter your email address to reset the password.</div>
+                                       <div class="mb-3">
+
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">{{ __('Email') }}</label>
+                                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
+                                                @error('email')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                                        <div class="row mb-0">
+                                            <div class="text-center ">
+                                                <button type="submit" class="btn btn-primary">
+                                                    {{ __('Send Password Reset Link') }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
+
                                 </div>
                                 <div class="text-center card-footer">
                                     <a href="#" id="back-to-login-link">Back to login</a>
@@ -160,80 +168,89 @@
         document.addEventListener("DOMContentLoaded", function() {
             var spinner = document.getElementById("spinner");
             spinner.classList.add("d-none");
-        
+
             var flipCard = document.getElementById('flip-card');
             var forgotLink = document.getElementById('forgot-link');
             var backToLoginLink = document.getElementById('back-to-login-link');
             var loader = document.getElementById('gifLoader'); // The GIF loader element
-        
+
             // Show forgot password form
             forgotLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 flipCard.classList.add('flipped');
             });
-        
+
             // Show login form again
             backToLoginLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 flipCard.classList.remove('flipped');
             });
-        
+
             // Form validation and loader functionality with AJAX submission
-            var forgotPasswordForm = document.getElementById('forgot-password-form');
-            forgotPasswordForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the form from being submitted traditionally
-        
-                if (forgotPasswordForm.checkValidity()) {
-                    // Show the GIF loader while keeping the form visible
-                    loader.classList.remove('d-none');
-        
-                    // Perform AJAX request to submit the form
-                    var formData = new FormData(forgotPasswordForm);
-        
-                    fetch('{{ route('password.email') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    })
-                    .then(response => {
-                        loader.classList.add('d-none'); // Hide loader after response
-                        
-                        if (response.ok) {
-                            // Server responded with a success status
-                            return response.json();
-                        } else {
-                            // If the server returned an error, handle it here
-                            throw new Error('Something went wrong with the request');
-                        }
-                    })
-                    .then(data => {
-                        // Handle successful response
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Password reset email sent successfully!',
-                            confirmButtonText: 'OK'
+
+
+        });
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var requestResetLinkForm = document.getElementById("request-reset-link-form");
+
+            requestResetLinkForm.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Processing...',
+                    text: 'Please wait while we send the reset link.',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                var formData = new FormData(requestResetLinkForm);
+
+                fetch("{{ route('password.email') }}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                        "Accept": "application/json"
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.json().then(data => {
+                            throw data; // Throw data to catch block for error handling
                         });
-                    })
-                    .catch(error => {
-                        loader.classList.add('d-none'); // Hide loader in case of error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'An error occurred. Please try again later.',
-                            confirmButtonText: 'OK'
-                        });
+                    }
+                })
+                .then(data => {
+                    Swal.close(); // Close loading
+                    Swal.fire({
+                        icon: data.success ? 'success' : 'error',
+                        title: data.success ? 'Success' : 'Error',
+                        text: data.message,
+                        confirmButtonText: 'OK'
                     });
-                } else {
-                    forgotPasswordForm.classList.add('was-validated');
-                }
+                })
+                .catch(error => {
+                    Swal.close(); // Close loading
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'An error occurred. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                });
             });
         });
-        
     </script>
-    
 </body>
 
 </html>

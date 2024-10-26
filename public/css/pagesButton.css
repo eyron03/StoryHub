@@ -1,3 +1,12 @@
+
+#quizButton {
+    display: none;
+    position: fixed;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}
 /* Common button styles */
 #nextPage, #prevPage {
     position: fixed;
@@ -25,95 +34,6 @@
 }
 
 #prevPage {
-    bottom: 20px;
+    bottom: 12px;
     left: 40px; /* Floating to the left */
-}
-#quizButton {
-    display: none;
-    position: fixed;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 999;
-}
-
-/* Adjust button positioning for larger screens (desktops) */
-@media (min-width: 1200px) {
-    #nextPage {
-        right: 150px;
-        bottom: 50px;
-    }
-
-    #prevPage {
-        left: 150px;
-        bottom: 50px;
-    }
-}
-
-/* For medium screens (tablets) */
-@media (max-width: 992px) {
-    #nextPage {
-        right: 20px;
-        bottom: 60px;
-    }
-
-    #prevPage {
-        left: 20px;
-        bottom: 60px;
-    }
-}
-
-/* For smaller screens (phones) */
-@media (max-width: 768px) {
-    #nextPage {
-        right: 20px;
-        bottom: 40px;
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
-    #prevPage {
-        left: 20px;
-        bottom: 40px;
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-}
-
-/* Additional responsive adjustments for very small screens */
-@media (max-width: 576px) {
-    #nextPage, #prevPage {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    #nextPage {
-        right: 10px;
-        bottom: 30px;
-    }
-
-    #prevPage {
-        left: 10px;
-        bottom: 30px;
-    }
-}
-
-/* Display buttons when relevant (Page 2 background) */
-.page-2-background #nextPage {
-    display: block;
-    right: 40px;
-    bottom: 20px;
-    transform: translateY(-50%);
-}
-
-.page-2-background #prevPage {
-    display: block;
-    left: 40px;
-    bottom: 20px;
-    transform: translateY(-50%);
-}
-
-/* Change button background color on hover */
-#nextPage:hover, #prevPage:hover {
-    background-color: #0056b3;
 }
