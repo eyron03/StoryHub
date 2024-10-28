@@ -66,8 +66,10 @@ Route::get('/', function () {
 
 
 });
-    Route::put('/admin/parent/update/{id}', [AdminController::class, 'updateParent'])->name('admin.parent.update');
 
+
+    Route::put('/admin/parent/update/{id}', [AdminController::class, 'updateParent'])->name('admin.parent.update');
+    Route::get('/admin/analytics',[AdminController::class,'Analytics'])->name('admin.Analytics');
     Route::middleware([ 'admin'])->group(function () {
     Route::get('/admin/dashboard', [LoginController::class, 'Adashboard'])->name('admin.dashboard');
 

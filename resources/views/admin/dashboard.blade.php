@@ -159,6 +159,10 @@
             <a class="sidebarimage img-fluid" href="progress">
                 <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i>Progress
             </a>
+            <a class="sidebarimage img-fluid" href="analytics">
+                <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Analytics
+               </a>
+       
         <a class="sidebarimage img-fluid" href="logs">
          <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
         </a>
