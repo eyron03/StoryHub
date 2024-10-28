@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
-  
+
 </head>
 <body>
     <div id="spinner" class=" show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -52,7 +52,7 @@
             </ul>
         </div>
     </div>
-   
+
     <div class="sidebar">
         <a class="sidebarimage img-fluid" href="dashboard" >
             <i class="fas fa-tachometer-alt icon-space"></i> Dashboard
@@ -75,6 +75,10 @@
         <a class="sidebarimage img-fluid" href="progress" >
             <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i> Progress
         </a>
+        <a class="sidebarimage img-fluid" href="analytics">
+            <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+        </a>
+
         <a class="sidebarimage img-fluid" href="logs">
             <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
            </a>
@@ -82,7 +86,7 @@
 
 
     <div class="content">
-                 
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -113,7 +117,7 @@
 </form>
 
 
-  
+
 <div class="table-responsive">
     <table id="teacherTable" class="table table-striped table-bordered">
         <thead class="thead-dark">
@@ -157,7 +161,7 @@
                             </tr>
             @endif
         </tbody>
-        
+
     </div>
     </table>
 </div>
@@ -165,7 +169,7 @@
            {{ $teachers->appends(['search' => $search])->links() }}
         </div>
 
-    
+
 
         <!-- View Teacher Modal -->
         <div class="modal fade" id="viewTeacherModal" tabindex="-1" aria-labelledby="viewTeacherModalLabel" aria-hidden="true">
@@ -232,7 +236,7 @@
                 <form action="{{ route('admin.addTeacher') }}" method="POST" class="needs-validation" novalidate>
                     @csrf
                     <input type="hidden" name="usertype" value="teacher">
-                    
+
                             <div class="form-group">
                     <label for="TeacherFirstName">First Name</label>
                     <input type="text" class="form-control" id="TeacherFirstName" name="TeacherFirstName" placeholder="Enter First Name" required>
@@ -309,7 +313,7 @@
                 </div>
 
 
-                    
+
                     <br>
                     <button type="submit" class="btn btn-primary">Add Teacher</button>
                 </form>
@@ -338,7 +342,7 @@
                                 <label for="editTeacherLastName">Last Name</label>
                                 <input type="text" class="form-control" id="editTeacherLastName" name="TeacherLastName" required>
                             </div>
-                        
+
                             <div class="form-group">
                                 <label for="editTeacherDob">Date of Birth</label>
                                 <input type="date" class="form-control" id="editTeacherDob" name="TeacherDob" required>
@@ -350,10 +354,10 @@
                             <div class="form-group">
                                 <label for="editTeacherGender">Gender</label>
                                 <select class="form-select" id="editTeacherGender" name="TeacherGender" required>
-                                  
+
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
-                                  
+
                                 </select>
                             </div>
                                     <div class="form-group">
@@ -383,14 +387,14 @@
         </div>
     </div>
 
-    
+
 </div>
  <script src="{{ asset('js/showPassword.js') }}"></script>
         <!-- SweetAlert CDN -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
-      
-     
+
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -437,7 +441,7 @@
 
     function viewTeacher(teacherId) {
         var teacher = {!! json_encode($teachers->keyBy('id')) !!}[teacherId];
-        
+
         if (teacher) {
             $('#viewTeacherFname').text(teacher.TeacherFirstName);
             $('#viewTeacherLname').text(teacher.TeacherLastName);
@@ -453,11 +457,11 @@
 
     function editTeacher(teacherId) {
         var teacher = {!! json_encode($teachers->keyBy('id')) !!}[teacherId];
-        
+
         if (teacher) {
             $('#editTeacherFirstName').val(teacher.TeacherFirstName);
             $('#editTeacherLastName').val(teacher.TeacherLastName);
-         
+
             $('#editTeacherDob').val(teacher.TeacherDob);
             $('#editTeacherAddress').val(teacher.TeacherAddress);
             $('#editTeacherGender').val(teacher.TeacherGender);
@@ -467,7 +471,7 @@
         }
     }
 
-  
+
 </script>
 
 <script>
@@ -476,7 +480,7 @@
             $teacher->id => [
                 'TeacherFirstName' => $teacher->TeacherFirstName,
                 'TeacherLastName' => $teacher->TeacherLastName,
-               
+
                 'TeacherDob' => $teacher->TeacherDob,
                 'TeacherAddress' => $teacher->TeacherAddress,
                 'TeacherGender' => $teacher->TeacherGender,
@@ -489,7 +493,7 @@
 
     function viewTeacher(teacherId) {
         var teacher = teachers[teacherId];
-        
+
         if (teacher) {
             $('#viewTeacherFname').text(teacher.TeacherFirstName);
             $('#viewTeacherLname').text(teacher.TeacherLastName);
@@ -518,14 +522,14 @@
     </script>
 @endif
 <script>
-   
+
     (function () {
         'use strict'
 
-       
+
         var forms = document.querySelectorAll('.needs-validation')
 
-      
+
         Array.prototype.slice.call(forms)
             .forEach(function (form) {
                 form.addEventListener('submit', function (event) {
@@ -541,35 +545,35 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-       
+
         const form = document.querySelector('.needs-validation');
         form.addEventListener('submit', function (event) {
-         
+
             const password = document.getElementById('password');
             const passwordConfirmation = document.getElementById('password_confirmation');
             const passwordMatchError = document.getElementById('password-match-error');
-            
-           
+
+
             if (password.value !== passwordConfirmation.value) {
-                
+
                 event.preventDefault();
                 event.stopPropagation();
-                
-                
+
+
                 passwordConfirmation.classList.add('is-invalid');
                 passwordMatchError.style.display = 'block';
             } else {
-            
+
                 passwordConfirmation.classList.remove('is-invalid');
                 passwordMatchError.style.display = 'none';
             }
-            
-          
+
+
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-            
+
             form.classList.add('was-validated');
         }, false);
     });

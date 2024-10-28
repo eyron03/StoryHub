@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
-    
+
 
 </head>
 <body>
@@ -61,7 +61,7 @@
     </div>
 
 
-  
+
     <div class="sidebar">
         <a class="sidebarimage img-fluid" href="dashboard" >
             <i class="fas fa-tachometer-alt icon-space"></i> Dashboard
@@ -84,6 +84,10 @@
         <a class="sidebarimage img-fluid" href="progress">
             <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i> Progress
         </a>
+        <a class="sidebarimage img-fluid" href="analytics">
+            <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+        </a>
+
         <a class="sidebarimage img-fluid" href="logs">
             <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
            </a>
@@ -91,7 +95,7 @@
 
 
     <div class="content">
-                 
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -108,7 +112,7 @@
              <br>
                 <h1 style="text-align: center;">All Children Information</h1>
                  <br>
-      
+
              <form action="{{ route('admin.childrenDashboard') }}" method="GET">
              <div class="row justify-content-center">
         <div class="col-md-6">
@@ -263,7 +267,7 @@
                         <label for="childLastName" class="form-label">Last Name:</label>
                         <input type="text" class="form-control" id="childLastName" name="childLastName">
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="childDob" class="form-label">Date of Birth:</label>
                         <input type="date" class="form-control" id="childDob" name="childDob">

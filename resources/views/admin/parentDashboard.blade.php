@@ -23,8 +23,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
     <style>
-     
- 
+
+
 </style>
 </head>
 <body>
@@ -58,7 +58,7 @@
         </div>
     </div>
 
-   
+
     <div class="sidebar">
         <a class="sidebarimage img-fluid" href="dashboard" >
             <i class="fas fa-tachometer-alt icon-space"></i> Dashboard
@@ -81,13 +81,17 @@
         <a class="sidebarimage img-fluid" href="progress">
             <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i> Progress
         </a>
+        <a class="sidebarimage img-fluid" href="analytics">
+            <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+        </a>
+
         <a class="sidebarimage img-fluid" href="logs">
             <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
            </a>
     </div>
 
     <div class="content">
-                 
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -101,17 +105,17 @@
 </div>
 
 
-       
+
              <br>
                 <h1 style="text-align: center;">All Parents Information</h1>
                  <br>
         <button class="btn btn-primary btn-sm" onclick="openAddParentModal()">Add Parent</button>
         <br>
         <div class="row justify-content-center">
-            
+
             <div class="col-md-6">
                 <br> <br>
-                
+
              <form action="{{ route('admin.parentDashboard') }}" method="GET">
                 <div class="mb-3 input-group">
                      <input type="text" class="form-control" id="searchInput" name="search" placeholder="Search by Parent name..." value="{{ request()->input('search') }}">
@@ -169,7 +173,7 @@
              {{ $parents->appends(['search' => $search])->links() }}
         </div>
 
-      
+
         <div class="modal fade" id="viewParentModal" tabindex="-1" aria-labelledby="viewParentModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -231,7 +235,7 @@
                     <div  class="modal-body">
                         <!-- Parent information editing form will be loaded here -->
                         @if($parent)
-                           
+
                             <form method="POST" action="{{ route('admin.parent.update', ['id' => $parent->id]) }}">
                                 @csrf
                                 @method('PUT')
@@ -263,7 +267,7 @@
                                     <label for="email" class="form-label">Email:</label>
                                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $parent->email) }}">
                                 </div>
-                                
+
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
                         @else
@@ -368,7 +372,7 @@
         spinner.classList.add("d-none");
       });
 </script>
-     
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -426,10 +430,10 @@ function confirmDelete(url) {
         $('#editParentForm').submit(function(e) {
             e.preventDefault(); // Prevent the default form submission
             var formData = $(this).serialize(); // Get form data
-    
+
             // Get the route URL for updating the parent data
             var routeUrl = $(this).attr('action');
-    
+
             // Make an AJAX request to update the parent data
             $.ajax({
                 url: routeUrl,
@@ -451,13 +455,13 @@ function confirmDelete(url) {
                     // Display errors if validation fails
                     var errors = xhr.responseJSON.errors;
                     var errorMessage = '';
-    
+
                     if (errors) {
                         $.each(errors, function(key, value) {
                             errorMessage += value[0] + "\n"; // Append each error message
                         });
                     }
-    
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -467,7 +471,7 @@ function confirmDelete(url) {
             });
         });
     });
-    
+
 </script>
 
 </body>

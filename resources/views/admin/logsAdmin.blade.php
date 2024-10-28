@@ -28,7 +28,7 @@
     border: 1px solid black; /* Add a black border */
     border-radius: 5px; /* Optional: Add rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
-    
+
 }
 .dashboard-icons {
     margin-left: 16px; /* Adjust this value to move the icon to the right */
@@ -42,7 +42,7 @@ body, html {
 }
 @media (max-width: 576px) {
     .pagination {
-        
+
         justify-content: center; /* Center the pagination links */
     }
 
@@ -58,7 +58,7 @@ body, html {
 
 @media (max-width: 768px) {
     .pagination {
-     
+
         justify-content: center;
     }
 
@@ -67,7 +67,7 @@ body, html {
     }
 
     .pagination li a {
-       
+
         font-size: 10px;
     }
 }
@@ -127,6 +127,10 @@ body, html {
             <a class="sidebarimage img-fluid" href="progress">
                 <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i>Progress
             </a>
+            <a class="sidebarimage img-fluid" href="analytics">
+                <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+            </a>
+
              <a class="sidebarimage img-fluid" href="logs" style="background-color: #fcfbe8;">
          <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
         </a>
@@ -134,7 +138,7 @@ body, html {
         </div>
 
         <div class="content">
-         
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -191,7 +195,7 @@ body, html {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    
+
 </body>
 
 </html>

@@ -620,22 +620,22 @@ class AdminController extends Controller
 
     public function Analytics(Request $request)
     {
-        // Get data for each chart
-        $quizTakenData = $this->getQuizTakenData($request->input('period', 'today'));
-        $reportsData = $this->getReportsData($request->input('period', 'today'));
-        $progressData = $this->getProgressData();
+        // Determine the period (default to 'today')
+        $period = $request->input('period', 'today');
+
+        // Get data for each chart based on the period
+        $quizTakenData = $this->getQuizTakenData($period);
+        $progressData = $this->getProgressData($period);
 
         if ($request->ajax()) {
             return response()->json([
                 'quizTakenData' => $quizTakenData,
-                'reportsData' => $reportsData,
                 'progressData' => $progressData,
             ]);
         }
 
         return view('admin.analyticsAdmin', [
             'initialQuizTakenData' => $quizTakenData,
-            'initialReportsData' => $reportsData,
             'initialProgressData' => $progressData,
         ]);
     }
@@ -653,59 +653,66 @@ class AdminController extends Controller
             )
             ->groupBy('gradeLevel', DB::raw('DATE(date_taken)'))
             ->orderBy('date', 'asc');
-    
+
         switch ($period) {
             case 'week':
                 $query->whereBetween('date_taken', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 break;
+            case 'last_week':
+                $query->whereBetween('date_taken', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
+                break;
             case 'month':
                 $query->whereBetween('date_taken', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+                break;
+            case 'last_month':
+                $query->whereBetween('date_taken', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
+                break;
+            case 'year':
+                $query->whereBetween('date_taken', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()]);
                 break;
             default:
                 $query->whereDate('date_taken', Carbon::now()->toDateString());
         }
-    
+
         return $query->get();
     }
-    
-    private function getReportsData($period)
+
+    private function getProgressData($period)
     {
-        $query = DB::table('quiz_results')
-            ->join('childrens', 'quiz_results.child_id', '=', 'childrens.id')
-            ->join('children_classes', 'childrens.id', '=', 'children_classes.child_id')
-            ->join('grade_levels', 'children_classes.class_id', '=', 'grade_levels.id')
+        $query = DB::table('grade_levels')
+            ->join('children_classes', 'grade_levels.id', '=', 'children_classes.class_id')
+            ->join('childrens', 'children_classes.child_id', '=', 'childrens.id')
+            ->join('quiz_results', 'childrens.id', '=', 'quiz_results.child_id')
             ->select(
                 'grade_levels.GradeLvl as gradeLevel',
-                DB::raw('DATE(date_taken) as date'),
-                DB::raw('SUM(quiz_results.total_score) as totalScore') // Sum the scores instead of counting
+                DB::raw('SUM(quiz_results.total_score) as totalScore') // Sum of scores by grade level
             )
-            ->groupBy('gradeLevel', DB::raw('DATE(date_taken)'))
-            ->orderBy('date', 'asc');
-    
+            ->groupBy('grade_levels.GradeLvl');
+
+        // Filter based on the period
         switch ($period) {
             case 'week':
-                $query->whereBetween('date_taken', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                $query->whereBetween('quiz_results.date_taken', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'last_week':
+                $query->whereBetween('quiz_results.date_taken', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
                 break;
             case 'month':
-                $query->whereBetween('date_taken', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+                $query->whereBetween('quiz_results.date_taken', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+                break;
+            case 'last_month':
+                $query->whereBetween('quiz_results.date_taken', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
+                break;
+            case 'year':
+                $query->whereBetween('quiz_results.date_taken', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()]);
                 break;
             default:
-                $query->whereDate('date_taken', Carbon::now()->toDateString());
+                // Default to today
+                $query->whereDate('quiz_results.date_taken', Carbon::now()->toDateString());
         }
-    
+
         return $query->get();
     }
-    private function getProgressData()
-{
-    return DB::table('grade_levels')
-        ->join('children_classes', 'grade_levels.id', '=', 'children_classes.class_id')
-        ->join('childrens', 'children_classes.child_id', '=', 'childrens.id')
-        ->join('quiz_results', 'childrens.id', '=', 'quiz_results.child_id')
-        ->select('grade_levels.GradeLvl as gradeLevel', DB::raw('SUM(quiz_results.total_score) as totalScore')) // Assuming 'score' is the column for individual scores
-        ->groupBy('grade_levels.GradeLvl')
-        ->get();
-}
-
 
     public function logout()
     {

@@ -101,11 +101,17 @@
         <a class="sidebarimage img-fluid" href="progress">
             <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i> Progress
         </a>
+        <a class="sidebarimage img-fluid" href="analytics">
+            <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+        </a>
+        <a class="sidebarimage img-fluid" href="logs">
+            <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
+           </a>
     </div>
 
-  
+
     <div class="content">
-                 
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -125,11 +131,11 @@
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-    
+
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
-    
+
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -139,7 +145,7 @@
                 </ul>
             </div>
         @endif
-    
+
         <div class="settings-options">
             <div class="option" data-toggle="modal" data-target="#personalInfoModal">
                 <i class="fas fa-envelope"></i>
@@ -151,7 +157,7 @@
             </div>
         </div>
     </div>
-    
+
     {{-- Personal Information Modal --}}
     <div class="modal fade" id="personalInfoModal" tabindex="-1" role="dialog" aria-labelledby="personalInfoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -167,8 +173,8 @@
                     <form action="{{ route('admin.change.email') }}" method="POST">
                         @csrf
                         @method('PUT')
-        
-        
+
+
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $admin->email) }}" required>
@@ -183,7 +189,7 @@
             </div>
         </div>
     </div>
-    
+
     {{-- Change Password Modal --}}
     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -204,7 +210,7 @@
                                 <button type="button" class="btn btn-outline-secondary" id="toggleCurrentPassword" style="cursor: pointer;">📗</button>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="new_password">New Password</label>
                             <div class="input-group">
@@ -212,7 +218,7 @@
                                 <button type="button" class="btn btn-outline-secondary" id="toggleNewPassword" style="cursor: pointer;">📗</button>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="new_password_confirmation">Confirm New Password</label>
                             <div class="input-group">
@@ -220,7 +226,7 @@
                                 <button type="button" class="btn btn-outline-secondary" id="toggleConfirmNewPassword" style="cursor: pointer;">📗</button>
                             </div>
                         </div>
-                        
+
                         <br>
                         <button type="submit" class="btn btn-primary">Change Password</button>
                     </form>

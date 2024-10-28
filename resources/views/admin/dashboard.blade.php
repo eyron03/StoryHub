@@ -19,9 +19,9 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
 </head>
 <style>
 .text-overlay {
-    
+
     padding: 10px;
     border-radius: 5px;
 }
@@ -38,7 +38,7 @@
         border: 1px solid black; /* Add a black border */
         border-radius: 5px; /* Optional: Add rounded corners */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
-        
+
     }
     .dashboard-icons {
         margin-left: 16px; /* Adjust this value to move the icon to the right */
@@ -105,8 +105,8 @@
 }
 </style>
 <body>
-   
-    
+
+
     @Include('sweetalert::alert')
     <div id="spinner" class=" show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -160,9 +160,11 @@
                 <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i>Progress
             </a>
             <a class="sidebarimage img-fluid" href="analytics">
-                <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Analytics
-               </a>
-       
+                <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+            </a>
+
+
+
         <a class="sidebarimage img-fluid" href="logs">
          <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
         </a>
@@ -171,7 +173,7 @@
         </div>
 
         <div class="content">
-            
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">

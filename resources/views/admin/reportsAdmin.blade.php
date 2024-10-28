@@ -27,7 +27,7 @@
          justify-content: center;
          margin: 20px 0;
      }
- 
+
      /* Pagination List */
      .pagination {
          display: flex;
@@ -35,12 +35,12 @@
          padding: 0;
          margin: 0;
      }
- 
+
      /* Pagination Items */
      .pagination li {
          margin: 0 5px;
      }
- 
+
      /* Pagination Links */
      .pagination a, .pagination span {
          display: block;
@@ -52,20 +52,20 @@
          border-radius: 5px;
          transition: background-color 0.2s ease, color 0.2s ease;
      }
- 
+
      /* Active Pagination Link */
      .pagination .active span {
          background-color: #007bff;
          color: #fff;
          border-color: #007bff;
      }
- 
+
      /* Hover Effect */
      .pagination a:hover {
          background-color: #e9ecef; /* Light gray background */
          color: #0056b3; /* Darker blue for better contrast */
      }
- 
+
      /* Disabled Links */
      .pagination .disabled span {
          color: #6c757d; /* Bootstrap secondary color */
@@ -73,7 +73,7 @@
          background-color: #f8f9fa; /* Light background for disabled state */
          border-color: #dee2e6;
      }
- 
+
 </style>
 
 
@@ -114,7 +114,7 @@
         </div>
     </div>
 
- 
+
     <div class="sidebar">
         <a class="sidebarimage img-fluid" href="dashboard" >
             <i class="fas fa-tachometer-alt icon-space"></i> Dashboard
@@ -137,13 +137,17 @@
         <a class="sidebarimage img-fluid" href="progress" >
             <i class="fas {{ Request::is('progress') ? 'fa-chart-line-open' : 'fa-chart-line' }} icon-space"></i> Progress
         </a>
+        <a class="sidebarimage img-fluid" href="analytics">
+            <i class="fas {{ Request::is('analytics') ? 'fa-chart-bar' : 'fa-bar-chart' }} icon-space"></i> Analytics
+        </a>
+
         <a class="sidebarimage img-fluid" href="logs">
             <i class="fas {{ Request::is('logs') ? 'fa-clipboard-list' : 'fa-clipboard' }} icon-space"></i> Logs
            </a>
     </div>
 
     <div class="content">
-                 
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -203,7 +207,7 @@
                                     <td>{{ $report->date_taken }}</td>
                                 </tr>
                             @endforeach
-                            
+
                         @else
                             <tr>
                                 <td colspan="7" class="text-center">No data found</td>
@@ -216,9 +220,9 @@
              {{ $reports->appends(['search' => $search])->links() }}
         </div>
             </div>
-           
+
         </div>
-         
+
     </div>
 
 </div>
