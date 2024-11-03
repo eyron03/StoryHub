@@ -140,15 +140,14 @@
         <div class="content">
             {{-- THIS WEEK --}}
 
-            <div class="d-flex justify-content-end mb-6">
-                <label for="timeFilter" class="me-2 mb-">Filter by:</label>
-                <select id="timeFilter" class="form-select w-auto">
-                    <option id="thisWeek" value="thisWeek">This Week</option>
-                    <option id="lastWeek" value="lastWeek">Last Week</option>
-                    <option id="lastMonth" value="lastMonth">Last Month</option>
-                    <option id="lastYear" value="lastYear">Last Year</option>
-                </select>
-            </div>
+            <select id="timeFilter" class="form-select w-auto">
+                <option value="week">This Week</option>
+                <option value="last_week">Last Week</option>
+                <option value="month">This Month</option>
+                <option value="last_month">Last Month</option>
+                <option value="year">This Year</option>
+            </select>
+
 
             <div class="container mt-5">
                 <h1 style="text-align: center;">AnalyticS Reports</h1>
@@ -179,22 +178,31 @@
     <script>
         // Fetch data function
         function fetchData(period) {
+            var spinner = document.getElementById("spinner");
+            spinner.classList.remove("d-none"); // Show spinner while fetching data
+
             fetch(`/admin/analytics?period=${period}`, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
             .then(data => {
                 updateCharts(data.quizTakenData, data.progressData);
+                spinner.classList.add("d-none"); // Hide spinner after data is updated
             })
-            .catch(error => console.error('Error fetching data:', error));
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                spinner.classList.add("d-none"); // Hide spinner in case of error
+            });
         }
 
         // Chart update function
         function updateCharts(quizData, progressData) {
+            // Update quiz chart
             quizTakenChart.data.labels = quizData.map(item => item.gradeLevel);
             quizTakenChart.data.datasets[0].data = quizData.map(item => item.childrenCount);
             quizTakenChart.update();
 
+            // Update progress chart
             progressChart.data.labels = progressData.map(item => item.gradeLevel);
             progressChart.data.datasets[0].data = progressData.map(item => item.totalScore);
             progressChart.update();
@@ -213,22 +221,39 @@
         // Chart.js initial configuration for both charts
         const quizTakenChart = new Chart(document.getElementById('quizTakenChart').getContext('2d'), {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Children Who Took Quiz', data: [], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] },
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Children Who Took Quiz',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }]
+            },
             options: { responsive: true, scales: { y: { beginAtZero: true } } }
         });
 
         const progressChart = new Chart(document.getElementById('progressChart').getContext('2d'), {
             type: 'pie',
-            data: { labels: [], datasets: [{ label: 'Total Scores by Grade Level', data: [], backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'] }] },
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Total Scores by Grade Level',
+                    data: [],
+                    backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)']
+                }]
+            },
             options: { responsive: true }
         });
     </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var spinner = document.getElementById("spinner");
-                    spinner.classList.add("d-none");
-                });
-            </script>
+
+    <!-- Spinner visibility control -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var spinner = document.getElementById("spinner");
+            spinner.classList.add("d-none"); // Ensure spinner is hidden on initial load
+        });
+    </script>
+
 </body>
 
 </html>

@@ -620,10 +620,7 @@ class AdminController extends Controller
 
     public function Analytics(Request $request)
     {
-        // Determine the period (default to 'today')
-        $period = $request->input('period', 'today');
-
-        // Get data for each chart based on the period
+        $period = $request->input('period', 'thisWeek');  // Default to 'thisWeek'
         $quizTakenData = $this->getQuizTakenData($period);
         $progressData = $this->getProgressData($period);
 
