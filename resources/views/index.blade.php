@@ -100,16 +100,16 @@
             <a href="#contactus" class="nav-item nav-link">Contact Us</a>
             <a href="{{ route('LoginIndex') }}"  class="nav-item nav-link">Login</a>
         </div>
-        <a href="{{ route('LoginIndex') }}" id="learnNowBtn" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
+        <a href="{{ route('LoginIndex') }}"  class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
     </div>
 </nav>
-       
+
 
 
 <div class="container">
-   
+
     </div>
-    
+
     <!-- Error message for invalid credentials -->
     @if (session('loginError'))
         <script>
@@ -120,8 +120,8 @@
             });
         </script>
     @endif
-    
-    
+
+
 {{--
         <div id="createAccountModal" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
@@ -297,7 +297,7 @@
                         <h1 class="mb-4">About Us</h1>
                 <p>Dinalaoan Centro is a vibrant community located in the heart of Calasiao, Pangasinan. Rich in cultural heritage and known for its close-knit neighborhood, our barangay serves as a hub of unity and cooperation among residents.</p>
             <p class="mb-4">We take pride in preserving our traditions while embracing growth and development. From local festivities that highlight our culture to initiatives aimed at improving our community's quality of life, Dinalaoan Centro thrives on collaboration and shared values. We welcome everyone with open arms, making this barangay not just a place, but a home to all who visit.</p>
-      
+
                     </div>
                     <div class="col-lg-6 about-img wow fadeInUp" data-wow-delay="0.5s">
                         <div class="row">
@@ -329,14 +329,14 @@
                         <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Dinalaoan Centro, Calasiao, Pangasinan</p>
                         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+63925 719 6748</p>
                         <p class="mb-2"><i class="fa fa-envelope me-3"></i>dinalaoanes101430@gmail.com</p>
-                      
+
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h3 class="mb-4 text-white">Quick Links</h3>
                         <a class="btn btn-link text-white-50" href="">About Us</a>
                         <a class="btn btn-link text-white-50" href="">Contact Us</a>
                         <a class="btn btn-link text-white-50" href="">Our Services</a>
-                       
+
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h3 class="mb-4 text-white">Photo Gallery</h3>
@@ -426,7 +426,7 @@
                 navbarCollapse.classList.remove('show');
             });
         });
-        
+
     </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -436,19 +436,19 @@
         const successMessage = document.getElementById('successMessage');
         const errorText = document.getElementById('errorText');
         const errorMessage = document.getElementById('errorMessage');
-    
+
         form.addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
-    
+
             const formData = new FormData(form);
-    
+
             // Show GIF loader and hide success/error text
             gifLoader.classList.remove('d-none');
             successText.classList.add('d-none');
             errorText.classList.add('d-none');
             successMessage.textContent = '';
             errorMessage.textContent = '';
-    
+
             fetch(form.action, {
                 method: 'POST',
                 headers: {
@@ -461,15 +461,15 @@
             .then(data => {
                 // Hide GIF loader
                 gifLoader.classList.add('d-none');
-    
+
                 if (data.success) {
                     // Show success message
                     successMessage.textContent = data.message;
                     successText.classList.remove('d-none');
-                    
+
                     // Optionally reset the form
                     form.reset();
-    
+
                     // Show SweetAlert success notification
                     Swal.fire({
                         title: 'Success!',
@@ -481,7 +481,7 @@
                     // Show error message
                     errorMessage.textContent = data.message;
                     errorText.classList.remove('d-none');
-    
+
                     // Show SweetAlert error notification
                     Swal.fire({
                         title: 'Error!',
@@ -494,7 +494,7 @@
             .catch(error => {
                 // Hide GIF loader
                 gifLoader.classList.add('d-none');
-                
+
                 // Show SweetAlert error notification
                 Swal.fire({
                     title: 'Error!',
@@ -505,7 +505,7 @@
             });
         });
     });
-    
+
 </script>
 
 

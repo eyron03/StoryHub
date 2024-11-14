@@ -17,8 +17,8 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
-    
-  
+
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
             border: 1px solid black; /* Add a black border */
             border-radius: 5px; /* Optional: Add rounded corners */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visual separation */
-            
+
         }
         .dashboard-icons {
             margin-left: 16px; /* Adjust this value to move the icon to the right */
@@ -47,25 +47,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #FED172; /* Change text color */
+            color: white; /* Change text color */
             text-shadow: 4px 4px 6px black; /* Add black text shadow */
         }
-        
+
         .text-center {
             text-align: center; /* Center align text for all screen sizes */
         }
-        
+
         .welcome-text {
-            color: #FED172; /* Change text color to white */
+            color: white; /* Change text color to white */
             text-shadow: 4px 4px 6px black; /* Add black text shadow */
         }
-    
+
     /* Responsive styling for all screen sizes */
     @media only screen and (max-width: 768px) {
         .filter-container {
             padding: 15px; /* Adjust padding for smaller screens */
         }
-    
+
         .filter-container h3,
         .filter-container h1,
         .filter-container p {
@@ -73,26 +73,26 @@
             text-align: center; /* Center-align text for smaller screens */
         }
     }
-    
+
     @media only screen and (max-width: 576px) {
         .filter-container {
             padding: 10px; /* Further reduce padding on extra small screens */
         }
-    
+
         .filter-container h3 {
             font-size: 14px; /* Smaller heading size */
         }
-    
+
         .filter-container h1 {
             font-size: 16px; /* Smaller title */
         }
-    
+
         .filter-container p {
             font-size: 14px; /* Smaller paragraph text */
             line-height: 1.3; /* Reduced line height to fit more text */
         }
     }
-    
+
     </style>
 </head>
 <body>
@@ -147,10 +147,10 @@
             <i class="fas fa-chart-line icon-space"></i> Progress
         </a>
     </div>
-    
+
 
     <div class="content">
-              
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -164,11 +164,11 @@
 </div>
 <br>
 
-       
+
 <center>
  <div class="filter-container d-flex justify-content-center align-items-center">
     <div class="p-4 content col-12 col-md-10 col-lg-8">
-  
+
         <tr>
             <td style="padding: 20px; color: black;">
                 <h3 class="welcome-text">Welcome!</h3>

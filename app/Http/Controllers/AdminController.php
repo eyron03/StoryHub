@@ -667,6 +667,10 @@ class AdminController extends Controller
             case 'year':
                 $query->whereBetween('date_taken', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()]);
                 break;
+                case 'last_year':
+                    $query->whereBetween('date_taken', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()]);
+                    break;
+                 
             default:
                 $query->whereDate('date_taken', Carbon::now()->toDateString());
         }

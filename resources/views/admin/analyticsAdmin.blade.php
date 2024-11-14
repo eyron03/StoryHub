@@ -146,6 +146,7 @@
                 <option value="month">This Month</option>
                 <option value="last_month">Last Month</option>
                 <option value="year">This Year</option>
+                <option value="last_year">Last Year</option>
             </select>
 
 

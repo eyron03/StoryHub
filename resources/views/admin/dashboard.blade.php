@@ -18,7 +18,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/table.css') }}" rel="stylesheet">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -55,7 +55,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #FED172; /* Change text color */
+    color: white; /* Change text color */
     text-shadow: 4px 4px 6px black; /* Add black text shadow */
 }
 
@@ -64,7 +64,7 @@
 }
 
 .welcome-text {
-    color: #FED172; /* Change text color to white */
+    color: white; /* Change text color to white */
     text-shadow: 4px 4px 6px black; /* Add black text shadow */
 }
 
