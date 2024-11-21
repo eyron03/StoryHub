@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: 'Successfully Added!',
                     text: 'You have successfully added parent account.',
                     showConfirmButton: true, // Show the OK button
-                   
-                   
+
+
                     allowOutsideClick: false // Prevent closing by clicking outside the modal
                 }).then((result) => {
                     if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
@@ -126,26 +126,26 @@ function viewParent(parentId) {
 
 function editParent(parentId) {
     $.ajax({
-        url: '/admin/parent/' + parentId + '/edit',
+        url: '/admin/parent/' + parentId + '/edit', // Matches Route URL
         type: 'GET',
         success: function(response) {
-            // Update modal content with parent data
-            $('#editParentContent').html(response);
-            // Populate form fields with parent data
-            $('#editParentId').val(response.id);
+            // Populate modal fields
             $('#pFname').val(response.pFname);
             $('#pLname').val(response.pLname);
-            $('#pAge').val(response.pAge);
             $('#pDob').val(response.pDob);
             $('#pAddress').val(response.pAddress);
             $('#pGender').val(response.pGender);
             $('#email').val(response.email);
 
-            // Show the modal
+            // Set dynamic form action
+            $('#editParentForm').attr('action', '/admin/parent/update/' + parentId);
+
+            // Show modal
             $('#editParentModal').modal('show');
         },
-        error: function(xhr, status, error) {
-            console.error('Error fetching edit parent modal:', error);
+        error: function(xhr) {
+            alert('Error: ' + xhr.responseJSON.message);
         }
     });
 }
+

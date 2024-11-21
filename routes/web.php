@@ -34,10 +34,10 @@ Route::get('/', function () {
     Route::post('/parent/register', [ParentsController::class, 'register'])->name('parents.register.submit');
     Route::get('/admin/register', [AdminController::class, 'showRegister'])->name('admin.register');
     Route::post('/admin/register', [AdminController::class, 'register'])->name('admin.register.submit');
-  
+
     //Route::get('/admin/test', [AdminController::class, 'test']);
-    
-    
+
+
 
 
 
@@ -67,6 +67,7 @@ Route::get('/', function () {
 
 });
 
+    Route::get('/admin/parent/{id}/edit', [AdminController::class, 'editParent'])->name('parent.edit');
 
     Route::put('/admin/parent/update/{id}', [AdminController::class, 'updateParent'])->name('admin.parent.update');
     Route::get('/admin/analytics',[AdminController::class,'Analytics'])->name('admin.Analytics');
@@ -76,7 +77,6 @@ Route::get('/', function () {
     Route::get('/admin/parent', [AdminController::class, 'parentDashboard'])->name('admin.parentDashboard');
     Route::get('/admin/children', [AdminController::class, 'childrenDashboard'])->name('admin.childrenDashboard');
     Route::get('/admin/parent/{id}', [AdminController::class, 'viewParent'])->name('parent.view');
-    Route::get('/admin/parent/{id}/edit', [AdminController::class, 'editParent'])->name('parent.edit');
 
     Route::delete('/admin/parent/{id}', [AdminController::class, 'destroyParent'])->name('parent.destroy');
 
@@ -91,27 +91,27 @@ Route::get('/', function () {
     Route::get('/admin/books', [FlipBookController::class, 'index'])->name('flipbook.index');
     Route::get('admin/create', [FlipBookController::class, 'create'])->name('flipbook.create');
     Route::post('/flipbookstore', [FlipBookController::class, 'store'])->name('flipbookstore');
-  
+
     Route::get('/{id}/edit', [FlipBookController::class, 'edit'])->name('editbook');
     Route::put('/audioBook/{id}', [FlipBookController::class, 'update'])->name('flipbook.update');
     Route::delete('/{id}/edit', [FlipBookController::class, 'destroy'])->name('flipbook.destroy');
 
-    
+
      Route::get('/admin/teacher',[AdminController::class,'teachersDashboard'])->name('admin.teacherDashboard');
- 
+
      Route::post('/admin/teacher', [AdminController::class, 'storeTeacher'])->name('admin.addTeacher');
      Route::get('/admin/teacher/{id}', [AdminController::class, 'showTeacher'])->name('admin.showTeacher');
- 
+
      Route::put('/teacher/{id}', [AdminController::class, 'updateTeacher'])->name('admin.updateTeacher');
- 
+
      Route::delete('/teacher/{id}', [AdminController::class, 'destroyTeacher'])->name('admin.deleteTeacher');
      Route::get('/admin/settings',[AdminController::class,'settings'])->name('admin.settings');
-        
+
      Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change.password');
 
      Route::put('/admin/change-email', [AdminController::class, 'changeEmail'])->name('admin.change.email');
      Route::get('/admin/logs',[AdminController::class,'logReports'])->name('admin.Logs');
-     
+
 });
 
     Route::get('/{id}', [FlipBookController::class, 'show'])->name('showbook');
@@ -142,8 +142,8 @@ Route::get('/', function () {
     Route::post('/teacher/update', [TeachersController::class, 'updateInfo'])->name('teacher.updateInfo');
     Route::post('/teacher/change-password', [TeachersController::class, 'changePassword'])->name('teacher.changePassword');
     });
-    
-   
+
+
 Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset', function () {
     return view('auth.passwords.email');

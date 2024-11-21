@@ -106,40 +106,44 @@ class AdminController extends Controller
 
     public function editParent($id)
     {
-        $parent = Parents::findOrFail($id);
-        return response()->json($parent);
+        $parent = Parents::find($id); // Fetch the parent by ID
+
+        if ($parent) {
+            return response()->json($parent); // Return parent data as JSON
+        } else {
+            return response()->json(['message' => 'Parent not found.'], 404);
+        }
     }
 
+    // Update Parent Method
     public function updateParent(Request $request, $id)
     {
-        // Fetch the parent record by ID
-        $parent = Parents::findOrFail($id);
+        $parent = Parents::find($id);
 
+        if (!$parent) {
+            return response()->json(['message' => 'Parent not found.'], 404);
+        }
+
+        // Validation
         $request->validate([
             'pFname' => 'required|string|max:255',
             'pLname' => 'required|string|max:255',
-            'email' => 'required|email|unique:parents,email,' . $parent->id, // Allow the current user to keep their existing email
-            'pDob' => 'required|date', // Ensure date of birth is valid
-            'pGender' => 'required|string|in:Male,Female', // Gender validation
+            'email' => 'required|email|unique:parents,email,' . $id,
+            'pDob' => 'required|date',
+            'pGender' => 'required|in:Male,Female',
         ]);
 
-        // Calculate the age based on the provided date of birth (pDob)
-        $dob = new \DateTime($request->input('pDob'));
-        $today = new \DateTime('today');
-        $age = $dob->diff($today)->y; // Get the difference in years
-
-        // Update the parent record with the computed age
+        // Update parent record
         $parent->update([
-            'pFname' => $request->input('pFname'),
-            'pLname' => $request->input('pLname'),
-            'email' => $request->input('email'),
-            'pDob' => $request->input('pDob'),
-            'pGender' => $request->input('pGender'),
-            'pAge' => $age, // Store the computed age in the database if needed
+            'pFname' => $request->pFname,
+            'pLname' => $request->pLname,
+            'email' => $request->email,
+            'pDob' => $request->pDob,
+            'pGender' => $request->pGender,
+            'pAddress' => $request->pAddress,
         ]);
 
-        // Redirect back to the parent's list or dashboard with a success message
-        return redirect()->route('admin.parentDashboard', compact('parent'))->with('success', 'Parent details updated successfully');
+        return response()->json(['message' => 'Parent updated successfully.']);
     }
 
 
@@ -667,10 +671,10 @@ class AdminController extends Controller
             case 'year':
                 $query->whereBetween('date_taken', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()]);
                 break;
-                case 'last_year':
-                    $query->whereBetween('date_taken', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()]);
-                    break;
-                 
+            case 'last_year':
+                $query->whereBetween('date_taken', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()]);
+                break;
+
             default:
                 $query->whereDate('date_taken', Carbon::now()->toDateString());
         }

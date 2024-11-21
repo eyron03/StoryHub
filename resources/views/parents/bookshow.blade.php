@@ -17,7 +17,7 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pagesButton.css') }}" rel="stylesheet">
-  
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
             margin: 0; /* Remove default margins */
             position: relative;
         }
-        
+
         #background {
             position: absolute;
             top: 9%; /* Align to the top */
@@ -54,12 +54,12 @@
             top: -6.3%;
             height: 100vh; /* Ensure full height for viewport */
         }
-        
+
         .flipbook {
             max-width: 100%; /* Prevent overflow */
             max-height: 100%; /* Prevent overflow */
         }
-        
+
         .flipbook div {
             background-size: contain; /* Change this to fit the content appropriately */
             background-position: center;
@@ -80,7 +80,7 @@
             z-index: 1000; /* Make sure it's above other content */
             overflow: hidden; /* Prevent scrolling */
         }
-        
+
         .overlay-message {
             color: white;
             font-size: 24px;
@@ -89,32 +89,32 @@
             background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
             border-radius: 10px;
         }
-        
+
         /* Medium screens (tablets) */
         @media (max-width: 992px) {
             .overlay-message {
                 font-size: 20px;
                 margin-left: 40px; /* Adjust margin for medium screens */
-              
+
             }
         }
-        
+
         /* Small screens (phones) */
         @media (max-width: 768px) {
             .overlay-message {
                 font-size: 18px;
                 margin-left: 100px; /* Adjust margin for small screens */
-               
+
             }
         }
-        
+
         /* Extra small screens (small phones) */
         @media (max-width: 576px) {
             .overlay-message {
                 font-size: 14px;
                 margin-left: -80px;
                 margin-top:-140px; /* Adjust margin for extra small screens */
-                
+
             }
         }
         body.swal2-shown .flipbook-viewport {
@@ -144,7 +144,7 @@
             pointer-events: auto; /* Add pointer-events to make the button clickable */
             z-index: 1000; /* Ensure it's above other elements */
         }
-        
+
     </style>
 </head>
 <body>
@@ -156,16 +156,16 @@
     <button id="audio-toggle" aria-label="Toggle audio" onclick="toggleAudio()" style="z-index: 1000;"> <!-- Added z-index -->
         <i class="fa fa-volume-off" aria-hidden="true" id="audio-icon"></i>
     </button>
-    
+
     <audio id="background-audio" loop>
         <source src="{{ asset('audio/backgroundMusic.mp3') }}" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    
-    
-  
-    
-    
+
+
+
+
+
     <div class="all">
         <div class="header d-flex justify-content-between align-items-center fixed-top">
             <a href="{{ route('parent.storybook', [ 'childId' => $childId]) }}" style="text-decoration: none;" class="d-flex align-items-center">
@@ -177,15 +177,15 @@
             </div>
             @endif
         </div>
-     
+
         <div class="content">
-         
+
             <div id="background" class="absolute inset-0 z-0 bg-center bg-cover">
                 <div class="flex items-center justify-center h-screen flipbook-viewport">
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
                             @foreach($images as $index => $page)
-                            @if($index === 0) 
+                            @if($index === 0)
                                 <!-- First page -->
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
@@ -206,13 +206,13 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="mt-3 col-12 d-flex justify-content-between flex-column flex-md-row">
                 <!-- Prev Button -->
                 <button class="order-1 mb-2 btn btn-primary mb-md-0 order-md-0" id="prevPage">
                     <i class="fa fa-arrow-left"></i>
                 </button>
-    
+
                 <!-- Next Button -->
                 <button class="order-3 mt-2 btn btn-primary mt-md-0 order-md-0" id="nextPage">
                     <i class="fa fa-arrow-right"></i>
@@ -232,8 +232,8 @@
             <span class="arrow-right">&#8594;</span>
         </div>
     </div>
-    
-    
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
@@ -241,11 +241,11 @@
             var childId = "{{ $childId }}";
             var flipbookId = "{{ $flipbook->id }}";
             var currentPage = 1; // Start on page 1
-    
+
             function storeReadingProgress() {
                 localStorage.setItem('readingProgress_' + childId + '_' + flipbookId, currentPage);
             }
-    
+
             function loadReadingProgress() {
                 if (typeof(Storage) !== "undefined") {
                     var readingProgress = localStorage.getItem('readingProgress_' + childId + '_' + flipbookId);
@@ -274,16 +274,16 @@
                     console.log("Error: Local storage is not supported.");
                 }
             }
-    
+
             window.addEventListener('beforeunload', function() {
                 storeReadingProgress();
             });
-    
+
             function calculateDimensions() {
                 const windowWidth = $(window).width();
                 const windowHeight = $(window).height();
                 let bookWidth, bookHeight;
-            
+
                 if (windowWidth >= 992) {
                     bookWidth = 940; // Larger size for desktops
                     bookHeight = 600;
@@ -291,14 +291,14 @@
                     bookWidth = windowWidth * 0.9; // Scale down for smaller screens
                     bookHeight = bookWidth * (600 / 922); // Maintain the aspect ratio
                 }
-            
+
                 return { width: Math.floor(bookWidth), height: Math.floor(bookHeight) };
             }
-            
-    
+
+
             function loadApp() {
                 const flipbook = $('.flipbook');
-    
+
                 flipbook.turn({
                     width: calculateDimensions().width,
                     height: calculateDimensions().height,
@@ -311,7 +311,7 @@
                             currentPage = page; // Update current page
                             const totalPages = flipbook.turn('pages');
                             let backgroundImage;
-    
+
                             // Ensure the same sizing and aspect ratio for all images
                             if (page === 1) {
                                 // backgroundImage = '{{ asset('book/front1.png') }}';
@@ -320,7 +320,7 @@
                             } else {
                                 backgroundImage = '{{ asset('book/pages1.png') }}';
                             }
-    
+
                             // Set background uniformly
                             $('#background').css({
                                 'background-image': `url(${backgroundImage})`,
@@ -338,34 +338,34 @@
                         }
                     }
                 });
-    
+
                 $('#nextPage').on('click', () => flipbook.turn('next'));
                 $('#prevPage').on('click', () => flipbook.turn('previous'));
-    
+
                 $(window).on('resize', () => {
                     const { width, height } = calculateDimensions();
                     flipbook.turn('size', width, height);
                 });
-    
+
                 // Ensure overlay is hidden on click
                 $('#overlay').on('click', function() {
                     off();
                 });
             }
-    
+
             function off() {
                 $('#overlay').hide(); // Hides the overlay
             }
-    
+
             yepnope({
                 test: Modernizr.csstransforms,
                 yep: ['{{ asset('lib/turn.js') }}'],
                 nope: ['{{ asset('lib/turn.html4.min.js') }}'],
                 complete: loadApp
             });
-    
+
             loadReadingProgress();
-    
+
             $('#quizButton').on('click', function() {
                 Swal.fire({
                     title: 'Quiz Now?',
@@ -389,13 +389,13 @@
             });
         });
     </script>
-    
-    
+
+
     <script>
         function toggleAudio() {
             var audio = document.getElementById('background-audio');
             var icon = document.getElementById('audio-icon');
-        
+
             if (audio.paused) {
                 audio.play().then(() => {
                     icon.classList.remove('fa-volume-off');
@@ -411,7 +411,7 @@
                 console.log("Audio is paused."); // Debugging log
             }
         }
-        
+
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
