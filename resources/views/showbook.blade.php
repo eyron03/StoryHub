@@ -30,7 +30,7 @@
         margin: 0; /* Remove default margins */
         position: relative;
     }
-    
+
     #background {
         position: absolute;
         top: 9%; /* Align to the top */
@@ -43,7 +43,7 @@
         z-index: -1; /* Position it behind other elements */
         transition: background-image 0.5s ease;
     }
-    
+
     .flipbook-viewport {
         position: relative; /* Ensure the viewport is positioned above the background */
         z-index: 1;
@@ -53,12 +53,12 @@
         top: -6.3%;
         height: 100vh; /* Ensure full height for viewport */
     }
-    
+
     .flipbook {
         max-width: 100%; /* Prevent overflow */
         max-height: 100%; /* Prevent overflow */
     }
-    
+
     .flipbook div {
         background-size: contain; /* Change this to fit the content appropriately */
         background-position: center;
@@ -66,8 +66,8 @@
         width: 100%; /* Make flipbook pages fill the parent */
         height: 100%; /* Make flipbook pages fill the parent */
     }
- 
-</style>  
+
+</style>
 </head>
 <body>
     <div id="spinner" class="bg-white show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -81,15 +81,15 @@
                 <h1 class="m-0 text-primary text-orange"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
             </a>
         </div>
-    
+
         <div class="content">
-         
+
             <div id="background" class="absolute inset-0 z-0 bg-center bg-cover">
                 <div class="flex items-center justify-center h-screen flipbook-viewport">
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
                             @foreach($images as $index => $page)
-                            @if($index === 0) 
+                            @if($index === 0)
                                 <!-- First page -->
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
@@ -110,31 +110,31 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="d-flex justify-content-between">
                 <button class="btn btn-primary" id="prevPage"><i class="fa fa-arrow-left"></i></button>
                 <button class="btn btn-primary" id="nextPage"><i class="fa fa-arrow-right"></i></button>
             </div>
-    
+
             <a href="{{ route('showquiz', ['id' => $flipbooks->id]) }}" class="btn btn-primary" id="quizButton">Next</a>
         </div>
     </div>
-    
+
 <!-- JavaScript for Flipbook and Responsiveness -->
 <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="https://www.turnjs.com/lib/turn.min.js"></script>
 <script>
     function loadApp() {
         const flipbook = $('.flipbook');
-    
+
         // Set the initial background image
         // $('#background').css('background-image', `url('{{ asset('book/front1.png') }}')`);
-    
+
         function calculateDimensions() {
             const windowWidth = $(window).width();
             const windowHeight = $(window).height();
             let bookWidth, bookHeight;
-        
+
             if (windowWidth >= 992) {
                 bookWidth = 940; // Larger size for desktops
                 bookHeight = 600;
@@ -142,11 +142,11 @@
                 bookWidth = windowWidth * 0.9; // Scale down for smaller screens
                 bookHeight = bookWidth * (600 / 922); // Maintain the aspect ratio
             }
-        
+
             return { width: Math.floor(bookWidth), height: Math.floor(bookHeight) };
         }
-        
-    
+
+
         flipbook.turn({
             width: calculateDimensions().width,
             height: calculateDimensions().height,
@@ -158,8 +158,8 @@
                 turning: function (event, page) {
                     const totalPages = flipbook.turn('pages');
                     let backgroundImage;
-        
-            
+
+
                     if (page === 1) {
                       //  backgroundImage = '{{ asset('book/front1.png') }}';
                     } else if (page === totalPages) {
@@ -167,7 +167,7 @@
                     } else {
                         backgroundImage = '{{ asset('book/pages1.png') }}';
                     }
-        
+
                     // Set background uniformly
                     $('#background').css({
                         'background-image': `url(${backgroundImage})`,
@@ -184,21 +184,21 @@
                 }
             }
         });
-        
+
         $('#nextPage').on('click', () => flipbook.turn('next'));
         $('#prevPage').on('click', () => flipbook.turn('previous'));
-    
+
         $(window).on('resize', () => {
             const { width, height } = calculateDimensions();
             flipbook.turn('size', width, height);
         });
     }
-    
+
     yepnope({
         test: Modernizr.csstransforms,
         yep: ['{{ asset('lib/turn.js') }}'],
         nope: ['{{ asset('lib/turn.html4.min.js') }}'],
-      
+
         complete: loadApp
     });
 </script>

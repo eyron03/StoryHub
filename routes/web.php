@@ -141,6 +141,8 @@ Route::get('/', function () {
     Route::post('/teacher/pupils/update',[TeachersController::class,'updatePupil'])->name('teacher.updatePupil');
     Route::post('/teacher/update', [TeachersController::class, 'updateInfo'])->name('teacher.updateInfo');
     Route::post('/teacher/change-password', [TeachersController::class, 'changePassword'])->name('teacher.changePassword');
+    Route::get('/teacher/showbook/{id}',[TeachersController::class,'showbook'])->name('teacher.showbook');
+    Route::get('/teacher/showquiz/{id}',[TeachersController::class,'teacherShowquiz'])->name('teacher.showquiz');
     });
 
 

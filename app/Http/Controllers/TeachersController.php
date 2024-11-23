@@ -25,34 +25,34 @@ class TeachersController extends Controller
      */
     public function index(Request $request)
     {
-       
+
         $teacherId = $request->session()->get('logged_in_teacher_id');
         $teacherName = $request->session()->get('logged_in_teacher_name');
-        
-        
+
+
         $teacher = Teachers::where('TeacherFirstName', $teacherName)
             ->where('id', $teacherId)
             ->first();
             $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
-        
-       
+
+
         if (!$teacher) {
             return redirect()->route('teachers.dashboard')->with('error', 'Teacher not found.');
         }
-    
+
         $today = now()->toDateString();
-    
+
         $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
-        
+
         if ($gradeLevel) {
             $gradeLevelId = $gradeLevel->id;
-    
-          
+
+
             $assignedChildrenCount = Children::whereHas('gradeLevel', function ($query) use ($gradeLevelId) {
                 $query->where('grade_levels.id', $gradeLevelId);
             })->count();
-    
-           
+
+
             $parentsCount = Parents::whereHas('children', function ($query) use ($gradeLevelId) {
                 $query->whereHas('gradeLevel', function ($query) use ($gradeLevelId) {
                     $query->where('grade_levels.id', $gradeLevelId);
@@ -62,11 +62,11 @@ class TeachersController extends Controller
             $assignedChildrenCount = 0;
             $parentsCount = 0;
         }
-        
-     
+
+
         $booksCount = Flipbook::count();
         $teachersCount = Teachers::count();
- 
+
         return view('teachers.dashboard', [
             'teachers' => $teachers,
             'today' => $today,
@@ -76,7 +76,7 @@ class TeachersController extends Controller
             'teachersCount' => $teachersCount,
         ]);
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -85,41 +85,41 @@ class TeachersController extends Controller
     {
         $teacherId = $request->session()->get('logged_in_teacher_id');
         $today = now()->toDateString();
-        
-      
+
+
         $teacher = Teachers::where('id', $teacherId)->first();
-        
-      
+
+
         $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
-       
+
         if (!$teacher) {
             return redirect()->route('teachers.parents')->with('error', 'Teacher not found.');
         }
-        
-       
+
+
         $gradeLevel = GradeLevel::where('teacher_id', $teacher->id)->first();
-        
+
         if (!$gradeLevel) {
             return redirect()->route('teachers.parents')->with('error', 'No grade level assigned to the teacher.');
         }
-        
+
         $gradeLevelId = $gradeLevel->id;
-        
-      
+
+
         $assignedChildren = Children::whereHas('gradeLevel', function($query) use ($gradeLevelId) {
             $query->where('grade_levels.id', $gradeLevelId);
         })->get();
-        
-       
+
+
         $assignedChildrenIds = $assignedChildren->pluck('id');
-        
-       
+
+
         $search = $request->input('search');
-        
+
         $query = Parents::whereHas('children', function($query) use ($assignedChildrenIds) {
             $query->whereIn('id', $assignedChildrenIds);
         });
-        
+
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('pFname', 'LIKE', "%{$search}%")
@@ -127,24 +127,24 @@ class TeachersController extends Controller
                   ->orWhere('id', 'LIKE', "%{$search}%");
             });
         }
-        
+
         $parents = $query->paginate(5)->appends(['search' => $search]);
-        
-       
+
+
         $parents->map(function ($parent) use ($assignedChildren) {
             $parent->childrenNames = $assignedChildren->where('parent_id', $parent->id)->pluck('childFirstName');
             return $parent;
         });
-        
+
         return view('teachers.parents', [
             'teachers' => $teachers,
             'teacherId' => $teacherId,
             'parents' => $parents,
             'today' => $today,
-            'search' => $search 
+            'search' => $search
         ]);
     }
-    
+
 public function updateParent(Request $request, $id)
 {
     // Fetch the parent record by ID
@@ -177,22 +177,22 @@ public function updateParent(Request $request, $id)
     // Redirect back to the parent's list or dashboard with a success message
     return redirect()->route('teachers.parent')->with('success', 'Parent details updated successfully');
 }
-    
+
 public function pupils(Request $request)
 {
     $teacher = Teachers::where('TeacherFirstName', $request->session()->get('logged_in_teacher_name'))
         ->where('id', $request->session()->get('logged_in_teacher_id'))
         ->first();
-    
+
     $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
     $today = now()->toDateString();
 
-  
+
     if (!$teacher) {
         return redirect()->route('teachers_pupils')->with('error', 'Teacher not found.');
     }
 
-  
+
     $gradeLevel = GradeLevel::where('teacher_id', $teacher->id)->first();
 
     if (!$gradeLevel) {
@@ -203,8 +203,8 @@ public function pupils(Request $request)
 
 
     $children = Children::whereDoesntHave('gradeLevel')->get();
-    
-    
+
+
     $search = $request->input('search');
 
     $query = Children::whereHas('gradeLevel', function($query) use ($gradeLevelId) {
@@ -234,12 +234,12 @@ public function pupils(Request $request)
 
 public function storePupil(Request $request)
 {
-    
+
     $validated = $request->validate([
         'childCustomId' => 'required|exists:childrens,custom_id',
     ]);
 
-  
+
     $child = Children::where('custom_id', $validated['childCustomId'])->first();
 
     $teacherId = $request->session()->get('logged_in_teacher_id');
@@ -247,11 +247,11 @@ public function storePupil(Request $request)
     $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
     $gradeLevelName = $gradeLevel ? $gradeLevel->GradeLvl : 'Unknown';
 
-    
+
     $teacher = Teachers::find($teacherId);
     $teacherName = $teacher ? $teacher->TeacherFirstName . ' ' . $teacher->TeacherLastName : 'Unknown';
 
-    
+
     DB::table('children_classes')->insert([
         'child_id' => $child->id,
         'class_id' => $gradeLevel ? $gradeLevel->id : null,
@@ -259,7 +259,7 @@ public function storePupil(Request $request)
         'updated_at' => now()
     ]);
 
-    
+
     Log::info('Pupil added to class:', [
         'child_custom_id' => $child->custom_id,
         'grade_level' => $gradeLevelName,
@@ -270,7 +270,7 @@ public function storePupil(Request $request)
     return redirect()->route('teachers.pupils')->with('success', 'Child added successfully.');
 }
 
-    
+
     public function editPupil($id)
     {
         $child = Children::findOrFail($id);
@@ -286,12 +286,12 @@ public function storePupil(Request $request)
             'childAddress' => 'required|string|max:255',
             'childGender' => 'required|string|in:male,female',
         ]);
-    
+
         // Calculate the age based on the child's date of birth
         $dob = new \DateTime($validatedData['childDob']);
         $today = new \DateTime('today');
         $age = $dob->diff($today)->y; // Calculate age in years
-    
+
         // Find the child by ID
         $child = Children::findOrFail($validatedData['childId']);
         $child->childFirstName = $validatedData['childFirstName'];
@@ -301,10 +301,10 @@ public function storePupil(Request $request)
         $child->childAddress = $validatedData['childAddress'];
         $child->childGender = $validatedData['childGender'];
         $child->save();
-    
+
         return response()->json(['success' => true]);
     }
-    
+
     // public function destroy($id)
     // {
     //     // Find the parent by its ID and delete it
@@ -319,13 +319,13 @@ public function storePupil(Request $request)
     $teacher = Teachers::where('TeacherFirstName', $request->session()->get('logged_in_teacher_name'))
         ->where('id', $request->session()->get('logged_in_teacher_id'))
         ->first();
-    
+
     $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
-    
-    
+
+
     $search = $request->input('search');
 
-    
+
     $query = Flipbook::query();
 
     if ($search) {
@@ -342,7 +342,7 @@ public function storePupil(Request $request)
     ]);
 }
 
-    
+
 public function reports(Request $request)
 {
     $logged_in_teacher_id = $request->session()->get('logged_in_teacher_id');
@@ -397,13 +397,13 @@ public function reports(Request $request)
     return view('teachers.reports', compact('reports', 'children', 'teachers', 'today', 'search'));
 }
 
-    
+
 public function showProgress(Request $request)
 {
     $teacher = Teachers::where('TeacherFirstName', $request->session()->get('logged_in_teacher_name'))
         ->where('id', $request->session()->get('logged_in_teacher_id'))
         ->first();
-    
+
     if (!$teacher) {
         return redirect()->route('teachers.progress')->with('error', 'Teacher not found.');
     }
@@ -463,7 +463,7 @@ $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
     $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
     $images = explode(",", $flipbooks->images);
 
-    
+
     return view('teachers.showbook', compact('flipbooks', 'images','teachers'));
 }
 public function showquiz($id) {
@@ -476,12 +476,12 @@ public function settings(Request $request)
 {
     $teacherId = $request->session()->get('logged_in_teacher_id');
     $today = now()->toDateString();
- 
+
     $teacher = Teachers::find($teacherId);
-    
-  
+
+
     $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
-    
+
     return view('teachers.settings', ['teachers' => $teachers, 'teacher' => $teacher],['today'=>$today]);
 }
 public function updateInfo(Request $request)
@@ -496,7 +496,7 @@ public function updateInfo(Request $request)
         'TeacherGender' => 'required|string|in:Male,Female,Other',
         'email' => 'required|string|email|max:255|unique:teachers,email,' . $request->session()->get('logged_in_teacher_id'),
     ]);
-    
+
     $teacherId = $request->session()->get('logged_in_teacher_id');
 
 
@@ -505,10 +505,10 @@ public function updateInfo(Request $request)
     if (!$teacher) {
         return redirect()->route('teacher.settings')->with('error', 'Teacher not found.');
     }
-    
+
 
     $oldValues = $teacher->getAttributes();
-    
+
 
     $teacher->TeacherFirstName = $validatedData['TeacherFirstName'];
     $teacher->TeacherLastName = $validatedData['TeacherLastName'];
@@ -518,70 +518,70 @@ public function updateInfo(Request $request)
     $teacher->TeacherGender = $validatedData['TeacherGender'];
     $teacher->email = $validatedData['email'];
     $teacher->save();
-    
+
 
     Log::info('Teacher information updated:', [
         'teacher_id' => $teacher->id,
         'old_values' => $oldValues,
         'updated_values' => $validatedData,
     ]);
-   
+
     $request->session()->put('logged_in_teacher_name', $teacher->TeacherFirstName);
-    
-    
+
+
     return redirect()->route('teacher.settings')->with('success', 'Personal information updated successfully.');
 }
 
 
 public function changePassword(Request $request)
 {
-   
+
     $request->validate([
         'current_password' => 'required',
         'new_password' => 'required|string|min:8|confirmed',
     ]);
-    
-   
+
+
     $teacher = Teachers::find($request->session()->get('logged_in_teacher_id'));
     if ($teacher && Hash::check($request->current_password, $teacher->password)) {
-    
+
         $teacher->password = Hash::make($request->new_password);
         $teacher->save();
-        
+
         return redirect()->route('teacher.settings')->with('success', 'Password updated successfully!');
     }
-    
+
     return redirect()->route('teacher.settings')->with('error', 'Current password is incorrect!');
 }
 public function removeFromGradeLevel($id)
 {
     try {
-      
+
         $child = Children::findOrFail($id);
-        
-    
+
+
         $gradeLevels = $child->gradeLevel->pluck('GradeLvl')->toArray();
-        
-       
+
+
         $child->gradeLevel()->detach();
 
-        
+
         Log::info('Child removed from grade level:', [
             'ID' => $child->custom_id,
             'Pupil Name' => $child->childFirstName . ' ' . $child->childLastName,
             'Grade' => $gradeLevels,
         ]);
 
-        
+
         return response()->json(['message' => 'Child removed from grade level successfully.']);
     } catch (\Exception $e) {
-       
+
         Log::error('Error removing child from grade level:', [
             'child_id' => $id,
             'error' => $e->getMessage(),
         ]);
 
-       
+
         return response()->json(['error' => 'An error occurred while removing the child from the grade level.'], 500);
     }
 }
@@ -591,10 +591,10 @@ public function removeAllFromGradeLevels()
     try {
         // Get all children
         $children = Children::with('gradeLevel')->get(); // Load children with their associated grade levels
-        
+
         foreach ($children as $child) {
             $gradeLevels = $child->gradeLevel->pluck('GradeLvl')->toArray();
-            
+
             // Detach the child from their grade levels
             $child->gradeLevel()->detach();
 
@@ -611,15 +611,27 @@ public function removeAllFromGradeLevels()
         return redirect()->back()->with('error', 'An error occurred while removing children from their grade levels.');
     }
 }
+public function showbooks($id) {
+    $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
+    $images = explode(",", $flipbooks->images);
+
+    return view('teachers.showbook', compact('flipbooks', 'images'));
+}
+
+public function teacherShowquiz($id) {
+    $quizQuestions = Quiz::where('flipbook_id', $id)->get();
+
+    return view('teachers.showquiz', compact('quizQuestions'));
+}
 
     public function logout()
 {
-    Auth::guard('teacher')->logout();  
+    Auth::guard('teacher')->logout();
 
 
     session()->flush();
 
-    return redirect('/');  
+    return redirect('/');
 }
 
 }

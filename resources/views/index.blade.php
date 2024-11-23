@@ -33,7 +33,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -53,23 +55,32 @@
         .rounded-content {
             border-radius: 15px;
         }
+
         .rounded-input {
             border-radius: 10px;
         }
+
         .nav-link.active {
             /* Add your styles for active link here */
             font-weight: bold;
-            color: #ff0000; /* Change color as desired */
+            color: #ff0000;
+            /* Change color as desired */
         }
+
         @media (max-width: 992px) {
             .navbar-nav {
-                text-align: center; /* Center links on small screens */
+                text-align: center;
+                /* Center links on small screens */
             }
+
             .navbar-collapse {
-                margin-top: 15px; /* Add space above collapsed links */
+                margin-top: 15px;
+                /* Add space above collapsed links */
             }
+
             .btn {
-                margin-top: 15px; /* Add space above button on small screens */
+                margin-top: 15px;
+                /* Add space above button on small screens */
             }
         }
     </style>
@@ -79,50 +90,54 @@
     @Include('sweetalert::alert')
     <div class="p-0 bg-white container-xxl">
         <!-- Spinner Start -->
-        <div id="spinner" class="bg-white show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div id="spinner"
+            class="bg-white show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
         <!-- Spinner End -->
-<div id="index"></div>
-<nav class="px-4 bg-white navbar navbar-expand-lg navbar-light sticky-top px-lg-5 py-lg-0">
-    <a href="index" class="navbar-brand">
-        <h1 class="m-0 text-primary"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
-    </a>
-    <button type="button" class="navbar-toggler" id="navbarToggle" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="mx-auto navbar-nav">
-            <a href="#index" class="nav-item nav-link">Home</a>
-            <a href="#about" class="nav-item nav-link">About Us</a>
-            <a href="#contactus" class="nav-item nav-link">Contact Us</a>
-            <a href="{{ route('LoginIndex') }}"  class="nav-item nav-link">Login</a>
+        <div id="index"></div>
+        <nav class="px-4 bg-white navbar navbar-expand-lg navbar-light sticky-top px-lg-5 py-lg-0">
+            <a href="index" class="navbar-brand">
+                <h1 class="m-0 text-primary"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
+            </a>
+            <button type="button" class="navbar-toggler" id="navbarToggle" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="mx-auto navbar-nav">
+                    <a href="#index" class="nav-item nav-link">Home</a>
+                    <a href="#about" class="nav-item nav-link">About Us</a>
+                    <a href="#contactus" class="nav-item nav-link">Contact Us</a>
+                    <a href="{{ route('LoginIndex') }}" class="nav-item nav-link">Login</a>
+                </div>
+                <a href="{{ route('LoginIndex') }}" class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn
+                    Now <i class="fa fa-arrow-right ms-3"></i></a>
+            </div>
+        </nav>
+
+
+
+        <div class="container">
+
         </div>
-        <a href="{{ route('LoginIndex') }}"  class="px-3 btn btn-primary rounded-pill d-none d-lg-block">Learn Now <i class="fa fa-arrow-right ms-3"></i></a>
-    </div>
-</nav>
+
+        <!-- Error message for invalid credentials -->
+        @if (session('loginError'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('loginError') }}',
+                });
+            </script>
+        @endif
 
 
-
-<div class="container">
-
-    </div>
-
-    <!-- Error message for invalid credentials -->
-    @if (session('loginError'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '{{ session('loginError') }}',
-            });
-        </script>
-    @endif
-
-
-{{--
+        {{--
         <div id="createAccountModal" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-content">
@@ -204,7 +219,8 @@
             <div class="owl-carousel header-carousel position-relative">
                 <div class="owl-carousel-item position-relative">
                     <img class="img-fluid" src="img/carousel-1.jpg" alt="">
-                    <div class="top-0 position-absolute start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(0, 0, 0, .2);">
+                    <div class="top-0 position-absolute start-0 w-100 h-100 d-flex align-items-center"
+                        style="background: rgba(0, 0, 0, .2);">
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-10 col-lg-8">
@@ -218,7 +234,8 @@
                 </div>
                 <div class="owl-carousel-item position-relative">
                     <img class="img-fluid" src="img/carousel-2.jpg" alt="">
-                    <div class="top-0 position-absolute start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(0, 0, 0, .2);">
+                    <div class="top-0 position-absolute start-0 w-100 h-100 d-flex align-items-center"
+                        style="background: rgba(0, 0, 0, .2);">
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-10 col-lg-8">
@@ -240,7 +257,9 @@
             <div class="container">
                 <div class="mx-auto mb-5 text-center wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
                     <h1 class="mb-3">School Facilities</h1>
-                    <p>At Dinalaoan Elementary School, each facilities are designed and constructed with different purpose, some are to promote the academic excellence, some are for physical health, and some are for general growth and development of the students.</p>
+                    <p>At Dinalaoan Elementary School, each facilities are designed and constructed with different
+                        purpose, some are to promote the academic excellence, some are for physical health, and some are
+                        for general growth and development of the students.</p>
                 </div>
                 <div class="row justify-content-center">
 
@@ -253,7 +272,8 @@
                             </div>
                             <div class="facility-text bg-success">
                                 <h3 class="mb-3 text-success">Playground</h3>
-                                <p class="mb-0">The playground where children are chasing around each other and swinging under the tree, where you can see the joy on their faces as students.</p>
+                                <p class="mb-0">The playground where children are chasing around each other and
+                                    swinging under the tree, where you can see the joy on their faces as students.</p>
                             </div>
                         </div>
                     </div>
@@ -266,7 +286,8 @@
                             </div>
                             <div class="facility-text bg-warning">
                                 <h3 class="mb-3 text-warning">Healthy Canteen</h3>
-                                <p class="mb-0">It is hard to study with an empty stomach, good thing the canteen offers healthy and nutritious foods for students to snack on.</p>
+                                <p class="mb-0">It is hard to study with an empty stomach, good thing the canteen
+                                    offers healthy and nutritious foods for students to snack on.</p>
                             </div>
                         </div>
                     </div>
@@ -279,7 +300,8 @@
                             </div>
                             <div class="facility-text bg-info">
                                 <h3 class="mb-3 text-info">Positive Learning</h3>
-                                <p class="mb-0">If based on a fairy tale, the school would be the kingdom of knowledge. A place where learning is always fun and exciting.</p>
+                                <p class="mb-0">If based on a fairy tale, the school would be the kingdom of
+                                    knowledge. A place where learning is always fun and exciting.</p>
                             </div>
                         </div>
                     </div>
@@ -295,20 +317,29 @@
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
                         <h1 class="mb-4">About Us</h1>
-                <p>Dinalaoan Centro is a vibrant community located in the heart of Calasiao, Pangasinan. Rich in cultural heritage and known for its close-knit neighborhood, our barangay serves as a hub of unity and cooperation among residents.</p>
-            <p class="mb-4">We take pride in preserving our traditions while embracing growth and development. From local festivities that highlight our culture to initiatives aimed at improving our community's quality of life, Dinalaoan Centro thrives on collaboration and shared values. We welcome everyone with open arms, making this barangay not just a place, but a home to all who visit.</p>
+                        <p>Dinalaoan Centro is a vibrant community located in the heart of Calasiao, Pangasinan. Rich in
+                            cultural heritage and known for its close-knit neighborhood, our barangay serves as a hub of
+                            unity and cooperation among residents.</p>
+                        <p class="mb-4">We take pride in preserving our traditions while embracing growth and
+                            development. From local festivities that highlight our culture to initiatives aimed at
+                            improving our community's quality of life, Dinalaoan Centro thrives on collaboration and
+                            shared values. We welcome everyone with open arms, making this barangay not just a place,
+                            but a home to all who visit.</p>
 
                     </div>
                     <div class="col-lg-6 about-img wow fadeInUp" data-wow-delay="0.5s">
                         <div class="row">
                             <div class="text-center col-12">
-                                <img class="p-3 img-fluid w-75 rounded-circle bg-light" src="img/about-1.jpg" alt="">
+                                <img class="p-3 img-fluid w-75 rounded-circle bg-light" src="img/about-1.jpg"
+                                    alt="">
                             </div>
                             <div class="col-6 text-start" style="margin-top: -150px;">
-                                <img class="p-3 img-fluid w-100 rounded-circle bg-light" src="img/about-2.jpg" alt="">
+                                <img class="p-3 img-fluid w-100 rounded-circle bg-light" src="img/about-2.jpg"
+                                    alt="">
                             </div>
                             <div class="col-6 text-end" style="margin-top: -150px;">
-                                <img class="p-3 img-fluid w-100 rounded-circle bg-light" src="img/about-3.jpg" alt="">
+                                <img class="p-3 img-fluid w-100 rounded-circle bg-light" src="img/about-3.jpg"
+                                    alt="">
                             </div>
                         </div>
                     </div>
@@ -321,12 +352,14 @@
 
 
         <!-- Footer Start -->
-        <div id="contactus" class="pt-5 mt-5 container-fluid bg-dark text-white-50 footer wow fadeIn" data-wow-delay="0.1s">
+        <div id="contactus" class="pt-5 mt-5 container-fluid bg-dark text-white-50 footer wow fadeIn"
+            data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row justify-content-center">
                     <div class="col-lg-3 col-md-6">
                         <h3 class="mb-4 text-white">Get In Touch</h3>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Dinalaoan Centro, Calasiao, Pangasinan</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Dinalaoan Centro, Calasiao,
+                            Pangasinan</p>
                         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+63925 719 6748</p>
                         <p class="mb-2"><i class="fa fa-envelope me-3"></i>dinalaoanes101430@gmail.com</p>
 
@@ -360,6 +393,8 @@
                                 <img class="p-1 rounded img-fluid bg-light" src="img/classes-6.jpg" alt="">
                             </div>
                         </div>
+                        <br>
+                        <p>© Dinalaoan Elementary School</p>
                     </div>
 
                 </div>
@@ -390,30 +425,30 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Include SweetAlert JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Function to handle click on nav links
-        $('nav .nav-link').on('click', function() {
-            // Remove 'active' class from all nav links
-            $('nav .nav-link').removeClass('active');
-            // Add 'active' class to the clicked nav link
-            $(this).addClass('active');
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Include SweetAlert JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to handle click on nav links
+            $('nav .nav-link').on('click', function() {
+                // Remove 'active' class from all nav links
+                $('nav .nav-link').removeClass('active');
+                // Add 'active' class to the clicked nav link
+                $(this).addClass('active');
+            });
         });
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
         // JavaScript to handle navbar toggle
         const navbarToggle = document.getElementById('navbarToggle');
         const navbarCollapse = document.getElementById('navbarCollapse');
 
         // Toggle the navbar
-        navbarToggle.addEventListener('click', function () {
+        navbarToggle.addEventListener('click', function() {
             // Toggle the 'show' class on the navbar collapse
             navbarCollapse.classList.toggle('show');
         });
@@ -421,92 +456,90 @@
         // Close the navbar when a link is clicked
         const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
         navbarLinks.forEach(link => {
-            link.addEventListener('click', function () {
+            link.addEventListener('click', function() {
                 // Close the navbar
                 navbarCollapse.classList.remove('show');
             });
         });
-
     </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('forgotPasswordForm');
-        const gifLoader = document.getElementById('gifLoader');
-        const successText = document.getElementById('successText');
-        const successMessage = document.getElementById('successMessage');
-        const errorText = document.getElementById('errorText');
-        const errorMessage = document.getElementById('errorMessage');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('forgotPasswordForm');
+            const gifLoader = document.getElementById('gifLoader');
+            const successText = document.getElementById('successText');
+            const successMessage = document.getElementById('successMessage');
+            const errorText = document.getElementById('errorText');
+            const errorMessage = document.getElementById('errorMessage');
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
 
-            const formData = new FormData(form);
+                const formData = new FormData(form);
 
-            // Show GIF loader and hide success/error text
-            gifLoader.classList.remove('d-none');
-            successText.classList.add('d-none');
-            errorText.classList.add('d-none');
-            successMessage.textContent = '';
-            errorMessage.textContent = '';
+                // Show GIF loader and hide success/error text
+                gifLoader.classList.remove('d-none');
+                successText.classList.add('d-none');
+                errorText.classList.add('d-none');
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
 
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': formData.get('_token') // Ensure CSRF token is sent
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Hide GIF loader
-                gifLoader.classList.add('d-none');
+                fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': formData.get('_token') // Ensure CSRF token is sent
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide GIF loader
+                        gifLoader.classList.add('d-none');
 
-                if (data.success) {
-                    // Show success message
-                    successMessage.textContent = data.message;
-                    successText.classList.remove('d-none');
+                        if (data.success) {
+                            // Show success message
+                            successMessage.textContent = data.message;
+                            successText.classList.remove('d-none');
 
-                    // Optionally reset the form
-                    form.reset();
+                            // Optionally reset the form
+                            form.reset();
 
-                    // Show SweetAlert success notification
-                    Swal.fire({
-                        title: 'Success!',
-                        text: data.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
+                            // Show SweetAlert success notification
+                            Swal.fire({
+                                title: 'Success!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            // Show error message
+                            errorMessage.textContent = data.message;
+                            errorText.classList.remove('d-none');
+
+                            // Show SweetAlert error notification
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        // Hide GIF loader
+                        gifLoader.classList.add('d-none');
+
+                        // Show SweetAlert error notification
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                     });
-                } else {
-                    // Show error message
-                    errorMessage.textContent = data.message;
-                    errorText.classList.remove('d-none');
-
-                    // Show SweetAlert error notification
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            })
-            .catch(error => {
-                // Hide GIF loader
-                gifLoader.classList.add('d-none');
-
-                // Show SweetAlert error notification
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
             });
         });
-    });
-
-</script>
+    </script>
 
 
 
