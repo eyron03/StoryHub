@@ -24,16 +24,7 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     //
-    public function dashboard()
-    {
-        $today = now()->toDateString();
-        $teachersCount = Teachers::count();
-        $parentsCount = Parents::count();
-        $childrenCount = Children::count();
-        $booksCount = Flipbook::count();
-
-        return view('dashboard', compact('today', 'teachersCount', 'parentsCount', 'childrenCount', 'booksCount'));
-    }
+ 
     public function showRegister()
     {
         return view('admin.register');

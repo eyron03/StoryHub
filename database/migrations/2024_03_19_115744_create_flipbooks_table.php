@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('book_name');
             $table->longText('desc');
-           
+            $table->longText('subtitles')->nullable();
+
             $table->string('images', 3000);
-           
-           
-            
-            
+
+
+
+
             $table->timestamps();
         });
     }

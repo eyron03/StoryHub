@@ -17,7 +17,7 @@ class FlipbookController extends Controller
     // Get the search input and book type from the request
     $search = $request->input('search');
     $bookType = $request->input('book_type'); // New filter for book type
-    
+
     // Build the query to fetch flipbooks with search and filter functionality
     $query = Flipbook::query();
 
@@ -30,7 +30,7 @@ class FlipbookController extends Controller
     if ($bookType) {
         $query->where('book_type', $bookType);
     }
-    
+
     // Paginate the results, appending search and filter parameters
     $flipbooks = $query->paginate(12)->appends([
         'search' => $search,
@@ -39,7 +39,7 @@ class FlipbookController extends Controller
 
     // Get today's date
     $today = now()->toDateString();
-    
+
     // Pass the data to the view
     return view('bookindex', [
         'flipbooks' => $flipbooks,
@@ -55,29 +55,54 @@ class FlipbookController extends Controller
         $bookId = session('flipbook_id');
         return view('bookcreater', ['bookId' => $bookId]);
     }
-
     public function store(Request $request)
 {
     $input = $request->all();
-    $images = "";
+    $images = [];
+    $subtitles = [];
 
+    // Check if images are uploaded
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $uploadedFile) {
             $filename = time() . '_' . uniqid() . '.' . $uploadedFile->getClientOriginalExtension();
             $uploadedFile->move(public_path('storyhub/images/'), $filename);
             $path = 'storyhub/images/' . $filename;
-            $images .= $path . ",";
+            $images[] = $path; // Save each image path
         }
-        $images = rtrim($images, ","); // Remove the trailing comma
     }
 
-    // Assign concatenated image paths and book type to the input
-    $input['images'] = $images;
-    $input['name'] = $input['book_name'];
-   
+    // Handle subtitles
+    if ($request->has('subtitles')) {
+        $subtitles = $request->input('subtitles'); // Get the subtitles input
+    }
 
-    // Create the flipbook
+    // Store images and subtitles as a serialized string or in a related database table
+    $input['images'] = implode(',', $images);
+    $input['subtitles'] = implode(',', $subtitles);// Convert images array to a comma-separated string
+   // Convert subtitles to a comma-separated string
+
+    // Create the flipbook record
     $flipbook = Flipbook::create($input);
+
+    Log::info('Book added successfully:', [
+        'BookTitle' => $flipbook->book_name,
+        'BookDescription' => $flipbook->desc,
+    ]);
+
+    return redirect()->route('admin.createQuiz', ['flipbook' => $flipbook->id]);
+}
+
+    public function createQuiz($flipbook_id)
+    {
+        // Retrieve the flipbook by ID
+        $flipbook = Flipbook::findOrFail($flipbook_id);
+
+        // Pass the flipbook to the view for context
+        return view('admin.createQuiz', compact('flipbook'));
+    }
+    public function storeQuiz(Request $request, $flipbook_id)
+{
+    $flipbook = Flipbook::findOrFail($flipbook_id);
 
     // Validate and save quiz data
     for ($i = 1; $i <= $request->counter; $i++) {
@@ -102,28 +127,33 @@ class FlipbookController extends Controller
         $flipbook->quizzes()->save($quiz);
     }
 
-    Log::info('Book added successfully:', [
-        'BookTitle' => $flipbook->book_name,
-        'BookDescription' => $flipbook->desc,
-    ]);
-
-    return redirect()->route('flipbook.index');
+    return redirect()->route('flipbook.index')->with('success', 'Quiz created successfully!');
 }
 
-        public function show($id)
-    {
-        $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
-        $images = explode(",", $flipbooks->images);
 
-        return view('showbook', compact('flipbooks', 'images'));
-    }
- 
+
+public function show($id)
+{
+    // Retrieve the flipbook with related quizzes
+    $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
+
+    // Decode the subtitles JSON
+  
+    $subtitles = explode(",", $flipbooks->subtitles);
+    // Split the images string into an array
+    $images = explode(",", $flipbooks->images);
+
+    // Pass the flipbooks, images, and subtitles to the view
+    return view('showbook', compact('flipbooks', 'images', 'subtitles'));
+}
+
+
     public function showquiz($id) {
         $quizQuestions = Quiz::where('flipbook_id', $id)->get();
-    
+
         return view('showquiz', compact('quizQuestions'));
     }
-    
+
     public function edit($id)
     {
         $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
@@ -134,17 +164,17 @@ class FlipbookController extends Controller
     public function update(Request $request, $id)
     {
         $fb = Flipbook::find($id);
-    
+
         if (!$fb) {
             // Log error if flipbook is not found
             Log::error('Flipbook not found for update', ['flipbook_id' => $id]);
             return redirect()->route('flipbook.index')->with('error', 'Flipbook not found.');
         }
-    
+
         $input = $request->all();
         $fb->images .= ",";
         $i = 1;
-    
+
         // Handle file uploads
         foreach ($request->file('files', []) as $uploadedFile) {
             $filename = time() . '_' . $i . '.' . $uploadedFile->getClientOriginalExtension();
@@ -153,13 +183,13 @@ class FlipbookController extends Controller
             $path = 'storyhub/images/' . $filename;
             $fb->images .= $path . ",";
         }
-    
+
         $fb->images = rtrim($fb->images, ",");
         $fb->book_name = $input['book_name'];
         $fb->desc = $input['desc'];
-     
+
         $fb->save();
-    
+
         // Handle quiz updates
         $quizQuestions = $request->input('quiz_question', []);
         $optionA = $request->input('option_a', []);
@@ -167,7 +197,7 @@ class FlipbookController extends Controller
         $optionC = $request->input('option_c', []);
         $optionD = $request->input('option_d', []);
         $correctAnswers = $request->input('correct_answer', []);
-    
+
         foreach ($quizQuestions as $key => $question) {
             if (!empty($question)) {
                 $quiz = isset($fb->quizzes[$key]) ? $fb->quizzes[$key] : new Quiz();
@@ -180,50 +210,50 @@ class FlipbookController extends Controller
                 $fb->quizzes()->save($quiz);
             }
         }
-    
+
         Log::info('Book updated successfully:', [
             'BookTitle' => $fb->book_name,
             'BookDescription' => $fb->desc,
         ]);
-    
+
         // Flash message for SweetAlert
         return redirect()->route('flipbook.index')->with('success', 'Book updated successfully!');
     }
-    
+
             public function destroy($id)
     {
         $fb = Flipbook::find($id);
-    
+
         if (!$fb) {
             // Log error if flipbook is not found
             Log::error('Attempted to delete non-existent flipbook', ['flipbook_id' => $id]);
             return redirect()->route('flipbook.index')->with('error', 'Flipbook not found.');
         }
-    
+
         $imgArr = explode(",", $fb->images);
-    
+
         // Log the images to be deleted
         Log::info('Deleting Book:', [
             'flipbook_id' => $id,
             'images' => $imgArr
         ]);
-    
+
         foreach ($imgArr as $img) {
             $image = public_path($img);
             if (file_exists($image)) {
                 unlink($image);
             }
         }
-    
+
         // Delete the flipbook
         $fb->delete();
-    
+
         // Log the successful deletion
         Log::info('Flipbook deleted successfully', ['flipbook_id' => $id]);
-    
+
         return Redirect::route('flipbook.index')->with('success', 'Book deleted successfully!');;
     }
-    
+
     public function destroyQuiz(Request $request)
     {
         $quizIds = $request->input('delete_quiz');

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User  as Authenticatable;
 class Flipbook extends Authenticatable
 {
     use HasFactory;
-    protected $fillable = ['book_name', 'desc', 'images'];
+    protected $fillable = ['book_name', 'desc', 'images','subtitles'];
 
 
     public function quizzes()
@@ -18,6 +18,6 @@ class Flipbook extends Authenticatable
 
     public function quizResults()
     {
-        return $this->hasMany(QuizResult::class); 
+        return $this->hasMany(QuizResult::class);
     }
 }

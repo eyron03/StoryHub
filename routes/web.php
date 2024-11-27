@@ -1,19 +1,21 @@
 <?php
 
-use FontLib\Table\Type\name;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ForgotPassword;
-use App\Http\Controllers\QuizController;
-use rudrarajiv\flipbooklaravel\Flipbook;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ParentsController;
 use App\Http\Controllers\ChildrenController;
 use App\Http\Controllers\FlipbookController;
-use App\Http\Controllers\TeachersController;
-use App\Http\Controllers\QuizResultController;
+use App\Http\Controllers\ForgotPassword;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\ParentsController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizResultController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\StorybookController;
+use App\Http\Controllers\TeachersController;
+use FontLib\Table\Type\name;
+use Illuminate\Support\Facades\Route;
+use rudrarajiv\flipbooklaravel\Flipbook;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -34,13 +36,8 @@ Route::get('/', function () {
     Route::post('/parent/register', [ParentsController::class, 'register'])->name('parents.register.submit');
     Route::get('/admin/register', [AdminController::class, 'showRegister'])->name('admin.register');
     Route::post('/admin/register', [AdminController::class, 'register'])->name('admin.register.submit');
-
-    //Route::get('/admin/test', [AdminController::class, 'test']);
-
-
-
-
-
+    Route::get('/admin/{flipbook}/create-quiz', [FlipbookController::class, 'createQuiz'])->name('admin.createQuiz');
+    Route::post('/admin/{flipbook}/store-quiz', [FlipbookController::class, 'storeQuiz'])->name('admin.storeQuiz');
     Route::middleware(['parent'])->group(function(){
       Route::post('/parent/logout', [ParentsController::class, 'logout'])->name('logout');
 

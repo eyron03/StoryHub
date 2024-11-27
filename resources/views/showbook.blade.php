@@ -89,23 +89,45 @@
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
                             @foreach($images as $index => $page)
+                            @php
+                                // Get the subtitle for the current page (if any)
+                                $currentSubtitle = $subtitles[$index] ?? ''; // Safe fallback if subtitle is missing
+                            @endphp
+
                             @if($index === 0)
                                 <!-- First page -->
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                    @if($currentSubtitle)
+                                        <div class="absolute top-52 left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold">
+                                            {{ $currentSubtitle }}
+                                        </div>
+                                    @endif
                                 </div>
                             @elseif($index === count($images) - 1)
                                 <!-- Last page -->
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                    @if($currentSubtitle)
+                                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold">
+                                            {{ $currentSubtitle }}
+                                        </div>
+                                    @endif
                                 </div>
                             @else
                                 <!-- Middle pages -->
                                 <div class="flex items-center justify-center w-full h-full" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                    @if($currentSubtitle)
+                                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold">
+                                            {{ $currentSubtitle }}
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
                         @endforeach
+
+
                         </div>
                     </div>
                 </div>
