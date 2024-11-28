@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 class ChildrenController extends Controller
 {
-    //      
+    //
     public function store(Request $request)
     {
         // Validate the incoming request
@@ -22,39 +22,40 @@ class ChildrenController extends Controller
             'childDob' => 'required|date',
             'childAddress' => 'required|string|max:255',
             'childGender' => 'required|in:male,female',
+            'parent_id' => 'required|exists:parents,id',
         ]);
-    
+
         // Parse the date of birth and compute the age
         $dob = Carbon::parse($validatedData['childDob']);
         $age = $dob->diffInYears(Carbon::now());
-    
+
         // Get parent ID from the session
         $parentId = $request->session()->get('logged_in_parent_id');
-    
+
         // Find parent information
         $parent = Parents::find($parentId);
         $parentName = $parent ? $parent->pFname . ' ' . $parent->pLname : 'Unknown Parent';
-    
+
         // Generate custom ID
         $customId = $this->generateCustomId();
-    
+
         // Create new child record, including age
         $child = Children::create(array_merge($validatedData, [
             'parent_id' => $parentId,
             'custom_id' => $customId,
             'childAge' => $age
         ]));
-    
+
         // Log child creation
         Log::info('New child created:', [
             'ChildFirstName' => $child->childFirstName,
             'ChildLastName' => $child->childLastName,
             'ParentName' => $parentName,
         ]);
-    
+
         // Prepare parents and child data for response
         $parents = $parent ? ['id' => $parent->id, 'name' => $parentName] : [];
-    
+
         // Redirect back with parents and child data
         return redirect()->back()->with(['parents' => $parents, 'child' => $child])->with('success', 'Child added successfully!');
     }
@@ -70,27 +71,27 @@ class ChildrenController extends Controller
         public function edit($childId)
     {
         $child = Children::findOrFail($childId); // Adjust model name as per your actual implementation
-    
+
         return response()->json($child);
     }
-    
+
 
     public function updateChild(Request $request)
 {
-    
+
     $child = Children::findOrFail($request->id);
-    
-    
+
+
     $oldValues = $child->getAttributes();
-    
-    
+
+
     if ($request->has('childDob')) {
         $dob = Carbon::parse($request->input('childDob'));
         $age = $dob->diffInYears(Carbon::now());
         $request->merge(['childAge' => $age]);
     }
-    
-  
+
+
     $child->update($request->except('id')); // Exclude the ID from the update
 
     // Log the update operation
@@ -103,7 +104,7 @@ class ChildrenController extends Controller
     // Redirect back with a success message
     return redirect()->back()->with('success', 'Updated successfully!');
 }
-    
+
     public function destroy($id)
 {
     // Find the child by ID or fail if not found
@@ -124,4 +125,3 @@ class ChildrenController extends Controller
 }
 
 }
-        

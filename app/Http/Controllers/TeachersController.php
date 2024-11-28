@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teachers;
-
 use App\Http\Requests\StoreTeachersRequest;
-use Illuminate\Http\Request;
+
 use App\Http\Requests\UpdateTeachersRequest;
 use App\Models\Children;
+use App\Models\ChildrenClass;
 use App\Models\Flipbook;
 use App\Models\GradeLevel;
 use App\Models\Parents;
 use App\Models\Quiz;
+use App\Models\Teachers;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -180,6 +183,9 @@ public function updateParent(Request $request, $id)
 
 public function pupils(Request $request)
 {
+    $parents =Parents::all();
+    $classes =ChildrenClass::find($request->all());
+
     $teacher = Teachers::where('TeacherFirstName', $request->session()->get('logged_in_teacher_name'))
         ->where('id', $request->session()->get('logged_in_teacher_id'))
         ->first();
@@ -227,50 +233,131 @@ public function pupils(Request $request)
         'gradeLevelId' => $gradeLevelId,
         'assignedChildren' => $assignedChildren,
         'today' => $today,
+        'parents' => $parents,
+        'classes' => $classes,
+
         'search' => $search
     ]);
 }
 
 
+// public function storePupil(Request $request)
+// {
+
+//     $validated = $request->validate([
+//         'childCustomId' => 'required|exists:childrens,custom_id',
+//     ]);
+
+
+//     $child = Children::where('custom_id', $validated['childCustomId'])->first();
+
+//     $teacherId = $request->session()->get('logged_in_teacher_id');
+
+//     $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
+//     $gradeLevelName = $gradeLevel ? $gradeLevel->GradeLvl : 'Unknown';
+
+
+//     $teacher = Teachers::find($teacherId);
+//     $teacherName = $teacher ? $teacher->TeacherFirstName . ' ' . $teacher->TeacherLastName : 'Unknown';
+
+
+//     DB::table('children_classes')->insert([
+//         'child_id' => $child->id,
+//         'class_id' => $gradeLevel ? $gradeLevel->id : null,
+//         'created_at' => now(),
+//         'updated_at' => now()
+//     ]);
+
+
+//     Log::info('Pupil added to class:', [
+//         'child_custom_id' => $child->custom_id,
+//         'grade_level' => $gradeLevelName,
+//         'teacher_name' => $teacherName,
+//         'timestamp' => now()->toDateTimeString()
+//     ]);
+
+//     return redirect()->route('teachers.pupils')->with('success', 'Child added successfully.');
+// }
 public function storePupil(Request $request)
 {
-
-    $validated = $request->validate([
-        'childCustomId' => 'required|exists:childrens,custom_id',
+    // Validate the child data
+    $validatedData = $request->validate([
+        'childFirstName' => 'required|string|max:255',
+        'childLastName' => 'required|string|max:255',
+        'childDob' => 'required|date',
+        'childAddress' => 'required|string|max:255',
+        'childGender' => 'required|in:male,female',
+        'parent_id' => 'nullable|exists:parents,id', // Ensure parent_id exists if provided
     ]);
 
+    // Calculate the child's age
+    $dob = Carbon::parse($validatedData['childDob']);
+    $age = $dob->diffInYears(Carbon::now());
 
-    $child = Children::where('custom_id', $validated['childCustomId'])->first();
+    // Check if parent ID is provided (selected parent)
+    if ($request->parent_id) {
+        // Associate the child with the selected parent
+        $parent = Parents::find($request->parent_id);
+    } else {
+        // Create a new parent
+        $parent = Parents::create([
+            'pFname' => $request->parentFirstName,
+            'pLname' => $request->parentLastName,
+            'pAge' => Carbon::parse($request->parentDob)->diffInYears(Carbon::now()),
+            'pDob' => $request->parentDob,
+            'pAddress' => $request->parentAddress,
+            'pGender' => $request->parentGender,
+            'usertype' => 'parent',
+            'email' => $request->parentEmail,
+            'password' => bcrypt($request->parentPassword), // Hash password
+        ]);
+    }
 
+    // Generate a custom ID for the child
+    $customId = $this->generateCustomId();
+
+    // Create the child record and associate it with the parent
+    $child = Children::create([
+        'custom_id' => $customId,
+        'childFirstName' => $validatedData['childFirstName'],
+        'childLastName' => $validatedData['childLastName'],
+        'childAge' => $age,
+        'childDob' => $validatedData['childDob'],
+        'childAddress' => $validatedData['childAddress'],
+        'childGender' => $validatedData['childGender'],
+        'parent_id' => $parent->id, // Associate with the selected or created parent
+    ]);
+
+    // Add child to the teacher's class automatically
+    // Get the logged-in teacher's ID from the session (assuming it's stored in the session)
     $teacherId = $request->session()->get('logged_in_teacher_id');
 
+    // Retrieve the grade level associated with the teacher
     $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
-    $gradeLevelName = $gradeLevel ? $gradeLevel->GradeLvl : 'Unknown';
 
+    // Check if a grade level is found for the teacher
+    if ($gradeLevel) {
+        // Insert the relationship into the children_classes table
+        DB::table('children_classes')->insert([
+            'child_id' => $child->id,  // Associate the child by their ID
+            'class_id' => $gradeLevel->id,  // Associate with the teacher's grade level
+        ]);
+    } else {
+        return redirect()->back()->with('error', 'No grade level found for the teacher!');
+    }
 
-    $teacher = Teachers::find($teacherId);
-    $teacherName = $teacher ? $teacher->TeacherFirstName . ' ' . $teacher->TeacherLastName : 'Unknown';
-
-
-    DB::table('children_classes')->insert([
-        'child_id' => $child->id,
-        'class_id' => $gradeLevel ? $gradeLevel->id : null,
-        'created_at' => now(),
-        'updated_at' => now()
-    ]);
-
-
-    Log::info('Pupil added to class:', [
-        'child_custom_id' => $child->custom_id,
-        'grade_level' => $gradeLevelName,
-        'teacher_name' => $teacherName,
-        'timestamp' => now()->toDateTimeString()
-    ]);
-
-    return redirect()->route('teachers.pupils')->with('success', 'Child added successfully.');
+    // Redirect to the pupil index with a success message
+    return redirect()->route('teachers.pupils')->with('success', 'Child and Parent added successfully!');
 }
 
 
+private function generateCustomId()
+{
+    // Example logic for custom ID generation (adjust as needed)
+    $lastChild = Children::orderBy('id', 'desc')->first();
+    $lastId = $lastChild ? $lastChild->id + 1 : 1;
+    return '24-CD-' . str_pad($lastId, 2, '0', STR_PAD_LEFT);
+}
     public function editPupil($id)
     {
         $child = Children::findOrFail($id);

@@ -257,7 +257,12 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" id="editParentForm"
+                            @if (count($parents) > 0)
+                                <div class="alert alert-danger"></div>
+                                    <strong>Error:</strong> Parent not found.
+                                </div>
+                                @else
+                                <form method="POST" id="editParentForm"
                                 action="{{ route('parent.update', $parent->id) }}">
                                 @csrf
                                 @method('PUT')
@@ -296,6 +301,8 @@
 
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
+                            @endif
+
                         </div>
                     </div>
                 </div>

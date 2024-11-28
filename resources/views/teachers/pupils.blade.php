@@ -6,7 +6,7 @@
     <title>Storyhub</title>
     <link rel="icon" href="{{ asset('book\icon.png') }}" type="image/png">
 
-    
+
     <!--Links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Dosis&family=Gajraj+One&family=Madimi+One&family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -27,9 +27,9 @@
 
 
     <style>
-      
-      
-       
+
+
+
         .no-children-message {
             font-style: italic;
             color: #6c757d;
@@ -83,7 +83,7 @@
                 @foreach ($teachers as $teacherName)
                 {{ $teacherName }}
             @endforeach
-       
+
             </div>
             <ul class="dropdown-menu">
                 <li class="text-center"><a class="dropdown-item" href="settings" style="text-decoration: none; color:black;">Account Settings</a></li>
@@ -125,7 +125,7 @@
 
 
     <div class="content">
-              
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -154,16 +154,17 @@
 </form>
 
 <div class="d-flex ">
-  <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addChildModal">Add Pupils</button>
-      
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addChildModal">
+        Add Pupils
+    </button>
 <form id="removeAllForm" action="{{ route('children.removeAllFromGradeLevels') }}" method="POST">
     @csrf
     <button type="button" class="btn btn-danger btn-sm ms-2" id="removeAllButton">Remove All</button>
 </form>
 </div>
-      
 
-        <br> 
+
+        <br>
         <div class="table-responsive">
             <table id="pupilsTable" class="table table-striped table-bordered">
                 <thead class="thead-dark">
@@ -213,7 +214,7 @@
                     @endif
                 </tbody>
             </table>
-            
+
         </div>
          <div class="d-flex justify-content-center">
         {{ $assignedChildren->appends(['search' => $search])->links() }}
@@ -239,7 +240,7 @@
                                 <label for="editChildLastName" class="form-label">Last Name:</label>
                                 <input type="text" class="form-control" id="editChildLastName" name="childLastName">
                             </div>
-                           
+
                                         <div class="mb-3">
                                     <label for="editChildDob" class="form-label">Date of Birth:</label>
                                     <input type="date" class="form-control" id="editChildDob" name="childDob">
@@ -264,101 +265,188 @@
                 </div>
             </div>
         </div>
-        
-        
-<!-- Modal HTML -->
-<div class="modal fade" id="addChildModal" tabindex="-1" aria-labelledby="addChildModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addChildModalLabel">Add Pupils</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Child registration form -->
-                @if ($children->isEmpty())
-                    <p class="no-children-message">No children available to assign.</p>
-                @else
-                    <form action="{{ route('pupil.store') }}" method="POST">
+        <div class="modal fade" id="addChildModal" tabindex="-1" aria-labelledby="addChildModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="addChildModalLabel">Add Pupil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="{{ route('pupils.store') }}">
                         @csrf
-                        <div class="mb-3 datalist-wrapper">
-                            <label for="childCustomId" class="form-label">Search Pupils:</label>
-                            <div class="datalist-input">
-                                <input id="childCustomId" name="childCustomId" class="form-control" placeholder="Search Name or ID " required>
-                                <div id="childrenList" class="datalist-options">
-                                    @foreach($children as $child)
-                                        <div data-value="{{ $child->custom_id }}">{{ $child->custom_id }} / {{ $child->childFirstName }} {{ $child->childLastName }}</div>
+
+                        <!-- Step 1: Child Details -->
+                        <div id="childForm" class="p-4">
+                            <div class="mb-3">
+                                <label for="childFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="childFirstName" name="childFirstName" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="childLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="childLastName" name="childLastName" required>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="childDob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="childDob" name="childDob" required onchange="calculateAge()">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="childAddress" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="childAddress" name="childAddress" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="childGender" class="form-label">Gender</label>
+                                <select class="form-select" id="childGender" name="childGender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="nextButton">Next</button>
+                        </div>
+
+                        <!-- Step 2: Parent Details -->
+                        <div id="parentForm" class="p-4" style="display: none;">
+                            <div class="mb-3">
+                                <label for="parentExist" class="form-label">Does the parent exist?</label>
+                                <select class="form-select" id="parentExist" name="parentExist" onchange="toggleParentFields(this.value)" required>
+                                    <option value="">Select...</option>
+                                    <option value="existing">Select Existing Parent</option>
+                                    <option value="new">Create New Parent</option>
+                                </select>
+                            </div>
+
+                            <!-- Existing Parent Selection -->
+                            <div id="existingParent" class="mb-3" style="display: none;">
+                                <label for="parent_id" class="form-label">Parent</label>
+                                <select class="form-select" id="selectParent" name="parent_id">
+                                    <option value="">-- Select Parent --</option>
+                                    @foreach ($parents as $parent)
+                                        <option value="{{ $parent->id }}">{{ $parent->pFname }} {{ $parent->pLname }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+
+                            <!-- New Parent Form -->
+                            <div id="newParent" class="mb-3" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="parentFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="parentFirstName" name="parentFirstName" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parentLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="parentLastName" name="parentLastName" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parentEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="parentEmail" name="parentEmail" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parentPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="parentPassword" name="parentPassword" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parentDob" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="parentDob" name="parentDob" required onchange="calculateParentAge()">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="parentAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="parentAddress" name="parentAddress" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="parentGender" class="form-label">Gender</label>
+                                    <select class="form-select" id="parentGender" name="parentGender" required>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
                                 </div>
                             </div>
+
+                            <button type="submit" class="btn btn-success">Save Pupil</button>
                         </div>
-                        
-                        <!-- Hidden input field for grade level ID -->
-                        <input type="hidden" name="gradeLevelId" value="{{ $gradeLevelId }}">
-                        
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary w-100">Save</button>
                     </form>
-                @endif
+                </div>
             </div>
         </div>
+
+
     </div>
-</div>
         </div>
 
     </div>
 
 </div>
 
-<!-- Bootstrap JS and dependencies -->
- <!-- SweetAlert2 JavaScript -->
-       
+
+<script>
+    document.getElementById('nextButton').addEventListener('click', function() {
+        document.getElementById('childForm').style.display = 'none';
+        document.getElementById('parentForm').style.display = 'block';
+    });
+
+    function toggleParentFields(value) {
+    const existingParentFields = document.getElementById('existingParent');
+    const newParentFields = document.getElementById('newParent');
+
+    const newParentInputs = newParentFields.querySelectorAll('input, select');
+
+    if (value === 'existing') {
+        existingParentFields.style.display = 'block';
+        newParentFields.style.display = 'none';
+
+        newParentInputs.forEach((input) => {
+            input.required = false; // Disable required attribute
+        });
+    } else if (value === 'new') {
+        existingParentFields.style.display = 'none';
+        newParentFields.style.display = 'block';
+
+        newParentInputs.forEach((input) => {
+            input.required = true; // Enable required attribute
+        });
+    } else {
+        existingParentFields.style.display = 'none';
+        newParentFields.style.display = 'none';
+
+        newParentInputs.forEach((input) => {
+            input.required = false; // Reset required attribute
+        });
+    }
+
+
+    }
+
+    // Calculate child's age based on date of birth
+    function calculateAge() {
+        var dob = document.getElementById('childDob').value;
+        var age = new Date().getFullYear() - new Date(dob).getFullYear();
+        document.getElementById('childAge').value = age;
+    }
+
+    // Calculate parent's age based on date of birth
+    function calculateParentAge() {
+        var dob = document.getElementById('parentDob').value;
+        var age = new Date().getFullYear() - new Date(dob).getFullYear();
+        // You can use the age in the controller when the parent is created
+    }
+</script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('childCustomId');
-        const datalist = document.getElementById('childrenList');
-
-        // Show datalist options when the input is focused
-        input.addEventListener('focus', function () {
-            datalist.style.display = 'block';
-        });
-
-        // Hide datalist options when clicking outside
-        document.addEventListener('click', function (event) {
-            if (!input.contains(event.target) && !datalist.contains(event.target)) {
-                datalist.style.display = 'none';
-            }
-        });
-
-        // Filter options based on input
-        input.addEventListener('input', function () {
-            const filter = input.value.toLowerCase();
-            const options = datalist.querySelectorAll('div');
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                if (text.includes(filter)) {
-                    option.style.display = 'block';
-                } else {
-                    option.style.display = 'none';
-                }
-            });
-        });
-
-        // Set the input value and hide datalist when an option is clicked
-        datalist.addEventListener('click', function (event) {
-            if (event.target.tagName === 'DIV') {
-                input.value = event.target.dataset.value;
-                datalist.style.display = 'none';
-            }
-        });
-    });
-</script>
 <script>
 function removeChildFromGradeLevel(childId) {
     Swal.fire({

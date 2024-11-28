@@ -11,14 +11,14 @@ class Children extends  Authenticatable
     protected $guarded =[];
     public function parent()
 {
-    return $this->belongsTo(Parents::class, 'id');
+    return $this->belongsTo(Parents::class);
 }
 public function quizResults()
     {
         return $this->hasMany(QuizResult::class);
     }
-   
-    
+
+
 
     public function gradeLevel()
     {
@@ -28,5 +28,6 @@ public function quizResults()
     {
         return $this->belongsToMany(GradeLevel::class, 'children_classes', 'child_id', 'class_id');
     }
+
 
 }
