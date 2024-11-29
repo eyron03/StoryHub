@@ -313,10 +313,10 @@ public function storePupil(Request $request)
         ]);
     }
 
-    // Generate a custom ID for the child
+   
     $customId = $this->generateCustomId();
 
-    // Create the child record and associate it with the parent
+
     $child = Children::create([
         'custom_id' => $customId,
         'childFirstName' => $validatedData['childFirstName'],
@@ -328,11 +328,10 @@ public function storePupil(Request $request)
         'parent_id' => $parent->id, // Associate with the selected or created parent
     ]);
 
-    // Add child to the teacher's class automatically
-    // Get the logged-in teacher's ID from the session (assuming it's stored in the session)
+
     $teacherId = $request->session()->get('logged_in_teacher_id');
 
-    // Retrieve the grade level associated with the teacher
+
     $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
 
     // Check if a grade level is found for the teacher

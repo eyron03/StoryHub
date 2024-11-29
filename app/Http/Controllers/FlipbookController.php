@@ -101,37 +101,48 @@ class FlipbookController extends Controller
         return view('admin.createQuiz', compact('flipbook'));
     }
     public function storeQuiz(Request $request, $flipbook_id)
-{
-    $flipbook = Flipbook::findOrFail($flipbook_id);
-
-    // Validate and save quiz data
-    for ($i = 1; $i <= $request->counter; $i++) {
-        $validatedQuizData = $request->validate([
-            "quiz_question_$i" => 'required|string',
-            "option_a_$i" => 'required|string',
-            "option_b_$i" => 'required|string',
-            "option_c_$i" => 'required|string',
-            "option_d_$i" => 'required|string',
-            "correct_answer_$i" => 'required|string',
-        ]);
-
-        $quiz = new Quiz([
-            'quiz_question' => $validatedQuizData["quiz_question_$i"],
-            'option_a' => $validatedQuizData["option_a_$i"],
-            'option_b' => $validatedQuizData["option_b_$i"],
-            'option_c' => $validatedQuizData["option_c_$i"],
-            'option_d' => $validatedQuizData["option_d_$i"],
-            'correct_answer' => $validatedQuizData["correct_answer_$i"],
-        ]);
-
-        $flipbook->quizzes()->save($quiz);
+    {
+        $flipbook = Flipbook::findOrFail($flipbook_id);
+    
+        // Validate and save quiz data
+        for ($i = 1; $i <= $request->counter; $i++) {
+            $validatedQuizData = $request->validate([
+                "quiz_question_$i" => 'required|string',
+                "option_a_$i" => 'required|string',
+                "option_b_$i" => 'required|string',
+                "option_c_$i" => 'required|string',
+                "option_d_$i" => 'required|string',
+                "correct_answer_$i" => 'required|string',
+                "images_$i" => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', // Validate image
+            ]);
+    
+            // Handle image upload if present
+            $imagePath = null;
+            if ($request->hasFile("images_$i")) {
+                $uploadedFile = $request->file("images_$i");
+                $filename = time() . '_' . $uploadedFile->getClientOriginalName(); // Generate a unique filename
+                $uploadedFile->move(public_path('storyhub/quiz/'), $filename); // Move the file to the desired directory
+                $imagePath = 'storyhub/quiz/' . $filename; // Store the relative path to the image
+            }
+    
+            // Create the new Quiz
+            $quiz = new Quiz([
+                'quiz_question' => $validatedQuizData["quiz_question_$i"],
+                'option_a' => $validatedQuizData["option_a_$i"],
+                'option_b' => $validatedQuizData["option_b_$i"],
+                'option_c' => $validatedQuizData["option_c_$i"],
+                'option_d' => $validatedQuizData["option_d_$i"],
+                'correct_answer' => $validatedQuizData["correct_answer_$i"],
+                'images' => $imagePath, // Store the image path in the database
+            ]);
+    
+            // Save the quiz data to the flipbook
+            $flipbook->quizzes()->save($quiz);
+        }
+    
+        return redirect()->route('flipbook.index')->with('success', 'Quiz created successfully!');
     }
-
-    return redirect()->route('flipbook.index')->with('success', 'Quiz created successfully!');
-}
-
-
-
+    
 public function show($id)
 {
     // Retrieve the flipbook with related quizzes
