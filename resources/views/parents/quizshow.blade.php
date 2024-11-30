@@ -113,7 +113,33 @@
             pointer-events: auto; /* Add pointer-events to make the button clickable */
             z-index: 1000; /* Ensure it's above other elements */
         }
-        
+        .cloud-box {
+
+    display: inline-block;
+    padding: 20px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 10px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    top: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: #e2f1ff; /* Light blue background */
+}
+.quiz-image {
+    object-fit: cover; /* Ensures the image covers the entire box */
+    width: 100%; /* Make the image fill the width of the box */
+    height: 100%; /* Make the image fill the height of the box */
+    object-position: center; /* Center the image */
+    border-radius: 50%;
+    width: 240px;
+    height: 250px;
+
+}
     </style>
 </head>
 <body>
@@ -122,58 +148,62 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <button id="audio-toggle" aria-label="Toggle audio" onclick="toggleAudio()" style="z-index: 1000;"> <!-- Added z-index -->
-        <i class="fa fa-volume-off" aria-hidden="true" id="audio-icon"></i>
-    </button>
-    
-    <audio id="background-audio" loop>
-        <source src="{{ asset('audio/backgroundMusic.mp3') }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    
+
+
 
 <div class="all">
     <div class="header d-flex justify-content-between align-items-center fixed-top">
         <a href="{{ route('parent.bookshow', ['id' => $flipbookId, 'childId' => $childId]) }}" style="text-decoration: none;" class="d-flex align-items-center">
             <h1 class="m-0 text-primary text-orange"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
         </a>
-        
+
         @if(isset($childId))
         <div>
           <b>Hello {{ $childId->childFirstName }}</b>
         </div>
         @endif
     </div>
-<br><br>
+
+
     <div class="quiz-container">
         <h1>Quiz</h1>
 
         <form id="quizForm" method="POST">
             @csrf
             <input type="hidden" id="child_id" name="child_id" value="{{ $childId }}">
-            {{--  <input type="hidden" id="gradeLevelId" name="gradeLevelId" value="{{ $gradeLevelId }}">
-            <input type="hidden" id="teacherId" name="teacherId" value="{{ $teacherId }}">  --}}
             <input type="hidden" id="flipbook_id" name="flipbook_id" value="{{ $flipbookId }}">
             <input type="hidden" id="date_taken" name="date_taken" value="{{ \Carbon\Carbon::now()->toDateTimeString() }}">
 
             @foreach($quizQuestions as $key => $question)
                 <div class="quiz-question" id="question-{{ $key }}" style="display: {{ $key === 0 ? 'block' : 'none' }};">
+                    <!-- Dynamically changing image for each question -->
+                    @if($question['images']) <!-- Check if image exists -->
+                        <div class="cloud-box float-end" style="background-image: url('{{ asset($question['images']) }}');">
+                        </div>
+                    @endif
+
                     <div class="question-box">
                         <p><strong>Question {{ $key + 1 }}:</strong> {{ $question['quiz_question'] }}</p>
                     </div>
+
                     <div class="options">
                         @foreach(['A', 'B', 'C', 'D'] as $option)
-                        <div class="option" data-question="{{ $key }}" data-answer="{{ $option }}">
-                            {{ $question['option_' . strtolower($option)] }}
-                        </div>
+                            <div class="option" data-question="{{ $key }}" data-answer="{{ $option }}">
+                                {{ $question['option_' . strtolower($option)] }}
+                            </div>
                         @endforeach
                     </div>
                     <input type="hidden" name="answer{{ $key }}" id="answer{{ $key }}">
                 </div>
             @endforeach
+
             <button type="submit" id="submitQuiz" class="btn btn-primary" style="display: none;">Submit Quiz</button>
         </form>
+
+
     </div>
+
+
 </div>
 
 
@@ -184,7 +214,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
- 
+let currentQuestion = 0;
+
+
     // Quiz functionality
     $(document).ready(function() {
         var currentQuestion = 0;
@@ -198,7 +230,7 @@
         $('.option').click(function() {
             var questionId = $(this).data('question');
             var selectedAnswer = $(this).data('answer');
-            
+
             $('#answer' + questionId).val(selectedAnswer);
 
             $(this).siblings().removeClass('selected');
@@ -271,7 +303,7 @@
     function toggleAudio() {
         var audio = document.getElementById('background-audio');
         var icon = document.getElementById('audio-icon');
-    
+
         if (audio.paused) {
             audio.play().then(() => {
                 icon.classList.remove('fa-volume-off');
@@ -287,7 +319,7 @@
             console.log("Audio is paused."); // Debugging log
         }
     }
-    
+
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {

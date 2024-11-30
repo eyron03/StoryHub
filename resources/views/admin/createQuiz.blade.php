@@ -91,8 +91,6 @@
         @csrf
 
 
-
-
         <div id="quiz_questions" class="table-responsive">
             <input type="hidden" id="counter" name="counter" value="1"> <!-- Initialize counter with 1 for the first question -->
 
@@ -128,7 +126,7 @@
                 <input type="file" class="form-control" id="images_1" name="images_1">
             </div>
         </div>
-       
+
 <br>
         <div class="row">
             <div class="col-lg-offset-6">
@@ -160,58 +158,58 @@
                 $(document).ready(function() {
                     var counter = 1; // Initialize counter with 1 for the first question
                     var imageCounter = 1; // Initialize image counter with 1 for the first image
-            
+
                     // Add a new quiz question
                     $("#add_question").on('click', function() {
                         counter++; // Increment the question counter
                         $("#counter").val(counter); // Update the counter value in the hidden input
-            
+
                         // HTML for a new quiz question
                         var newQuestion = '<div class="quiz_question">' +
                             '<label for="quiz_question_' + counter + '">Quiz Question ' + counter + ':</label>' +
                             '<input type="text" id="quiz_question_' + counter + '" name="quiz_question_' + counter + '" required>' +
-            
+
                             '<div>' +
                             '<label for="option_a_' + counter + '">Option A:</label>' +
                             '<input type="text" id="option_a_' + counter + '" name="option_a_' + counter + '" required>' +
                             '</div>' +
-            
+
                             '<div>' +
                             '<label for="option_b_' + counter + '">Option B:</label>' +
                             '<input type="text" id="option_b_' + counter + '" name="option_b_' + counter + '" required>' +
                             '</div>' +
-            
+
                             '<div>' +
                             '<label for="option_c_' + counter + '">Option C:</label>' +
                             '<input type="text" id="option_c_' + counter + '" name="option_c_' + counter + '" required>' +
                             '</div>' +
-            
+
                             '<div>' +
                             '<label for="option_d_' + counter + '">Option D:</label>' +
                             '<input type="text" id="option_d_' + counter + '" name="option_d_' + counter + '" required>' +
                             '</div>' +
-            
+
                             '<div>' +
                             '<label for="correct_answer_' + counter + '">Correct Answer:</label>' +
                             '<input type="text" id="correct_answer_' + counter + '" name="correct_answer_' + counter + '" required>' +
                             '</div>' +
-            
+
                             // New Image Upload Section
                             '<div>' +
-                            '<label for="quiz_image_' + imageCounter + '">Upload Image for Question ' + counter + ':</label>' +
-                            '<input type="file" id="quiz_image_' + imageCounter + '" name="quiz_image_' + imageCounter + '" accept="image/*">' +
+                            '<label for="images_' + counter + '">Upload Image for Question ' + counter + ':</label>' +
+                            '<input type="file" id="images_' + counter + '" name="images_' + counter + '" accept="image/*">' +
                             '</div>' +
                             '</div>';
-            
+
                         // Append the new quiz question and image upload to the container
                         $("#quiz_questions").append(newQuestion);
-            
+
                         // Increment the image counter for the next image
                         imageCounter++;
                     });
                 });
             </script>
-            
+
                             <script>
                                 $(document).ready(function() {
                                     // Show loader and handle form submission

@@ -261,7 +261,7 @@
                                 <div class="alert alert-danger"></div>
                                     <strong>Error:</strong> Parent not found.
                                 </div>
-                                @else
+
                                 <form method="POST" id="editParentForm"
                                 action="{{ route('parent.update', $parent->id) }}">
                                 @csrf
@@ -301,6 +301,8 @@
 
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
+                            @else
+                            <p>Parents information not available.</p>
                             @endif
 
                         </div>

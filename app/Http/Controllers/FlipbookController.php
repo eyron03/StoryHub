@@ -103,7 +103,7 @@ class FlipbookController extends Controller
     public function storeQuiz(Request $request, $flipbook_id)
     {
         $flipbook = Flipbook::findOrFail($flipbook_id);
-    
+
         // Validate and save quiz data
         for ($i = 1; $i <= $request->counter; $i++) {
             $validatedQuizData = $request->validate([
@@ -115,7 +115,7 @@ class FlipbookController extends Controller
                 "correct_answer_$i" => 'required|string',
                 "images_$i" => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', // Validate image
             ]);
-    
+
             // Handle image upload if present
             $imagePath = null;
             if ($request->hasFile("images_$i")) {
@@ -124,7 +124,7 @@ class FlipbookController extends Controller
                 $uploadedFile->move(public_path('storyhub/quiz/'), $filename); // Move the file to the desired directory
                 $imagePath = 'storyhub/quiz/' . $filename; // Store the relative path to the image
             }
-    
+
             // Create the new Quiz
             $quiz = new Quiz([
                 'quiz_question' => $validatedQuizData["quiz_question_$i"],
@@ -135,21 +135,21 @@ class FlipbookController extends Controller
                 'correct_answer' => $validatedQuizData["correct_answer_$i"],
                 'images' => $imagePath, // Store the image path in the database
             ]);
-    
+
             // Save the quiz data to the flipbook
             $flipbook->quizzes()->save($quiz);
         }
-    
+
         return redirect()->route('flipbook.index')->with('success', 'Quiz created successfully!');
     }
-    
+
 public function show($id)
 {
     // Retrieve the flipbook with related quizzes
     $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
 
     // Decode the subtitles JSON
-  
+
     $subtitles = explode(",", $flipbooks->subtitles);
     // Split the images string into an array
     $images = explode(",", $flipbooks->images);

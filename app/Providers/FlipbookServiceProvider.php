@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\FlipbookController;
+
+use App\Services\ElevenLabsService;
 use Illuminate\Support\ServiceProvider;
+use rudrarajiv\flipbooklaravel\FlipBookController;
 
 class FlipbookServiceProvider extends ServiceProvider
 {
@@ -12,11 +14,17 @@ class FlipbookServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register the FlipbookController as a singleton
         $this->app->singleton(FlipbookController::class, function ($app) {
-            return new FlipBookController();
+            return new FlipbookController();
+        });
+
+        // Register the ElevenLabsService as a singleton
+        $this->app->singleton(ElevenLabsService::class, function ($app) {
+            return new ElevenLabsService();
         });
     }
+
 
     /**
      * Bootstrap services.

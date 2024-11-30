@@ -209,37 +209,48 @@
 <script src="https://www.turnjs.com/lib/turn.min.js"></script>
 <!-- Add JavaScript for Speech Synthesis -->
 <script>
-    function speakText(text) {
-        const speech = new SpeechSynthesisUtterance(text);
+   function speakText(text) {
+  const speech = new SpeechSynthesisUtterance(text);
 
-        // Check if any voices are available, and select a female voice
-        const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = null;
+  // Check if any voices are available, and select a female voice
+  const voices = window.speechSynthesis.getVoices();
+  let selectedVoice = null;
 
-        // Try to pick a female voice (based on available voices)
-        for (let i = 0; i < voices.length; i++) {
-            // Look for female voices (most voices have 'female' in their name)
-            if (voices[i].name.toLowerCase().includes('female')) {
-                selectedVoice = voices[i];
-                break;
-            }
-        }
-
-        // If no female voice is found, fall back to a default English female voice
-        if (!selectedVoice) {
-            selectedVoice = voices.find(voice => voice.lang === 'en-US' && voice.gender === 'female') || voices[0];
-        }
-
-        // Set the selected voice for speech
-        speech.voice = selectedVoice;
-        speech.lang = selectedVoice.lang; // Use the selected voice's language
-        speech.volume = 1; // Full volume
-        speech.rate = 0.8; // Slightly slower rate for better readability
-        speech.pitch = 1.2; // Slightly higher pitch for a friendly tone
-
-        // Speak the text
-        window.speechSynthesis.speak(speech);
+  // Try to pick a female voice (based on available voices)
+  for (let i = 0; i < voices.length; i++) {
+    // Look for female voices (most voices have 'female' in their name)
+    if (voices[i].name.toLowerCase().includes('female')) {
+      selectedVoice = voices[i];
+      break;
     }
+  }
+
+  // If no female voice is found, fall back to a default English female voice
+  if (!selectedVoice) {
+    selectedVoice = voices.find(voice => voice.lang === 'en-US' && voice.gender === 'female') || voices[0];
+  }
+
+  // Set the selected voice for speech
+  speech.voice = selectedVoice;
+  speech.lang = selectedVoice.lang; // Use the selected voice's language
+  speech.volume = 1; // Full volume
+  speech.rate = 0.7; // Slower rate for a storytelling feel
+  speech.pitch = 1; // Neutral pitch for storytelling
+
+  // Add a slight pause between sentences
+  const sentences = text.split('.');
+  for (let i = 0; i < sentences.length - 1; i++) {
+    sentences[i] += '.'; // Add period back
+    sentences[i] += ' '; // Add a space
+    sentences[i] += '<break time="0.5s"/>'; // Add a 0.5 second pause
+  }
+  text = sentences.join('');
+
+  speech.text = text;
+
+  // Speak the text
+  window.speechSynthesis.speak(speech);
+}
 </script>
 
 <script>

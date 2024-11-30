@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->registerPolicies();
         Paginator::useBootstrap();
-       
+
 
         //Password::resetUrl(url('/password/reset'));
     }
