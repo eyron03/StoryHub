@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuizResult extends Model
 {
     use HasFactory;
-
+    protected $table = 'quiz_results';
     protected $guarded = [];
     public function child()
     {
@@ -29,5 +29,19 @@ class QuizResult extends Model
     {
         return $this->belongsTo(Teachers::class);
     }
+    public function questions()
+    {
+        return $this->hasMany(Quiz::class,'id');
+    }
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class, 'flipbook_id', 'flipbook_id'); // Assuming 'flipbook_id' links the quiz to the result
+    }
+    public function quizAnswers()
+    {
+        return $this->hasMany(QuizAnswer::class);
+    }
+
+
 
 }

@@ -59,9 +59,9 @@ Route::get('/', function () {
     Route::get('/parent/storybook/bookshow/{id}/{childId}', [ParentsController::class, 'bookshow'])->name('parent.bookshow');
     Route::get('/parent/storybook/bookshowAudio/{id}/{childId}', [ParentsController::class, 'bookshowAudio'])->name('parent.bookshowAudio');
     Route::get('/parent/storybook/bookshow/quiz/{id}/{childId}', [QuizController::class, 'quizshow'])->name('parent.quizshow');
-    Route::post('parent/storybook/bookshow/quiz/child/{id}/{childId}', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    Route::post('/parent/storybook/bookshow/quiz/child/{id}/{childId}', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
 
-
+    Route::get('/parent/storybook/quizResults/{id}/{childId}/{quizResultId}', [QuizResultController::class, 'showResults'])->name('parent.quizResult');
 });
 
     Route::get('/admin/parent/{id}/edit', [AdminController::class, 'editParent'])->name('parent.edit');

@@ -157,7 +157,6 @@
              <script type="text/javascript">
                 $(document).ready(function() {
                     var counter = 1; // Initialize counter with 1 for the first question
-                    var imageCounter = 1; // Initialize image counter with 1 for the first image
 
                     // Add a new quiz question
                     $("#add_question").on('click', function() {
@@ -204,8 +203,6 @@
                         // Append the new quiz question and image upload to the container
                         $("#quiz_questions").append(newQuestion);
 
-                        // Increment the image counter for the next image
-                        imageCounter++;
                     });
                 });
             </script>

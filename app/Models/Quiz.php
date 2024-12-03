@@ -20,4 +20,12 @@ class Quiz extends  Authenticatable
     {
         return $this->hasMany(QuizResult::class);
     }
+    public function quizResult()
+    {
+        return $this->belongsTo(QuizResult::class, 'id');  // Make sure the foreign key matches
+    }
+    public function quizAnswers()
+{
+    return $this->hasMany(QuizAnswer::class);
+}
 }

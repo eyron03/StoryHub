@@ -14,12 +14,6 @@
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <style>
         body {
             background-color: #f7f1e3;
@@ -114,32 +108,30 @@
             z-index: 1000; /* Ensure it's above other elements */
         }
         .cloud-box {
-
-    display: inline-block;
-    padding: 20px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    margin-top: 10px;
-    width: 250px;
-    height: 250px;
-    display: flex;
-    top: 50%;
-    align-items: center;
-    justify-content: center;
-    background-color: #e2f1ff; /* Light blue background */
-}
-.quiz-image {
-    object-fit: cover; /* Ensures the image covers the entire box */
-    width: 100%; /* Make the image fill the width of the box */
-    height: 100%; /* Make the image fill the height of the box */
-    object-position: center; /* Center the image */
-    border-radius: 50%;
-    width: 240px;
-    height: 250px;
-
-}
+            display: inline-block;
+            padding: 20px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 10px;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            top: 50%;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2f1ff; /* Light blue background */
+        }
+        .quiz-image {
+            object-fit: cover; /* Ensures the image covers the entire box */
+            width: 100%; /* Make the image fill the width of the box */
+            height: 100%; /* Make the image fill the height of the box */
+            object-position: center; /* Center the image */
+            border-radius: 50%;
+            width: 240px;
+            height: 250px;
+        }
     </style>
 </head>
 <body>
@@ -149,37 +141,34 @@
         </div>
     </div>
 
+    <div class="all">
+        <div class="header d-flex justify-content-between align-items-center fixed-top">
+            <a href="{{ route('parent.bookshow', ['id' => $flipbookId, 'childId' => $childId]) }}" style="text-decoration: none;" class="d-flex align-items-center">
+                <h1 class="m-0 text-primary text-orange"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
+            </a>
 
-
-<div class="all">
-    <div class="header d-flex justify-content-between align-items-center fixed-top">
-        <a href="{{ route('parent.bookshow', ['id' => $flipbookId, 'childId' => $childId]) }}" style="text-decoration: none;" class="d-flex align-items-center">
-            <h1 class="m-0 text-primary text-orange"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
-        </a>
-
-        @if(isset($childId))
-        <div>
-          <b>Hello {{ $childId->childFirstName }}</b>
+            @if(isset($child))
+            <div>
+                <b>Hello {{ $child->childFirstName }}</b>
+            </div>
+            @endif
         </div>
-        @endif
-    </div>
 
+        <div class="quiz-container">
+            <h1>Quiz</h1>
 
-    <div class="quiz-container">
-        <h1>Quiz</h1>
+            <form id="quizForm" method="POST" action="{{ route('quiz.submit', ['id' => $flipbookId, 'childId' => $childId]) }}">
+                @csrf
+                <input type="hidden" id="child_id" name="child_id" value="{{ $childId }}">
+                <input type="hidden" id="flipbook_id" name="flipbook_id" value="{{ $flipbookId }}">
+                <input type="hidden" id="date_taken" name="date_taken" value="{{ \Carbon\Carbon::now()->toDateTimeString() }}">
+ <!-- Add total_score hidden input -->
+ <input type="hidden" id="total_score" name="total_score" value="0">
 
-        <form id="quizForm" method="POST">
-            @csrf
-            <input type="hidden" id="child_id" name="child_id" value="{{ $childId }}">
-            <input type="hidden" id="flipbook_id" name="flipbook_id" value="{{ $flipbookId }}">
-            <input type="hidden" id="date_taken" name="date_taken" value="{{ \Carbon\Carbon::now()->toDateTimeString() }}">
-
-            @foreach($quizQuestions as $key => $question)
+                @foreach($quizQuestions as $key => $question)
                 <div class="quiz-question" id="question-{{ $key }}" style="display: {{ $key === 0 ? 'block' : 'none' }};">
-                    <!-- Dynamically changing image for each question -->
                     @if($question['images']) <!-- Check if image exists -->
-                        <div class="cloud-box float-end" style="background-image: url('{{ asset($question['images']) }}');">
-                        </div>
+                        <div class="cloud-box float-end" style="background-image: url('{{ asset($question['images']) }}');"></div>
                     @endif
 
                     <div class="question-box">
@@ -188,144 +177,144 @@
 
                     <div class="options">
                         @foreach(['A', 'B', 'C', 'D'] as $option)
-                            <div class="option" data-question="{{ $key }}" data-answer="{{ $option }}">
-                                {{ $question['option_' . strtolower($option)] }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selected_answer[{{$key}}]" id="option{{ $key }}{{ $option }}" value="{{ $option }}">
+
+                                <label class="form-check-label" for="option{{ $key }}{{ $option }}">
+                                    {{ $question['option_' . strtolower($option)] }}
+                                </label>
                             </div>
                         @endforeach
                     </div>
-                    <input type="hidden" name="answer{{ $key }}" id="answer{{ $key }}">
                 </div>
             @endforeach
 
-            <button type="submit" id="submitQuiz" class="btn btn-primary" style="display: none;">Submit Quiz</button>
-        </form>
+                <!-- Navigation Buttons -->
+                <button type="button" id="prevButton" class="btn btn-secondary">Previous</button>
+                <button type="button" id="nextButton" class="btn btn-primary">Next</button>
 
+                <!-- Submit Button (hidden until the last question) -->
+                <button type="submit" id="submitQuiz" class="btn btn-success" style="display: none;">Submit Quiz</button>
+            </form>
 
+        </div>
     </div>
 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fkrVo15cV5ckdA3trn8J7fmp96eof7Ylh50Asfq" crossorigin="anonymous"></script>
 
-</div>
-
-
-
-<!-- Bootstrap JS and dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-let currentQuestion = 0;
+    <script>
 
 
-    // Quiz functionality
-    $(document).ready(function() {
-        var currentQuestion = 0;
-        var totalQuestions = $('.quiz-question').length;
+    // Initialize the first question
+    document.addEventListener('DOMContentLoaded', function () {
+    let currentQuestion = 0;
+    const totalQuestions = {{ count($quizQuestions) }};
+    const nextButton = document.getElementById('nextButton');
+    const prevButton = document.getElementById('prevButton');
+    const submitButton = document.getElementById('submitQuiz');
+    const totalScoreInput = document.getElementById('total_score');
 
-        function showQuestion(index) {
-            $('.quiz-question').hide();
-            $('#question-' + index).show();
+    // Correct answers passed from the controller
+    const correctAnswers = @json($correctAnswers);
+
+    function showQuestion(index) {
+        const questions = document.querySelectorAll('.quiz-question');
+        questions.forEach((question, i) => {
+            question.style.display = i === index ? 'block' : 'none';
+        });
+
+        // Hide the Next button if on the last question
+        if (index === totalQuestions - 1) {
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'block';
+        } else {
+            nextButton.style.display = 'block';
+            submitButton.style.display = 'none';
         }
 
-        $('.option').click(function() {
-            var questionId = $(this).data('question');
-            var selectedAnswer = $(this).data('answer');
-
-            $('#answer' + questionId).val(selectedAnswer);
-
-            $(this).siblings().removeClass('selected');
-            $(this).addClass('selected');
-
-            currentQuestion++;
-            if (currentQuestion < totalQuestions) {
-                showQuestion(currentQuestion);
-            } else {
-                $('#submitQuiz').show();
-            }
-        });
-
-        $('#quizForm').submit(function(event) {
-            event.preventDefault();
-
-            var answers = [];
-            $("input[type=hidden][name^=answer]").each(function() {
-                answers.push($(this).val());
-            });
-
-            var correctAnswers = [];
-            @foreach($quizQuestions as $question)
-                correctAnswers.push('{{ $question['correct_answer'] }}');
-            @endforeach
-
-            var score = 0;
-            for (var i = 0; i < answers.length; i++) {
-                if (answers[i] === correctAnswers[i]) {
-                    score++;
-                }
-            }
-
-            console.log("Score: " + score);
-
-            var childId = $("input[name='child_id']").val();
-            var flipbookId = $("input[name='flipbook_id']").val();
-            var dateTaken = $("input[name='date_taken']").val();
-
-            $.ajax({
-                url: '{{ route("quiz.submit", ["id" => $flipbookId, "childId" => $childId]) }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    total_score: score,
-                    child_id: childId,
-                    flipbook_id: flipbookId,
-                    date_taken: dateTaken
-                },
-                success: function(response) {
-                    Swal.fire({
-                        title: 'Quiz Result',
-                        text: 'You scored ' + score + ' out of ' + correctAnswers.length,
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '{{ route('parent.reports') }}';
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
-<script>
-    function toggleAudio() {
-        var audio = document.getElementById('background-audio');
-        var icon = document.getElementById('audio-icon');
-
-        if (audio.paused) {
-            audio.play().then(() => {
-                icon.classList.remove('fa-volume-off');
-                icon.classList.add('fa-volume-up');
-                console.log("Audio is playing."); // Debugging log
-            }).catch(error => {
-                console.error("Audio play failed:", error);
-            });
+        // Hide the Previous button if on the first question
+        if (index === 0) {
+            prevButton.style.display = 'none';
         } else {
-            audio.pause();
-            icon.classList.remove('fa-volume-up');
-            icon.classList.add('fa-volume-off');
-            console.log("Audio is paused."); // Debugging log
+            prevButton.style.display = 'block';
         }
     }
 
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var spinner = document.getElementById("spinner");
-        spinner.classList.add("d-none");
-      });
-</script>
+    function getSelectedAnswer(index) {
+        const selectedOption = document.querySelector(`input[name="selected_answer[${index}]"]:checked`);
+        return selectedOption ? selectedOption.value : null;
+    }
+
+    function calculateTotalScore() {
+        let score = 0;
+        let answers = [];
+        for (let i = 0; i < totalQuestions; i++) {
+            const selectedAnswer = getSelectedAnswer(i);
+            answers.push(selectedAnswer); // Store the answer
+            if (selectedAnswer && selectedAnswer === correctAnswers[i]) {
+                score++;
+            }
+        }
+
+        totalScoreInput.value = score;  // Update total score hidden field
+        return answers;
+    }
+
+    nextButton.addEventListener('click', function () {
+        const selectedAnswer = getSelectedAnswer(currentQuestion);
+        if (selectedAnswer) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        } else {
+            Swal.fire('Error', 'Please select an answer before proceeding.', 'error');
+        }
+    });
+
+    prevButton.addEventListener('click', function () {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+    });
+
+    // Add the answers to the form when submitting
+    submitButton.addEventListener('click', function () {
+        const answers = [];
+        for (let i = 0; i < totalQuestions; i++) {
+            const selectedAnswer = getSelectedAnswer(i);
+            answers.push(selectedAnswer || null); // Add null if no answer is selected
+        }
+
+        // Remove existing hidden inputs for answers (if any)
+        const existingInputs = document.querySelectorAll('input[name^="selected_answer"]');
+        existingInputs.forEach(input => input.remove());
+
+        // Create hidden inputs for each answer
+        answers.forEach((answer, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `selected_answer[${index}]`;
+            input.value = answer || ''; // Handle null values
+            document.getElementById('quizForm').appendChild(input);
+        });
+
+        // Submit the form
+        document.getElementById('quizForm').submit();
+    });
+
+    // Initialize the first question
+    showQuestion(currentQuestion);
+});
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var spinner = document.getElementById("spinner");
+            spinner.classList.add("d-none");
+          });
+    </script>
 </body>
 </html>
