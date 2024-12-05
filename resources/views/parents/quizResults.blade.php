@@ -166,7 +166,6 @@
 
 
     <div class="quiz-container">
-       
         <!-- Show the total score -->
         <div class="alert alert-success">
             <strong>Score:</strong> {{ $quizResult->total_score }} / 100
@@ -175,7 +174,7 @@
         <!-- Show the questions and answers -->
         <h4>Questions and Answers:</h4>
         <ul>
-            @foreach($quizQuestions as $question)
+            @foreach($shuffledQuizQuestions as $question)
                 <li>
                     <strong>{{ $question->quiz_question }}</strong>
                     <ul>
@@ -184,9 +183,11 @@
                         <li><strong>Option C:</strong> {{ $question->option_c }}</li>
                         <li><strong>Option D:</strong> {{ $question->option_d }}</li>
                     </ul>
+
                     <!-- Display the answer selected by the child -->
                     <strong>Answer:</strong>
                     @php
+                        // Find the answer for this shuffled question
                         $answer = $quizAnswers->firstWhere('quiz_id', $question->id);
                     @endphp
                     @if($answer)
@@ -200,6 +201,7 @@
 
         <a href="{{ route('parent.quizshow', ['id' => $quizResult->flipbook_id, 'childId' => $quizResult->child_id]) }}" class="btn btn-primary">Back to Quiz</a>
     </div>
+
 
 
 

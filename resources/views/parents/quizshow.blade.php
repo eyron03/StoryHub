@@ -7,12 +7,20 @@
     <link rel="icon" href="{{ asset('book\icon.png') }}" type="image/png">
 
     <!-- Links -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+      <!-- Links -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+      <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+      <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
+      <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+      <!-- Google Web Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <style>
         body {
@@ -280,36 +288,62 @@
     });
 
     // Add the answers to the form when submitting
-    submitButton.addEventListener('click', function () {
-        const answers = [];
-        for (let i = 0; i < totalQuestions; i++) {
-            const selectedAnswer = getSelectedAnswer(i);
-            answers.push(selectedAnswer || null); // Add null if no answer is selected
+submitButton.addEventListener('click', function () {
+
+    const answers = [];
+    let score = 0;
+
+    // Calculate the score
+    for (let i = 0; i < totalQuestions; i++) {
+        const selectedAnswer = getSelectedAnswer(i);
+        answers.push(selectedAnswer || null); // Add null if no answer is selected
+        if (selectedAnswer && selectedAnswer === correctAnswers[i]) {
+            score++;
         }
+    }
 
-        // Remove existing hidden inputs for answers (if any)
-        const existingInputs = document.querySelectorAll('input[name^="selected_answer"]');
-        existingInputs.forEach(input => input.remove());
+    // Remove existing hidden inputs for answers (if any)
+    const existingInputs = document.querySelectorAll('input[name^="selected_answer"]');
+    existingInputs.forEach(input => input.remove());
 
-        // Create hidden inputs for each answer
-        answers.forEach((answer, index) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `selected_answer[${index}]`;
-            input.value = answer || ''; // Handle null values
-            document.getElementById('quizForm').appendChild(input);
-        });
-
-        // Submit the form
-        document.getElementById('quizForm').submit();
+    // Create hidden inputs for each answer
+    answers.forEach((answer, index) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = `selected_answer[${index}]`;
+        input.value = answer || ''; // Handle null values
+        document.getElementById('quizForm').appendChild(input);
     });
+
+    // Show SweetAlert with the score and a "View Results" button
+
+});
+
 
     // Initialize the first question
     showQuestion(currentQuestion);
 });
 
     </script>
+ @if (session('success'))
 
+    <script>
+
+        Swal.fire({
+            title: 'Quiz Submitted!',
+            text: `Your score is: {{ session('score') }} out of {{ $totalQuestions }}`,
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonText: 'View Results',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the results page or handle further logic here
+                window.location.href = '{{ route('quiz.results') }}';  // Update this with your results route
+            }
+        });
+
+    </script>
+  @endif
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var spinner = document.getElementById("spinner");

@@ -173,7 +173,8 @@ class QuizController extends Controller
             // Commit the transaction
             DB::commit();
 
-            return response()->json(['message' => 'Quiz result saved and answers submitted successfully'], 200);
+            return redirect()->route('parent.quizResult', ['id' => $flipbookId, 'childId' => $childId, 'quizResultId' => $quizResult->id])->with('success', 'Quiz submitted successfully!');
+
         } catch (\Exception $e) {
             // Rollback the transaction if something fails
             DB::rollback();

@@ -92,15 +92,23 @@ class QuizResultController extends Controller
 
         return redirect()->back()->withErrors(['error' => 'Parent not found']);
     }
-    public function showResults($id, $childId, $quizResultId)
+    public function showResults($id, $childId, $quizResultId, Request $request)
     {
         $quizResult = QuizResult::findOrFail($quizResultId);
         $quizAnswers = QuizAnswer::where('quiz_result_id', $quizResultId)->get();
         $quizQuestions = Quiz::where('flipbook_id', $id)->get();
 
-        return view('parents.quizResults', compact('quizResult', 'quizAnswers', 'quizQuestions'));
-    }
+        // Retrieve the shuffled question order from the session
+        $shuffledQuestionOrder = $request->session()->get('shuffled_question_order', []);
 
+        // Use the shuffled order to order the questions in the same way they were displayed in the quiz
+        $shuffledQuizQuestions = $quizQuestions->whereIn('id', $shuffledQuestionOrder)
+                                                 ->sortBy(function ($question) use ($shuffledQuestionOrder) {
+                                                     return array_search($question->id, $shuffledQuestionOrder);
+                                                 });
+
+        return view('parents.quizResults', compact('quizResult', 'quizAnswers', 'quizQuestions', 'shuffledQuizQuestions'));
+    }
 
 
 
