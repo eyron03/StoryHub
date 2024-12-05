@@ -20,9 +20,9 @@ use Carbon\Carbon;
 class ParentsController extends Controller
 {
     //
- 
-    
-    
+
+
+
     // public function showRegistrationForm()
     // {
     //     return view('parents.kids');
@@ -30,7 +30,7 @@ class ParentsController extends Controller
 
     public function register(Request $request)
     {
-        
+
         $validatedData = $request->validate([
             'pFname' => 'required|string|max:255',
             'pLname' => 'required|string|max:255',
@@ -41,15 +41,15 @@ class ParentsController extends Controller
             'email' => 'required|email|unique:parents|max:255',
             'password' => 'required|string|min:1|confirmed',
         ]);
-    
-       
+
+
         $dob = Carbon::parse($validatedData['pDob']);
-        $age = $dob->age; 
-    
-       
+        $age = $dob->age;
+
+
         $validatedData['password'] = bcrypt($validatedData['password']);
-    
-      
+
+
         $parent = Parents::create([
             'pFname' => $validatedData['pFname'],
             'pLname' => $validatedData['pLname'],
@@ -59,10 +59,10 @@ class ParentsController extends Controller
             'usertype' => $validatedData['usertype'],
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
-            'pAge' => $age, 
+            'pAge' => $age,
         ]);
-    
-    
+
+
         Log::info('New parent added:', [
             'parent_id' => $parent->id,
             'parent' => [
@@ -76,11 +76,11 @@ class ParentsController extends Controller
                 'usertype' => $parent->usertype,
             ]
         ]);
-    
+
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Parent registered successfully!');
     }
-    
+
 
     // public function login(Request $request)
     // {
@@ -103,7 +103,7 @@ class ParentsController extends Controller
     //     ]);
     // }
 
-    
+
 
 public function MyKids(Request $request)
 {
@@ -153,13 +153,13 @@ public function storytime(Request $request)
         ->whereIn('children_classes.child_id', $children->pluck('id')) // Pluck the child IDs
         ->get();
 
- 
+
     return view('parents.storytime', compact('parents', 'children', 'gradeLevels','today'));
 }
 
 public function storybook(Request $request, $childId)
 {
-   
+
     $parentId = $request->session()->get('logged_in_parent_id');
     $today = now()->toDateString();
     $parent = Parents::find($parentId);
@@ -167,27 +167,27 @@ public function storybook(Request $request, $childId)
 
     $child = null;
     $childId=Children::find($childId);
-    
+
     if ($parent) {
         $child = $parent->children()->find($childId);
     }
 
-  
+
     $search = $request->input('search');
 
 
     $flipbooks = FlipBook::when($search, function ($query, $search) {
             return $query->where('book_name', 'like', '%' . $search . '%');
-                         
-        })
-        ->paginate(12); 
 
-    
+        })
+        ->paginate(12);
+
+
     return view('parents.storybook', compact('flipbooks', 'child','childId','today','search'));
 }
 public function bookshow(Request $request, $id,$child)
 {
-    
+
     // Retrieve the flipbook with the given ID and its associated quizzes
     $flipbook = Flipbook::with('quizzes')->find($id);
     $today = now()->toDateString();
@@ -206,7 +206,7 @@ public function bookshow(Request $request, $id,$child)
 }
 public function bookshowAudio(Request $request, $id,$child)
 {
-    
+
     // Retrieve the flipbook with the given ID and its associated quizzes
     $flipbook = Flipbook::with('quizzes')->find($id);
     $today = now()->toDateString();
@@ -227,7 +227,7 @@ public function editChild($id)
 {
     // Find the child by ID or fail if not found
     $child = Children::findOrFail($id);
-    
+
     // Return the child data as JSON response
     return response()->json($child);
 }
@@ -258,7 +258,7 @@ public function update(Request $request)
     ]);
 
     $parentId = $request->session()->get('logged_in_parent_id');
-    
+
     // Retrieve the parent
     $parent = Parents::find($parentId);
 
@@ -266,23 +266,23 @@ public function update(Request $request)
         return redirect()->route('parent.settings')->with('error', 'Parent not found.');
     }
 
-   
+
     $oldValues = $parent->getAttributes();
 
- 
+
     $pAge = Carbon::parse($request->pDob)->age;
 
     // Update parent information
     $parent->pFname = $request->pFname;
     $parent->pLname = $request->pLname;
-    $parent->pAge = $pAge; 
+    $parent->pAge = $pAge;
     $parent->pDob = $request->pDob;
     $parent->pAddress = $request->pAddress;
     $parent->pGender = $request->pGender;
     $parent->email = $request->email;
     $parent->save();
 
-   
+
     Log::info('Parent information updated:', [
         'parent_id' => $parent->id,
         'old_values' => $oldValues,
@@ -297,10 +297,10 @@ public function update(Request $request)
         ],
     ]);
 
-    
+
     $request->session()->put('logged_in_parent_name', $parent->pFname);
 
-    
+
     return redirect()->route('parent.settings')->with('success', 'Personal information updated successfully.');
 }
 
@@ -342,4 +342,4 @@ public function logout()
 
 
 
-}       
+}

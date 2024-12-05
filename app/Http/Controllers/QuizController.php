@@ -75,8 +75,15 @@ class QuizController extends Controller
         $correctAnswers = $quizQuestions->map(function ($question) {
             return $question->correct_answer;
         });
+        $quizResultId= QuizResult::where('child_id', $childId)
+        ->where('flipbook_id', $flipbookId)
+        ->orderBy('id', 'desc') // Order by ID in descending order
+        ->first(); // Get the latest record
 
-        return view('parents.quizshow', compact('childId', 'flipbookId', 'quizQuestions', 'flipbook', 'child', 'dateTime', 'correctAnswers'));
+    $newQuizResultId = $quizResultId ? $quizResultId->id + 1 : 1;  // Get the latest (most recent) result
+
+
+        return view('parents.quizshow', compact('childId', 'flipbookId', 'quizQuestions', 'flipbook', 'child', 'dateTime', 'correctAnswers','quizResultId'));
     }
     public function submitQuiz(Request $request, $id, $childId)
     {
@@ -172,9 +179,8 @@ class QuizController extends Controller
 
             // Commit the transaction
             DB::commit();
-
-            return redirect()->route('parent.quizResult', ['id' => $flipbookId, 'childId' => $childId, 'quizResultId' => $quizResult->id])->with('success', 'Quiz submitted successfully!');
-
+            return redirect()->route('parent.quizResult', ['id' => $flipbookId, 'childId' => $childId, 'quizResultId' => $quizResult->id])->with('success', 'Quiz submitted successfully!'); 
+        //return redirect()->back()->with('success', 'Quiz created successfully!');
         } catch (\Exception $e) {
             // Rollback the transaction if something fails
             DB::rollback();

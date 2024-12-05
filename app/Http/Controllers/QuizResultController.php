@@ -107,7 +107,10 @@ class QuizResultController extends Controller
                                                      return array_search($question->id, $shuffledQuestionOrder);
                                                  });
 
-        return view('parents.quizResults', compact('quizResult', 'quizAnswers', 'quizQuestions', 'shuffledQuizQuestions'));
+        // Compute the total number of questions
+        $totalQuestions = $quizQuestions->count();
+
+        return view('parents.quizResults', compact('quizResult', 'quizAnswers', 'quizQuestions', 'shuffledQuizQuestions', 'totalQuestions'));
     }
 
 

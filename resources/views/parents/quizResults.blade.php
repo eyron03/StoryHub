@@ -66,80 +66,9 @@
             top: 90px;
             left: 20px;
         }
-        .falling-books {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-        .falling-book {
-            position: absolute;
-            width: 30px;
-            height: 40px;
-            background-image: url('path/to/book-image.png'); /* Replace with the path to your book image */
-            background-size: cover;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        #audio-toggle {
-            position: fixed; /* Fix position to top right */
-            top: 80px; /* 20px from the top */
-            right: 20px; /* 20px from the right */
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text color */
-            border: none; /* No border */
-            border-radius: 50%; /* Circular button */
-            width: 50px; /* Width of the button */
-            height: 50px; /* Height of the button */
-            display: flex; /* Use flexbox */
-            justify-content: center; /* Center icon */
-            align-items: center; /* Center icon */
-            cursor: pointer; /* Pointer cursor */
-            font-size: 24px; /* Font size for icon */
-            transition: background-color 0.3s; /* Smooth transition */
-            pointer-events: auto; /* Add pointer-events to make the button clickable */
-            z-index: 1000; /* Ensure it's above other elements */
-        }
-        .cloud-box {
 
-    display: inline-block;
-    padding: 20px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    margin-top: 10px;
-    width: 250px;
-    height: 250px;
-    display: flex;
-    top: 50%;
-    align-items: center;
-    justify-content: center;
-    background-color: #e2f1ff; /* Light blue background */
-}
-.quiz-image {
-    object-fit: cover; /* Ensures the image covers the entire box */
-    width: 100%; /* Make the image fill the width of the box */
-    height: 100%; /* Make the image fill the height of the box */
-    object-position: center; /* Center the image */
-    border-radius: 50%;
-    width: 240px;
-    height: 250px;
 
-}
+
     </style>
 </head>
 <body>
@@ -163,44 +92,62 @@
         </div>
         @endif
     </div>
+<br><br><br><br>
+<div class="quiz-container container mt-4">
+    <!-- Show the total score -->
+    <div class="alert alert-success d-flex justify-content-between align-items-center mb-3">
+        <strong>Score:</strong> <span class="fs-4">{{ $quizResult->total_score }} / {{ $totalQuestions }}</span>
+    </div>
 
+    <!-- Show the questions and answers -->
+    <h4 class="mb-3">Questions and Answers:</h4>
+    <div class="list-group">
+        @foreach($shuffledQuizQuestions as $key => $question)
+            <div class="list-group-item p-3">
+                <div class="question-box mb-2">
+                    <p><strong>Question {{ $key + 1 }}:</strong> {{ $question['quiz_question'] }}</p>
+                </div>
 
-    <div class="quiz-container">
-        <!-- Show the total score -->
-        <div class="alert alert-success">
-            <strong>Score:</strong> {{ $quizResult->total_score }} / 100
-        </div>
+                <ul class="list-unstyled mb-2">
+                    <li><strong>A:</strong> {{ $question->option_a }}</li>
+                    <li><strong>B:</strong> {{ $question->option_b }}</li>
+                    <li><strong>C:</strong> {{ $question->option_c }}</li>
+                    <li><strong>D:</strong> {{ $question->option_d }}</li>
+                </ul>
 
-        <!-- Show the questions and answers -->
-        <h4>Questions and Answers:</h4>
-        <ul>
-            @foreach($shuffledQuizQuestions as $question)
-                <li>
-                    <strong>{{ $question->quiz_question }}</strong>
-                    <ul>
-                        <li><strong>Option A:</strong> {{ $question->option_a }}</li>
-                        <li><strong>Option B:</strong> {{ $question->option_b }}</li>
-                        <li><strong>Option C:</strong> {{ $question->option_c }}</li>
-                        <li><strong>Option D:</strong> {{ $question->option_d }}</li>
-                    </ul>
-
-                    <!-- Display the answer selected by the child -->
+                <!-- Display the answer selected by the child -->
+                <div>
                     <strong>Answer:</strong>
                     @php
                         // Find the answer for this shuffled question
                         $answer = $quizAnswers->firstWhere('quiz_id', $question->id);
                     @endphp
                     @if($answer)
-                        {{ $answer->selected_answer }}
+                        <p class="mb-1">
+                            <strong>Selected Answer:</strong> {{ $answer->selected_answer }}
+                        </p>
+                        @if($answer->is_correct)
+                            <span class="badge bg-success">✔ Correct</span> <!-- Correct answer -->
+                        @else
+                            <span class="badge bg-danger">✘ Incorrect</span> <!-- Wrong answer -->
+                        @endif
                     @else
-                        <span class="text-danger">No answer selected</span>
+                        <span class="badge bg-warning">No answer selected</span>
                     @endif
-                </li>
-            @endforeach
-        </ul>
-
-        <a href="{{ route('parent.quizshow', ['id' => $quizResult->flipbook_id, 'childId' => $quizResult->child_id]) }}" class="btn btn-primary">Back to Quiz</a>
+                </div>
+            </div>
+        @endforeach
     </div>
+
+    <div class="mt-3">
+        <a href="{{ route('parent.quizshow', ['id' => $quizResult->flipbook_id, 'childId' => $quizResult->child_id]) }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back to Quiz
+        </a>
+    </div>
+</div>
+
+
+
 
 
 

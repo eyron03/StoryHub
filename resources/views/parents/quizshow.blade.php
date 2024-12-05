@@ -115,30 +115,62 @@
             pointer-events: auto; /* Add pointer-events to make the button clickable */
             z-index: 1000; /* Ensure it's above other elements */
         }
-        .cloud-box {
-            display: inline-block;
+        .quiz-container {
+            background-color: #f7f7f7;
             padding: 20px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            margin-top: 10px;
-            width: 250px;
-            height: 250px;
-            display: flex;
-            top: 50%;
-            align-items: center;
-            justify-content: center;
-            background-color: #e2f1ff; /* Light blue background */
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-        .quiz-image {
-            object-fit: cover; /* Ensures the image covers the entire box */
-            width: 100%; /* Make the image fill the width of the box */
-            height: 100%; /* Make the image fill the height of the box */
-            object-position: center; /* Center the image */
-            border-radius: 50%;
-            width: 240px;
-            height: 250px;
+
+        .question-box p {
+            font-size: 1.25rem;
+            color: #333;
+        }
+
+        .cloud-box {
+            width: 100%;
+            height: 200px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+        }
+
+        .quiz-question {
+            margin-bottom: 30px;
+        }
+
+        .options .form-check {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .form-check-input {
+            width: 25px;
+            height: 25px;
+        }
+
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 1.25rem;
+            border-radius: 8px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+
+
+
+        /* Add some space between form elements */
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .question-box {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -161,52 +193,62 @@
             </div>
             @endif
         </div>
-
-        <div class="quiz-container">
-            <h1>Quiz</h1>
+<br><br><br><br>
+        <div class="container quiz-container my-5">
+            <h1 class="text-center my-4">Fun Quiz!</h1>
 
             <form id="quizForm" method="POST" action="{{ route('quiz.submit', ['id' => $flipbookId, 'childId' => $childId]) }}">
                 @csrf
                 <input type="hidden" id="child_id" name="child_id" value="{{ $childId }}">
                 <input type="hidden" id="flipbook_id" name="flipbook_id" value="{{ $flipbookId }}">
                 <input type="hidden" id="date_taken" name="date_taken" value="{{ \Carbon\Carbon::now()->toDateTimeString() }}">
- <!-- Add total_score hidden input -->
- <input type="hidden" id="total_score" name="total_score" value="0">
+                <input type="hidden" id="total_score" name="total_score" value="0">
 
                 @foreach($quizQuestions as $key => $question)
                 <div class="quiz-question" id="question-{{ $key }}" style="display: {{ $key === 0 ? 'block' : 'none' }};">
-                    @if($question['images']) <!-- Check if image exists -->
-                        <div class="cloud-box float-end" style="background-image: url('{{ asset($question['images']) }}');"></div>
-                    @endif
+                    <div class="row mb-4">
+                        @if($question['images']) <!-- Check if image exists -->
+                        <div class="col-12 col-md-6">
+                            <div class="cloud-box" style="background-image: url('{{ asset($question['images']) }}');"></div>
+                        </div>
+                        @endif
 
-                    <div class="question-box">
-                        <p><strong>Question {{ $key + 1 }}:</strong> {{ $question['quiz_question'] }}</p>
-                    </div>
-
-                    <div class="options">
-                        @foreach(['A', 'B', 'C', 'D'] as $option)
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selected_answer[{{$key}}]" id="option{{ $key }}{{ $option }}" value="{{ $option }}">
-
-                                <label class="form-check-label" for="option{{ $key }}{{ $option }}">
-                                    {{ $question['option_' . strtolower($option)] }}
-                                </label>
+                        <div class="col-12 col-md-6">
+                            <div class="question-box">
+                                <p><strong>Question {{ $key + 1 }}:</strong> {{ $question['quiz_question'] }}</p>
                             </div>
-                        @endforeach
+
+                            <div class="options">
+                                @foreach(['A', 'B', 'C', 'D'] as $option)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="selected_answer[{{$key}}]" id="option{{ $key }}{{ $option }}" value="{{ $option }}">
+                                    <label class="form-check-label" for="option{{ $key }}{{ $option }}">
+                                        {{ $question['option_' . strtolower($option)] }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
 
                 <!-- Navigation Buttons -->
-                <button type="button" id="prevButton" class="btn btn-secondary">Previous</button>
-                <button type="button" id="nextButton" class="btn btn-primary">Next</button>
+                <div class="d-flex justify-content-between my-4">
+                    <button type="button" id="prevButton" class="btn btn-secondary btn-md">Previous</button>
+                    <button type="button" id="nextButton" class="btn btn-primary btn-md ">Next</button>
+                </div>
 
                 <!-- Submit Button (hidden until the last question) -->
-                <button type="submit" id="submitQuiz" class="btn btn-success" style="display: none;">Submit Quiz</button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" id="submitQuiz" class="btn btn-success btn-md" style="display: none;">Submit Quiz</button>
+                </div>
             </form>
-
         </div>
-    </div>
+
+        <!-- Bootstrap JS and Popper.js -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
@@ -287,9 +329,7 @@
         showQuestion(currentQuestion);
     });
 
-    // Add the answers to the form when submitting
-submitButton.addEventListener('click', function () {
-
+    submitButton.addEventListener('click', function () {
     const answers = [];
     let score = 0;
 
@@ -314,8 +354,21 @@ submitButton.addEventListener('click', function () {
         input.value = answer || ''; // Handle null values
         document.getElementById('quizForm').appendChild(input);
     });
+    event.preventDefault();
+    // SweetAlert to show the score and provide a "View Results" button
+    Swal.fire({
+    title: 'Quiz Submitted!',
+    text: `You scored ${score} out of ${totalQuestions}!`,
+    icon: 'success',
+    showCancelButton: false,
+    confirmButtonText: 'View Results',
+}).then(() => {
+    // Submit the form first
+    document.getElementById('quizForm').submit();
 
-    // Show SweetAlert with the score and a "View Results" button
+    // After a small delay (to allow form submission), redirect to the results page
+   // 100ms delay to ensure form submission before redirect
+});
 
 });
 
@@ -325,25 +378,7 @@ submitButton.addEventListener('click', function () {
 });
 
     </script>
- @if (session('success'))
 
-    <script>
-
-        Swal.fire({
-            title: 'Quiz Submitted!',
-            text: `Your score is: {{ session('score') }} out of {{ $totalQuestions }}`,
-            icon: 'success',
-            showCancelButton: false,
-            confirmButtonText: 'View Results',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect to the results page or handle further logic here
-                window.location.href = '{{ route('quiz.results') }}';  // Update this with your results route
-            }
-        });
-
-    </script>
-  @endif
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var spinner = document.getElementById("spinner");

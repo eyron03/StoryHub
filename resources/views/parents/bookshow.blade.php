@@ -44,7 +44,7 @@
             z-index: -1; /* Position it behind other elements */
             transition: background-image 0.5s ease;
         }
-        
+
         .flipbook-viewport {
             position: relative; /* Ensure the viewport is positioned above the background */
             z-index: 1;
