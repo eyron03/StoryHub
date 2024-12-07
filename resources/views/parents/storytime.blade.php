@@ -30,21 +30,21 @@
             overflow: hidden; /* Prevents scrolling */
             height: 100%;
         }
-    
+
         .content {
             height: 100vh; /* Ensures content takes the full height of the screen */
             overflow-y: auto; /* If content overflows, allow vertical scrolling */
         }
-    
-       
-    
+
+
+
         .all {
             display: flex;
             flex-direction: column;
             height: 100vh; /* Ensures all content is sized properly */
         }
     </style>
-    
+
 </head>
 <body>
     <div id="spinner" class=" show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -83,7 +83,7 @@
     </div>
 
 
-   
+
     <div class="sidebar">
         <a class="sidebarimage img-fluid" href="dashboard" >
             <i class="fas fa-tachometer-alt icon-space"></i> Dashboard
@@ -103,7 +103,7 @@
     </div>
 
     <div class="content">
-              
+
 <div class="container mt-4">
     <div class="row">
         <div class="col d-flex justify-content-end align-items-center">
@@ -143,8 +143,8 @@
             </div>
         @endforeach
     </div>
-    
-            
+
+
 
 </div>
 </div>

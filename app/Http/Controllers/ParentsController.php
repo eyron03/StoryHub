@@ -156,35 +156,77 @@ public function storytime(Request $request)
 
     return view('parents.storytime', compact('parents', 'children', 'gradeLevels','today'));
 }
-
 public function storybook(Request $request, $childId)
 {
-
+    // Retrieve the logged-in parent's ID
     $parentId = $request->session()->get('logged_in_parent_id');
-    $today = now()->toDateString();
     $parent = Parents::find($parentId);
+    $child=Children::find($childId);
+    // Retrieve the child associated with the logged-in parent
+    $child = $parent ? $parent->children()->find($childId) : null;
 
-
-    $child = null;
-    $childId=Children::find($childId);
-
-    if ($parent) {
-        $child = $parent->children()->find($childId);
-    }
-
-
+    // Retrieve the search term, if available
     $search = $request->input('search');
 
-
+    // Fetch flipbooks, applying the search term if provided
     $flipbooks = FlipBook::when($search, function ($query, $search) {
             return $query->where('book_name', 'like', '%' . $search . '%');
-
         })
         ->paginate(12);
 
+    // Get children's quiz progress, filtering by the logged-in parent's child
+    $childrenProgress = DB::table('quiz_results')
+        ->join('flipbooks', 'quiz_results.flipbook_id', '=', 'flipbooks.id')
+        ->join('childrens', 'quiz_results.child_id', '=', 'childrens.id')
+        ->leftJoin('grade_levels', 'quiz_results.grade_level_id', '=', 'grade_levels.id')
+        ->where('childrens.parent_id', $parentId)
+        ->where('quiz_results.child_id', $childId)  // Filter for the specific child
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('childrens.childFirstName', 'like', '%' . $search . '%')
+                    ->orWhere('grade_levels.GradeLvl', 'like', '%' . $search . '%')
+                    ->orWhere('flipbooks.book_name', 'like', '%' . $search . '%');
+            });
+        })
+        ->select(
+            'childrens.childFirstName as child_name',
+            DB::raw('COALESCE(grade_levels.GradeLvl, "N/A") as grade_level'),
+            'flipbooks.book_name',
+            'flipbooks.id as flipbook_id',
+            'quiz_results.total_score',
+            DB::raw('MAX(quiz_results.date_taken) as date_taken')
+        )
+        ->groupBy(
+            'childrens.id',
+            'childrens.childFirstName',
+            'grade_levels.GradeLvl',
+            'flipbooks.id',
+            'flipbooks.book_name',
+            'quiz_results.total_score'
+        )
+        ->get()
+        ->map(function ($result) {
 
-    return view('parents.storybook', compact('flipbooks', 'child','childId','today','search'));
+            // Define the perfect score (adjust based on your requirements)
+            $perfectScore = 5; // Adjust this based on your scoring system (e.g., 100 or total possible points)
+
+            // Determine the background color class based on the total score
+            if ($result->total_score == $perfectScore) {
+                $result->bgColorClass = 'bg-success'; // Green for perfect score
+            } elseif ($result->total_score > 0) {
+                $result->bgColorClass = 'bg-warning'; // Yellow for in-progress
+            } else {
+                $result->bgColorClass = 'bg-light'; // White for no score
+            }
+
+            return $result;
+        });
+
+    // Return the view with the relevant data
+    return view('parents.storybook', compact('flipbooks', 'child', 'childId', 'childrenProgress', 'search'));
 }
+
+
 public function bookshow(Request $request, $id,$child)
 {
 

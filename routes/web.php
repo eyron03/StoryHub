@@ -68,7 +68,11 @@ Route::get('/', function () {
 
     Route::put('/admin/parent/update/{id}', [AdminController::class, 'updateParent'])->name('admin.parent.update');
     Route::get('/admin/analytics',[AdminController::class,'Analytics'])->name('admin.Analytics');
+
+    Route::get('/admin/edit/quiz/{id}', [FlipbookController::class, 'editQuiz'])->name('admin.editQuiz');
+    Route::put('/admin/edit/quiz/update/{id}',[FlipbookController::class,'updateQuiz'])->name('admin.updateQuiz');
     Route::middleware([ 'admin'])->group(function () {
+
     Route::get('/admin/dashboard', [LoginController::class, 'Adashboard'])->name('admin.dashboard');
 
     Route::get('/admin/parent', [AdminController::class, 'parentDashboard'])->name('admin.parentDashboard');

@@ -28,4 +28,8 @@ class Quiz extends  Authenticatable
 {
     return $this->hasMany(QuizAnswer::class);
 }
+public function flipbooks()
+{
+    return $this->belongsTo(Flipbook::class, 'flipbook_id');
+}
 }

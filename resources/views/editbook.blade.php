@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Edit Flip Book</title>
-   
+
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{{ asset('css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Dosis&family=Gajraj+One&family=Madimi+One&family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Hammersmith+One&display=swap" rel="stylesheet">
 
-    
+
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -40,7 +40,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
-           
+
             padding: 10px;
             border-radius: 5px;
         }
@@ -49,17 +49,17 @@
             height: 200px; /* Maintain aspect ratio */
             margin-top:200px;
         }
-        
+
         .d-none { display: none; }
         .d-flex { display: flex; }
     </style>
 
-   
+
 </head>
 <body>
     <div class="all">
     <div class="container">
-       
+
     <div class="header d-flex justify-content-between align-items-center fixed-top">
         <a href="{{ route('flipbook.index') }}" style="text-decoration: none;"class="d-flex align-items-center">
 
@@ -94,10 +94,10 @@
         <br><br><br><br>
         <div class="starter-template">
             <h1>Edit Book & Questions</h1>
-           
+
 
         </div>
-       
+
         <form  class="register-form" method="POST" action="{{ route('flipbook.update',$flipbooks->id) }}" enctype="multipart/form-data">
             {!! csrf_field() !!}
             <input type="hidden" name="_method" value="put" />
@@ -117,8 +117,8 @@
                     <input class="input-block-level" type="text"  name="desc" value="{{ $flipbooks->desc }}">
                 </div>
             </div>
-          
-            
+
+
             <div class="row">
                 @foreach($images as $page)
                 <div class="col-md-1">
@@ -144,82 +144,24 @@
                 </div>
             </div>  --}}
            <hr>
-           @foreach($flipbooks->quizzes as $index => $quiz)
-        <div class="row">
-           
-               
-            
-            <div class="col-lg-3">
-                
-                <label><span class="required">*</span> Quiz Question</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="quiz_question[]" value="{{ $quiz->quiz_question }}">
-            </div>
-        </div>
-        <!-- Include fields for options and correct answer -->
-        <!-- Ensure that the names are array-like to handle multiple inputs -->
-        <div class="row">
-            <!-- Option A -->
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Option A</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="option_a[]" value="{{ $quiz->option_a }}">
-            </div>
-            <!-- Option B -->
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Option B</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="option_b[]" value="{{ $quiz->option_b }}">
-            </div>
-            <!-- Option C -->
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Option C</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="option_c[]" value="{{ $quiz->option_c }}">
-            </div>
-            <!-- Option D -->
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Option D</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="option_d[]" value="{{ $quiz->option_d }}">
-            </div>
-            <!-- Correct Answer -->
-            <div class="col-lg-3">
-                <label><span class="required">*</span> Correct Answer</label>
-            </div>
-            <div class="col-lg-3">
-                <input class="input-block-level" type="text" name="correct_answer[]" value="{{ $quiz->correct_answer }}">
-            </div>
-         
-        </div>
-        
-           
-     
-        @endforeach
-        <!-- Button to add more quiz questions -->
-        <div class="row">
-            <div class="col-lg-offset-6">
-               
-                <button id="add_question" class="btn btn-sm btn-primary" type="button">Add More Quiz</button>
-            </div>
-        </div>
-        <div id="quiz_questions" style="display: none;">
-            <input type="hidden" id="counter" name="counter" value="1">
-        </div>
-        
-        
+
+
             <hr>
             <div class="row">
                 <div class="col-lg-offset-3 pull-right">
                     <button id="add_files"  style="background-color: orange;" class="btn btn-lg btn-primary" type="submit">Update Book</button>
                 </div>
             </div>
+            <div class="row">
+
+            </div>
         </form>
+        <div class="col-lg-offset-3 pull-right">
+            <a href="{{ route('admin.editQuiz', $quiz->id) }}" style="text-decoration: none;">
+                <button style="background-color: green;" class="btn btn-lg btn-primary">Edit Quiz</button>
+            </a>
+        </div>
+
         <hr>
         <form class="delete-form" method="POST" action="{{ route('flipbook.destroy',$flipbooks->id) }}" >
             {!! csrf_field() !!}
@@ -231,7 +173,7 @@
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
-  
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -309,13 +251,13 @@
             });
         });
 
-  
-      
 
-        var counter = 0; 
+
+
+        var counter = 0;
         $("#add_question").on('click', function() {
-            counter++; 
-            $("#counter").val(counter); 
+            counter++;
+            $("#counter").val(counter);
 
             // HTML for a new quiz question
             var newQuestion = '<div class="quiz_question">' +

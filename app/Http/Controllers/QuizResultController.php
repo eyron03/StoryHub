@@ -80,7 +80,7 @@ class QuizResultController extends Controller
                     'childrens.childFirstName as child_name',
                     DB::raw('COALESCE(grade_levels.GradeLvl, "N/A") as grade_level'), // Fetch historical grade level
                     'flipbooks.book_name',
-                    DB::raw('MAX(quiz_results.total_score * 10) as progress'),
+                    DB::raw('MAX(quiz_results.total_score * 20) as progress'),
                     DB::raw('MAX(quiz_results.date_taken) as date_taken')
                 )
                 ->groupBy('childrens.childFirstName', 'grade_levels.GradeLvl', 'flipbooks.book_name')

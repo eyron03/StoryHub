@@ -12,7 +12,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/starter-template.css') }}" rel="stylesheet">
-   
+
     <!--Links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Dosis&family=Gajraj+One&family=Madimi+One&family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -32,15 +32,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@600&family=Lobster+Two:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-       
+
             .search-bar-container {
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
-                z-index: 1000; 
-                background-color: #fff; 
-                padding: 10px 0; 
+                z-index: 1000;
+                background-color: #fff;
+                padding: 10px 0;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
@@ -64,7 +64,7 @@
             background-color: #0056b3; /* Example color, adjust as needed */
         }
 
-        
+
             .input-group {
                 display: flex;
                 flex-wrap: nowrap;
@@ -75,9 +75,21 @@
             #search-button {
                 flex: 0 1 auto;
             }
-          
-            
-       
+
+
+            .bg-green-500 {
+          background-color: green;
+            color: white;
+        }
+        .bg-yellow-500 {
+            background-color: yellow;
+            color: black;
+        }
+        .bg-white {
+            background-color: white;
+            color: black;
+        }
+
     </style>
 
 </head>
@@ -93,14 +105,14 @@
             <a href="{{ route('parent.storytime') }}" style="text-decoration: none;" class="d-flex align-items-center">
                 <h1 class="m-0 text-primary text-orange"><i class="fa fa-book-reader me-3"></i>StoryHub</h1>
             </a>
-            @if(isset($childId))
+            @if(isset($child))
             <div>
-              <b>Hello {{ $childId->childFirstName }}</b>
-    
+              <b>Hello {{ $child->childFirstName }}</b>
             </div>
-        @endif
+            @endif
+
         </div>
-      
+
 
         </div>
     </div>
@@ -122,13 +134,13 @@
         </a>
     </div>
     <div class="content">
-        
+
         <div class="container">
-         
-    
+
+
             <br>
-         
-      
+
+
             <br>
             <form action="{{ route('parent.storybook',['childId' => $childId]) }}" method="GET">
                 <div class="row justify-content-center">
@@ -140,34 +152,41 @@
                     </div>
                 </div>
             </form>
-            
-            
-            
-    
+
+
+
+
             <div class="text-center starter-template">
                 <h1 style="margin-left:-60px;">Read and Learn</h1>
                 <p  style="margin-left:-60px;" class="lead">Enjoy Reading! 😊</p>
             </div>
-    
             <div class="row" id="bookList">
-                @foreach($flipbooks as $fb)
-                
-                    <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
-                        <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}" class="book-thumbnail" data-book-id="{{ $fb->id }}" data-child-id="{{ $childId }}">
-                            <img class="img-thumbnail" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;" src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
-                        </a>
-                        <br><br>
-                        <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
-                        <p style="font-size: 11px; color: #666;">
-                            <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
-                            <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
-                            <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
-                        </p>
-                       
-                    </div>
-             
-                @endforeach
-            </div>
+    @foreach($flipbooks as $fb)
+        <div class="text-center col-6 col-sm-4 col-md-3 col-lg-2 book gif-item">
+            <!-- Link to the Storybook page for the given child -->
+             <a href="{{ route('parent.bookshow', ['id' => $fb->id, 'childId' => $childId]) }}"   <!-- Determine the background color based on progress -->
+                @php
+                // Find the progress for this flipbook
+                $progress = $childrenProgress->firstWhere('flipbook_id', $fb->id);
+                $bgColorClass = $progress ? $progress->bgColorClass : 'bg-light'; // Default to 'bg-light' if no progress found
+            @endphp
+
+            <!-- Add dynamic background color class based on quiz progress -->
+            <img class="img-thumbnail {{ $bgColorClass }}" alt="200x200" style="width: 100%; max-width: 150px; height: 200px;margin-left: 20px;"
+                 src="{{ asset(explode(',', $fb->images)[0]) }}" data-holder-rendered="true">
+        </a>
+            </a>
+            <br><br>
+            <span style="font-size: 13px; font-weight: bold; color: #333;">{{ $fb->book_name }}</span>
+            <p style="font-size: 11px; color: #666;">
+                <span class="short-desc">{{ Str::limit($fb->desc, 50, '...') }}</span>
+                <span class="full-desc book-desc" style="display: none;">{{ $fb->desc }}</span>
+                <span class="show-more" style="cursor: pointer; color: blue;">Read more</span>
+            </p>
+        </div>
+    @endforeach
+</div>
+
             <div class="mt-4 pagination-wrapper d-flex justify-content-center">
                 {{ $flipbooks->appends(['search' => $search])->links() }}
             </div>
@@ -179,7 +198,7 @@
                 element.addEventListener('click', function () {
                     const shortDesc = this.previousElementSibling.previousElementSibling;
                     const fullDesc = this.previousElementSibling;
-                    
+
                     if (fullDesc.style.display === 'none') {
                         fullDesc.style.display = 'inline'; // Show full description
                         shortDesc.style.display = 'none'; // Hide short description
@@ -193,8 +212,8 @@
             });
         });
     </script>
-    
-   
+
+
 
 <!-- Bootstrap JS and dependencies -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>

@@ -6,9 +6,11 @@ use App\Models\Flipbook;
 use App\Models\Quiz;
 use GifCreator\GifCreator;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class FlipbookController extends Controller
 {
@@ -167,9 +169,10 @@ public function show($id)
 
     public function edit($id)
     {
+        $quiz = Quiz::with('flipbooks')->findOrFail($id);
         $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
         $images = explode(",", $flipbooks->images);
-        return view('editbook', compact('flipbooks', 'images'));
+        return view('editbook', compact('flipbooks', 'images','quiz'));
     }
 
     public function update(Request $request, $id)
@@ -201,27 +204,6 @@ public function show($id)
 
         $fb->save();
 
-        // Handle quiz updates
-        $quizQuestions = $request->input('quiz_question', []);
-        $optionA = $request->input('option_a', []);
-        $optionB = $request->input('option_b', []);
-        $optionC = $request->input('option_c', []);
-        $optionD = $request->input('option_d', []);
-        $correctAnswers = $request->input('correct_answer', []);
-
-        foreach ($quizQuestions as $key => $question) {
-            if (!empty($question)) {
-                $quiz = isset($fb->quizzes[$key]) ? $fb->quizzes[$key] : new Quiz();
-                $quiz->quiz_question = $question;
-                $quiz->option_a = $optionA[$key];
-                $quiz->option_b = $optionB[$key];
-                $quiz->option_c = $optionC[$key];
-                $quiz->option_d = $optionD[$key];
-                $quiz->correct_answer = $correctAnswers[$key];
-                $fb->quizzes()->save($quiz);
-            }
-        }
-
         Log::info('Book updated successfully:', [
             'BookTitle' => $fb->book_name,
             'BookDescription' => $fb->desc,
@@ -231,41 +213,81 @@ public function show($id)
         return redirect()->route('flipbook.index')->with('success', 'Book updated successfully!');
     }
 
-            public function destroy($id)
-    {
-        $fb = Flipbook::find($id);
 
-        if (!$fb) {
-            // Log error if flipbook is not found
-            Log::error('Attempted to delete non-existent flipbook', ['flipbook_id' => $id]);
-            return redirect()->route('flipbook.index')->with('error', 'Flipbook not found.');
+
+        // Method to show the edit form
+        public function editQuiz($id)
+        {
+            // Fetch the quiz with the related flipbooks
+            $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
+
+            // Pass the data to the view
+            return view('admin.editQuiz', compact( 'flipbooks'));
         }
 
-        $imgArr = explode(",", $fb->images);
+        public function updateQuiz(Request $request, $id)
+        {
+            $fb = Flipbook::findOrFail($id);
 
-        // Log the images to be deleted
-        Log::info('Deleting Book:', [
-            'flipbook_id' => $id,
-            'images' => $imgArr
-        ]);
+            // Retrieve form data
+            $quizQuestions = $request->input('quiz_question', []);
+            $optionA = $request->input('option_a', []);
+            $optionB = $request->input('option_b', []);
+            $optionC = $request->input('option_c', []);
+            $optionD = $request->input('option_d', []);
+            $correctAnswers = $request->input('correct_answer', []);
 
-        foreach ($imgArr as $img) {
-            $image = public_path($img);
-            if (file_exists($image)) {
-                unlink($image);
+            // Handle file uploads
+            $uploadedImages = $request->file('images', []);
+
+            foreach ($quizQuestions as $key => $question) {
+                if (!empty($question)) {
+                    // Find existing quiz or create a new one
+                    $quiz = $fb->quizzes[$key] ?? new Quiz();
+
+                    $quiz->quiz_question = $question;
+                    $quiz->option_a = $optionA[$key];
+                    $quiz->option_b = $optionB[$key];
+                    $quiz->option_c = $optionC[$key];
+                    $quiz->option_d = $optionD[$key];
+                    $quiz->correct_answer = $correctAnswers[$key];
+
+                    // Handle new image upload if present
+                    if (isset($uploadedImages[$key]) && $uploadedImages[$key]->isValid()) {
+                        // Delete the old image if exists
+                        if ($quiz->images) {
+                            // Delete the old image from storage
+                            $oldImagePath = public_path('storyhub/quiz/' . $quiz->images);
+                            if (file_exists($oldImagePath)) {
+                                unlink($oldImagePath); // Delete the old image
+                            }
+                        }
+
+                        // Generate a new filename and store the image
+                        $fileName = time() . '_' . $uploadedImages[$key]->getClientOriginalName();
+                        $uploadedImages[$key]->move(public_path('storyhub/quiz/'), $fileName); // Move the new file
+
+                        // Set the new image path
+                        $quiz->images = 'storyhub/quiz/' . $fileName;
+                    }
+
+                    // Update or create quiz
+                    $fb->quizzes()->save($quiz);
+                }
             }
+
+            // Log and redirect
+            Log::info('Quiz updated successfully:', [
+                'BookTitle' => $fb->book_name,
+                'BookDescription' => $fb->desc,
+            ]);
+
+            return redirect()->route('flipbook.index')->with('success', 'Quiz updated successfully!');
         }
 
-        // Delete the flipbook
-        $fb->delete();
 
-        // Log the successful deletion
-        Log::info('Flipbook deleted successfully', ['flipbook_id' => $id]);
 
-        return Redirect::route('flipbook.index')->with('success', 'Book deleted successfully!');;
-    }
-
-    public function destroyQuiz(Request $request)
+            public function destroyQuiz(Request $request)
     {
         $quizIds = $request->input('delete_quiz');
 
