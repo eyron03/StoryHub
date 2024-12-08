@@ -241,43 +241,43 @@ public function pupils(Request $request)
 }
 
 
-// public function storePupil(Request $request)
-// {
+public function storeExistingPupil(Request $request)
+{
 
-//     $validated = $request->validate([
-//         'childCustomId' => 'required|exists:childrens,custom_id',
-//     ]);
-
-
-//     $child = Children::where('custom_id', $validated['childCustomId'])->first();
-
-//     $teacherId = $request->session()->get('logged_in_teacher_id');
-
-//     $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
-//     $gradeLevelName = $gradeLevel ? $gradeLevel->GradeLvl : 'Unknown';
+    $validated = $request->validate([
+        'childCustomId' => 'required|exists:childrens,custom_id',
+    ]);
 
 
-//     $teacher = Teachers::find($teacherId);
-//     $teacherName = $teacher ? $teacher->TeacherFirstName . ' ' . $teacher->TeacherLastName : 'Unknown';
+    $child = Children::where('custom_id', $validated['childCustomId'])->first();
+
+    $teacherId = $request->session()->get('logged_in_teacher_id');
+
+    $gradeLevel = GradeLevel::where('teacher_id', $teacherId)->first();
+    $gradeLevelName = $gradeLevel ? $gradeLevel->GradeLvl : 'Unknown';
 
 
-//     DB::table('children_classes')->insert([
-//         'child_id' => $child->id,
-//         'class_id' => $gradeLevel ? $gradeLevel->id : null,
-//         'created_at' => now(),
-//         'updated_at' => now()
-//     ]);
+    $teacher = Teachers::find($teacherId);
+    $teacherName = $teacher ? $teacher->TeacherFirstName . ' ' . $teacher->TeacherLastName : 'Unknown';
 
 
-//     Log::info('Pupil added to class:', [
-//         'child_custom_id' => $child->custom_id,
-//         'grade_level' => $gradeLevelName,
-//         'teacher_name' => $teacherName,
-//         'timestamp' => now()->toDateTimeString()
-//     ]);
+    DB::table('children_classes')->insert([
+        'child_id' => $child->id,
+        'class_id' => $gradeLevel ? $gradeLevel->id : null,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
 
-//     return redirect()->route('teachers.pupils')->with('success', 'Child added successfully.');
-// }
+
+    Log::info('Pupil added to class:', [
+        'child_custom_id' => $child->custom_id,
+        'grade_level' => $gradeLevelName,
+        'teacher_name' => $teacherName,
+        'timestamp' => now()->toDateTimeString()
+    ]);
+
+    return redirect()->route('teachers.pupils')->with('success', 'Child added successfully.');
+}
 public function storePupil(Request $request)
 {
     // Validate the child data
@@ -292,28 +292,16 @@ public function storePupil(Request $request)
 
     // Calculate the child's age
     $dob = Carbon::parse($validatedData['childDob']);
-    $age = $dob->diffInYears(Carbon::now());
+        $age = $dob->age;
 
     // Check if parent ID is provided (selected parent)
     if ($request->parent_id) {
         // Associate the child with the selected parent
         $parent = Parents::find($request->parent_id);
-    } else {
-        // Create a new parent
-        $parent = Parents::create([
-            'pFname' => $request->parentFirstName,
-            'pLname' => $request->parentLastName,
-            'pAge' => Carbon::parse($request->parentDob)->diffInYears(Carbon::now()),
-            'pDob' => $request->parentDob,
-            'pAddress' => $request->parentAddress,
-            'pGender' => $request->parentGender,
-            'usertype' => 'parent',
-            'email' => $request->parentEmail,
-            'password' => bcrypt($request->parentPassword), // Hash password
-        ]);
     }
+    $dob = Carbon::parse($validatedData['pDob']);
+    $age = $dob->age;
 
-   
     $customId = $this->generateCustomId();
 
 

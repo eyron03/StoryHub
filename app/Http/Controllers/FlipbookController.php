@@ -170,50 +170,55 @@ public function show($id)
     public function edit($id)
     {
         $quiz = Quiz::with('flipbooks')->findOrFail($id);
-        $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
-        $images = explode(",", $flipbooks->images);
-        return view('editbook', compact('flipbooks', 'images','quiz'));
+        $flipbook = Flipbook::with('quizzes')->findOrFail($id);
+        $images = explode(",", $flipbook->images);
+        $subtitles = explode(',', $flipbook->subtitles);
+        return view('editbook', compact('flipbook', 'images','quiz','subtitles'));
     }
+
+
 
     public function update(Request $request, $id)
     {
-        $fb = Flipbook::find($id);
-
-        if (!$fb) {
-            // Log error if flipbook is not found
-            Log::error('Flipbook not found for update', ['flipbook_id' => $id]);
-            return redirect()->route('flipbook.index')->with('error', 'Flipbook not found.');
-        }
-
-        $input = $request->all();
-        $fb->images .= ",";
-        $i = 1;
-
-        // Handle file uploads
-        foreach ($request->file('files', []) as $uploadedFile) {
-            $filename = time() . '_' . $i . '.' . $uploadedFile->getClientOriginalExtension();
-            $i++;
-            $uploadedFile->move(public_path('storyhub/images/'), $filename);
-            $path = 'storyhub/images/' . $filename;
-            $fb->images .= $path . ",";
-        }
-
-        $fb->images = rtrim($fb->images, ",");
-        $fb->book_name = $input['book_name'];
-        $fb->desc = $input['desc'];
-
-        $fb->save();
-
-        Log::info('Book updated successfully:', [
-            'BookTitle' => $fb->book_name,
-            'BookDescription' => $fb->desc,
+        $validated = $request->validate([
+            'book_name' => 'required|string|max:255',
+            'desc' => 'required|string|max:255',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif',
+            'subtitles' => 'nullable|array',
+            'subtitles.*' => 'nullable|string',  // Validate each subtitle as a string
         ]);
 
-        // Flash message for SweetAlert
-        return redirect()->route('flipbook.index')->with('success', 'Book updated successfully!');
+        // Retrieve the Flipbook
+        $flipbook = Flipbook::findOrFail($id);
+
+        // Handle new image uploads
+        $images = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $uploadedFile) {
+                $filename = time() . '_' . uniqid() . '.' . $uploadedFile->getClientOriginalExtension();
+                $uploadedFile->move(public_path('storyhub/images/'), $filename);
+                $path = 'storyhub/images/' . $filename;
+                $images[] = $path;
+            }
+        }
+
+        // Handle subtitles as an array
+        $subtitles = $request->input('subtitles', []); // Ensure we get an empty array if no subtitles are provided
+
+        // Update flipbook fields
+        $flipbook->book_name = $request->input('book_name');
+        $flipbook->desc = $request->input('desc');
+        $flipbook->subtitles = implode(',', $subtitles); // Store subtitles as a comma-separated string
+        if (!empty($images)) {
+            $existingImages = explode(',', $flipbook->images);
+            $flipbook->images = implode(',', array_merge($existingImages, $images));
+        }
+
+        $flipbook->save();
+
+        return redirect()->route('flipbook.index')->with('success', 'Flipbook updated successfully!');
     }
-
-
 
         // Method to show the edit form
         public function editQuiz($id)

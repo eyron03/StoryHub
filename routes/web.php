@@ -129,6 +129,8 @@ Route::get('/', function () {
 
     Route::get('/teacher/pupils',[TeachersController::class,'pupils'])->name('teachers.pupils');
     Route::post('/teacher/store', [TeachersController::class, 'storePupil'])->name('pupils.store');
+    Route::post('/teacher/storeExistingPupil', [TeachersController::class, 'storeExistingPupil'])->name('pupils.existing.store');
+   
     Route::get('/teacher/books',[TeachersController::class,'books'])->name('teacher.books');
     Route::get('/teacher/reports',[TeachersController::class,'reports'])->name('teacher.reports');
     Route::get('/teacher/progressReports', [TeachersController::class, 'showProgress'])->name('teacher.progress');

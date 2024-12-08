@@ -97,27 +97,27 @@
 
 
         </div>
-
-        <form  class="register-form" method="POST" action="{{ route('flipbook.update',$flipbooks->id) }}" enctype="multipart/form-data">
+        <form class="register-form" method="POST" action="{{ route('flipbook.update', $flipbook->id) }}" enctype="multipart/form-data">
             {!! csrf_field() !!}
             <input type="hidden" name="_method" value="put" />
+
             <div class="row">
                 <div class="col-lg-3">
                     <label><span class="required">*</span> Book Title</label>
                 </div>
                 <div class="col-lg-3">
-                    <input class="input-block-level" type="text"  name="book_name" value="{{ $flipbooks->book_name }}">
+                    <input class="input-block-level" type="text" name="book_name" value="{{ $flipbook->book_name }}">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-lg-3">
                     <label><span class="required">*</span> Book Description</label>
                 </div>
                 <div class="col-lg-3">
-                    <input class="input-block-level" type="text"  name="desc" value="{{ $flipbooks->desc }}">
+                    <input class="input-block-level" type="text" name="desc" value="{{ $flipbook->desc }}">
                 </div>
             </div>
-
 
             <div class="row">
                 @foreach($images as $page)
@@ -134,28 +134,44 @@
                     </div>
                     <div class="col-lg-9">
                         <input type="file" name="files[]" multiple />
-
                     </div>
                 </div>
             </div>
-            {{--  <div class="row">
-                <div class="col-lg-offset-6">
-                    <button id="add_files"  class="btn btn-sm btn-primary" type="button">Add More Image</button>
-                </div>
-            </div>  --}}
-           <hr>
 
+            <!-- Subtitles Section -->
+            <div class="row">
+                <div class="col-lg-3">
+                    <label><span class="required">*</span> Subtitles</label>
+                </div>
+                <div class="col-lg-9">
+                    <div class="subtitles-container">
+                        @foreach (explode(',', $flipbook->subtitles) as $index => $subtitle)
+                        <div class="subtitle-group">
+                            <label for="subtitles[{{ $index }}]">Subtitle {{ $index + 1 }}</label>
+                            <input class="input-block-level" type="text" name="subtitles[{{ $index }}]" value="{{ old('subtitles.' . $index, $subtitle) }}" placeholder="Subtitle {{ $index + 1 }}">
+                            @if ($index > 0)
+                            <button type="button" class="remove-subtitle-btn">Remove</button>
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
 
             <hr>
             <div class="row">
                 <div class="col-lg-offset-3 pull-right">
-                    <button id="add_files"  style="background-color: orange;" class="btn btn-lg btn-primary" type="submit">Update Book</button>
+                    <button type="button" id="add-subtitle-btn" class="btn btn-lg btn-primary">Add Subtitle</button>
                 </div>
             </div>
-            <div class="row">
 
+            <div class="row">
+                <div class="col-lg-offset-3 pull-right">
+                    <button id="add_files" style="background-color: orange;" class="btn btn-lg btn-primary" type="submit">Update Book</button>
+                </div>
             </div>
         </form>
+
         <div class="col-lg-offset-3 pull-right">
             <a href="{{ route('admin.editQuiz', $quiz->id) }}" style="text-decoration: none;">
                 <button style="background-color: green;" class="btn btn-lg btn-primary">Edit Quiz</button>
@@ -163,7 +179,7 @@
         </div>
 
         <hr>
-        <form class="delete-form" method="POST" action="{{ route('flipbook.destroy',$flipbooks->id) }}" >
+        <form class="delete-form" method="POST" action="{{ route('flipbook.destroy',$flipbook->id) }}" >
             {!! csrf_field() !!}
             <input type="hidden" name="_method" value="delete" />
             <button class="btn btn-lg btn-danger" type="submit">Delete Book</button>
@@ -328,6 +344,30 @@
             });
         });
     });
+</script>
+<script>
+ document.getElementById('add-subtitle-btn').addEventListener('click', function () {
+    var subtitleGroup = document.createElement('div');
+    subtitleGroup.classList.add('subtitle-group');
+    var subtitleIndex = document.querySelectorAll('.subtitle-group').length; // Find the new index
+
+    subtitleGroup.innerHTML = `
+        <label for="subtitles[${subtitleIndex}]">Subtitle ${subtitleIndex + 1}</label>
+        <input class="input-block-level" type="text" name="subtitles[${subtitleIndex}]" placeholder="Subtitle ${subtitleIndex + 1}">
+        <button type="button" class="remove-subtitle-btn">Remove</button>
+    `;
+
+    // Append to the subtitles container
+    document.querySelector('.subtitles-container').appendChild(subtitleGroup);
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('remove-subtitle-btn')) {
+        e.target.parentElement.remove();
+    }
+});
+
+
 </script>
 
 </body>

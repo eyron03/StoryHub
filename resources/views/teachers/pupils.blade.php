@@ -152,7 +152,12 @@
         </div>
     </div>
 </form>
-
+<div class="d-flex ">
+<button type="button" class="btn btn-success btn-sm " data-bs-toggle="modal" data-bs-target="#addExistingPupilModal">
+    Add Existing Pupil
+</button>
+</div>
+<br>
 <div class="d-flex ">
     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addChildModal">
         Add Pupils
@@ -290,7 +295,7 @@
 
                             <div class="mb-3">
                                 <label for="childDob" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="childDob" name="childDob" required onchange="calculateAge()">
+                                <input type="date" class="form-control" id="childDob" name="childDob" required>
                             </div>
 
                             <div class="mb-3">
@@ -355,7 +360,7 @@
 
                                 <div class="mb-3">
                                     <label for="parentDob" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="parentDob" name="parentDob" required onchange="calculateParentAge()">
+                                    <input type="date" class="form-control" id="parentDob" name="parentDob" required >
                                 </div>
                                 <div class="mb-3">
                                     <label for="parentAddress" class="form-label">Address</label>
@@ -378,6 +383,44 @@
         </div>
 
 
+<div class="modal fade" id="addExistingPupilModal" tabindex="-1" aria-labelledby="addExistingPupilModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addExistingPupilModalLabel">Add Existing Pupil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Existing pupil registration form -->
+                @if ($children->isEmpty())
+                    <p class="no-children-message">No children available to assign.</p>
+                @else
+                    <form action="{{ route('pupils.existing.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3 datalist-wrapper">
+                            <label for="childCustomId" class="form-label">Search for Existing Pupil:</label>
+                            <div class="datalist-input">
+                                <input id="childCustomId" name="childCustomId" class="form-control" placeholder="Search by ID or Name" required>
+                                <div id="childrenList" class="datalist-options">
+                                    @foreach($children as $child)
+                                        <div data-value="{{ $child->custom_id }}">{{ $child->custom_id }} / {{ $child->childFirstName }} {{ $child->childLastName }}</div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden input field for grade level ID -->
+                        <input type="hidden" name="gradeLevelId" value="{{ $gradeLevelId }}">
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary w-100">Add Pupil</button>
+                    </form>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
         </div>
 
@@ -385,7 +428,46 @@
 
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('childCustomId');
+        const datalist = document.getElementById('childrenList');
 
+        // Show datalist options when the input is focused
+        input.addEventListener('focus', function () {
+            datalist.style.display = 'block';
+        });
+
+        // Hide datalist options when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!input.contains(event.target) && !datalist.contains(event.target)) {
+                datalist.style.display = 'none';
+            }
+        });
+
+        // Filter options based on input
+        input.addEventListener('input', function () {
+            const filter = input.value.toLowerCase();
+            const options = datalist.querySelectorAll('div');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        });
+
+        // Set the input value and hide datalist when an option is clicked
+        datalist.addEventListener('click', function (event) {
+            if (event.target.tagName === 'DIV') {
+                input.value = event.target.dataset.value;
+                datalist.style.display = 'none';
+            }
+        });
+    });
+</script>
 <script>
     document.getElementById('nextButton').addEventListener('click', function() {
         document.getElementById('childForm').style.display = 'none';
@@ -424,19 +506,6 @@
 
     }
 
-    // Calculate child's age based on date of birth
-    function calculateAge() {
-        var dob = document.getElementById('childDob').value;
-        var age = new Date().getFullYear() - new Date(dob).getFullYear();
-        document.getElementById('childAge').value = age;
-    }
-
-    // Calculate parent's age based on date of birth
-    function calculateParentAge() {
-        var dob = document.getElementById('parentDob').value;
-        var age = new Date().getFullYear() - new Date(dob).getFullYear();
-        // You can use the age in the controller when the parent is created
-    }
 </script>
 
 
