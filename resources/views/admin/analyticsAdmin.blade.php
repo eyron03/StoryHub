@@ -60,6 +60,37 @@
             color: #333;
             margin-bottom: 10px;
         }
+
+
+    .flipbook-image {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        aspect-ratio: 3/4; /* Portrait aspect ratio */
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 767px) {
+        .flipbook-info {
+            flex-direction: column;
+            align-items: center;
+        }
+    }.container-center {
+    display: flex;
+    flex-direction: column;
+
+    height: 100vh; /* Full viewport height */
+    gap: 20px; /* Optional: Adds spacing between the sections */
+}
+
+.text-center {
+    width: 100%; /* Ensures content spans the width */
+}
     </style>
 
 </head>
@@ -150,6 +181,8 @@
             </select>
 
 
+
+
             <div class="container mt-5">
                 <h1 style="text-align: center;">AnalyticS Reports</h1>
                 <br>
@@ -175,6 +208,33 @@
             </div>
         </div>
     </div>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center align-items-start" style="margin-left: 250px;">
+            <div class="text-center ms-3" style="margin-left: 200px;">
+                <h3 class="mb-6">Most Used Flipbook: {{ $mostUsedBook->book_name ?? 'No Data' }}</h3>
+                <p>Usage Count: {{ $mostUsedCount }}</p>
+
+                @if($mostUsedBookImage)
+                    <img src="{{ asset($mostUsedBookImage) }}" alt="Most Used Book Image" class="flipbook-image img-fluid">
+                @else
+                    <p>No image available</p>
+                @endif
+            </div>
+
+            <div class="text-center mx-3">
+                <h3>Least Used Flipbook: {{ $leastUsedBook->book_name ?? 'No Data' }}</h3>
+                <p>Usage Count: {{ $leastUsedCount }}</p>
+                @if($leastUsedBookImage)
+                    <img src="{{ asset($leastUsedBookImage) }}" alt="Least Used Book Image" class="flipbook-image img-fluid">
+                @else
+                    <p>No image available</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
+<br><br><br><br>
+
 
     <script>
         // Fetch data function

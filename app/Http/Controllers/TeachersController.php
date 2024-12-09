@@ -287,20 +287,37 @@ public function storePupil(Request $request)
         'childDob' => 'required|date',
         'childAddress' => 'required|string|max:255',
         'childGender' => 'required|in:male,female',
-        'parent_id' => 'nullable|exists:parents,id', // Ensure parent_id exists if provided
+        'parent_id' => 'nullable|exists:parents,id',
+       // Ensure parent_id exists if provided
     ]);
+
 
     // Calculate the child's age
     $dob = Carbon::parse($validatedData['childDob']);
-        $age = $dob->age;
+    $age = $dob->age;
 
     // Check if parent ID is provided (selected parent)
     if ($request->parent_id) {
         // Associate the child with the selected parent
         $parent = Parents::find($request->parent_id);
+        $dob = Carbon::parse($validatedData['pDob']);
+        $age = $dob->age;
+
+    } else {
+        // Create a new parent
+        $parent = Parents::create([
+            'pFname' => $request->parentFirstName,
+            'pLname' => $request->parentLastName,
+            'pAge' => $age,
+            'pDob' => $request->parentDob,
+            'pAddress' => $request->parentAddress,
+            'pGender' => $request->parentGender,
+            'usertype' => 'parent',
+            'email' => $request->parentEmail,
+            'password' => bcrypt($request->parentPassword), // Hash password
+        ]);
     }
-    $dob = Carbon::parse($validatedData['pDob']);
-    $age = $dob->age;
+
 
     $customId = $this->generateCustomId();
 
@@ -536,14 +553,14 @@ public function showbook(Request $request,$id)
 $teachers = $teacher ? [$teacher->TeacherFirstName] : [];
     $flipbooks = Flipbook::with('quizzes')->findOrFail($id);
     $images = explode(",", $flipbooks->images);
-
+    $subtitles = explode(",", $flipbooks->subtitles);
 
     return view('teachers.showbook', compact('flipbooks', 'images','teachers'));
 }
 public function showquiz($id) {
     $quizQuestions = Quiz::where('flipbook_id', $id)->get();
 
-    return view('teachers.showquiz', compact('quizQuestions'));
+    return view('teachers.showquiz', compact('quizQuestions','subtitles'));
 }
 
 public function settings(Request $request)

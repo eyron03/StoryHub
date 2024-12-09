@@ -114,30 +114,64 @@
                 <div class="flex items-center justify-center h-screen flipbook-viewport">
                     <div class="flex items-center justify-center w-full h-full">
                         <div class="flex items-center justify-center flipbook">
-                            @foreach ($images as $index => $page)
-                                @if ($index === 0)
-                                    <!-- First page -->
-                                    <div class="flex items-center justify-center w-full h-full hard"
-                                        style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
-                                        <img src="{{ asset($page) }}" alt="Page Image"
-                                            class="object-cover w-full h-full" />
-                                    </div>
-                                @elseif($index === count($images) - 1)
-                                    <!-- Last page -->
-                                    <div class="flex items-center justify-center w-full h-full hard"
-                                        style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
-                                        <img src="{{ asset($page) }}" alt="Page Image"
-                                            class="object-cover w-full h-full" />
-                                    </div>
-                                @else
-                                    <!-- Middle pages -->
-                                    <div class="flex items-center justify-center w-full h-full"
-                                        style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
-                                        <img src="{{ asset($page) }}" alt="Page Image"
-                                            class="object-cover w-full h-full" />
-                                    </div>
-                                @endif
-                            @endforeach
+                            @foreach($images as $index => $page)
+                            @php
+                                // Get the subtitle for the current page (if any)
+                                $currentSubtitle = $subtitles[$index] ?? ''; // Safe fallback if subtitle is missing
+                            @endphp
+
+                            @if($index === 0)
+                                <!-- First page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                    @if($currentSubtitle)
+                                                                                        <!-- Centered Container -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                        <span style="font-family: 'Dancing Script', 'Playfair Display', serif; font-size: 25px;  text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+
+                        <!-- Centered Speaker Button -->
+                        <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                            🔊
+                        </button>
+                    </div>
+
+                                    @endif
+                                </div>
+                            @elseif($index === count($images) - 1)
+                                <!-- Last page -->
+                                <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+                                    @if($currentSubtitle)
+                                                <!-- Centered Container -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                    <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+
+                    <!-- Centered Speaker Button -->
+                    <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                        🔊
+                    </button>
+                </div>
+
+                                    @endif
+                                </div>
+                            @else
+                                <!-- Middle pages -->
+                                <div class="flex items-center justify-center w-full h-full" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                                    <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
+
+                                    @if($currentSubtitle)
+                                        <div class="absolute left-1/2 transform -translate-x-1/2 bg-opacity-50 p-4 rounded text-white text-lg font-semibold">
+                                            <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000; " class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+
+                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg fixed bottom-0 right-40 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                                                🔊
+                                            </button>
+
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        @endforeach
                         </div>
                     </div>
                 </div>

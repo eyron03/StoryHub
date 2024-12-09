@@ -235,7 +235,7 @@ public function bookshow(Request $request, $id,$child)
     $today = now()->toDateString();
     // Retrieve the parent ID from the session
     $parentId = $request->session()->get('logged_in_parent_id');
-
+  $subtitles = explode(",", $flipbook->subtitles);
     // Retrieve the child associated with the parent and flipbook
     $childId=Children::find($child);
 
@@ -244,7 +244,7 @@ public function bookshow(Request $request, $id,$child)
     $readingProgress = $request->session()->get('readingProgress');
 
     // Return the view with the flipbook, images, and child ID
-    return view('parents.bookshow', compact('flipbook', 'images', 'childId','readingProgress','today'));
+    return view('parents.bookshow', compact('flipbook', 'images', 'childId','readingProgress','today','subtitles'));
 }
 public function bookshowAudio(Request $request, $id,$child)
 {

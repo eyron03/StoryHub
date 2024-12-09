@@ -125,7 +125,8 @@
             <hr>
         </div>
 
-        <button type="button" id="add-more-pages" class="btn btn-secondary">Add More Pages</button>
+        <button type="button" id="add-more-pages" class="btn btn-secondary btn-lg">Add More Pages</button>
+        <br><br>
         <div class="row">
             <div class="col-lg-offset-3 pull-right">
                 <button id="add_files" class="btn btn-lg btn-primary" type="submit">Next: Create Quiz</button>

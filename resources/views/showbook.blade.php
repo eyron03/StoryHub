@@ -128,15 +128,15 @@
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                     @if($currentSubtitle)
-                                                                       <!-- Centered Container -->
-<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
-    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+                                                                                        <!-- Centered Container -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                        <span style="font-family: 'Dancing Script', 'Playfair Display', serif; font-size: 25px;  text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
 
-    <!-- Centered Speaker Button -->
-    <button class="speaker text-xl text-white m-4 p-2 rounded-full shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
-        🔊
-    </button>
-</div>
+                        <!-- Centered Speaker Button -->
+                        <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                            🔊
+                        </button>
+                    </div>
 
                                     @endif
                                 </div>
@@ -145,15 +145,15 @@
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                     @if($currentSubtitle)
-                                  <!-- Centered Container -->
-<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
-    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+                                                <!-- Centered Container -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                    <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
 
-    <!-- Centered Speaker Button -->
-    <button class="speaker text-xl text-white m-4 p-2 rounded-full shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
-        🔊
-    </button>
-</div>
+                    <!-- Centered Speaker Button -->
+                    <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                        🔊
+                    </button>
+                </div>
 
                                     @endif
                                 </div>
@@ -163,9 +163,10 @@
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
 
                                     @if($currentSubtitle)
-                                        <div class="absolute left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 p-4 rounded text-white text-lg font-semibold">
-                                            <span class="absolute top-50 left-1/2 transform -translate-x-1/2">{{ $currentSubtitle }}</span>
-                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full shadow-lg fixed bottom-0 right-40 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                                        <div class="absolute left-1/2 transform -translate-x-1/2 bg-opacity-50 p-4 rounded text-white text-lg font-semibold">
+                                            <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000; " class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+
+                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg fixed bottom-0 right-40 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
                                                 🔊
                                             </button>
 

@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     //
- 
+
     public function showRegister()
     {
         return view('admin.register');
@@ -619,20 +619,77 @@ class AdminController extends Controller
         $quizTakenData = $this->getQuizTakenData($period);
         $progressData = $this->getProgressData($period);
 
+        // Get most and least used flipbooks based on quiz results
+        $flipbookUsageData = $this->getMostAndLeastUsedBooks();
+
         if ($request->ajax()) {
             return response()->json([
                 'quizTakenData' => $quizTakenData,
                 'progressData' => $progressData,
+                'mostUsedBook' => $flipbookUsageData['most_used_book'],
+                'leastUsedBook' => $flipbookUsageData['least_used_book'],
+                'mostUsedCount' => $flipbookUsageData['most_used_count'],
+                'leastUsedCount' => $flipbookUsageData['least_used_count'],
+                'mostUsedBookImage' => $flipbookUsageData['most_used_book_image'],
+                'leastUsedBookImage' => $flipbookUsageData['least_used_book_image'],
             ]);
         }
 
         return view('admin.analyticsAdmin', [
             'initialQuizTakenData' => $quizTakenData,
             'initialProgressData' => $progressData,
+            'mostUsedBook' => $flipbookUsageData['most_used_book'],
+            'leastUsedBook' => $flipbookUsageData['least_used_book'],
+            'mostUsedCount' => $flipbookUsageData['most_used_count'],
+            'leastUsedCount' => $flipbookUsageData['least_used_count'],
+            'mostUsedBookImage' => $flipbookUsageData['most_used_book_image'],
+            'leastUsedBookImage' => $flipbookUsageData['least_used_book_image'],
         ]);
     }
+// Func
+private function getMostAndLeastUsedBooks()
+{
+    // Count the usage of each flipbook_id
+    $result = DB::table('quiz_results')
+                ->select('flipbook_id', DB::raw('count(*) as usage_count'))
+                ->groupBy('flipbook_id')
+                ->orderByDesc('usage_count') // Most used books first
+                ->get();
 
-    private function getQuizTakenData($period)
+    // Get the most used flipbook
+    $mostUsedBook = $result->first();
+    // Get the least used flipbook
+    $leastUsedBook = $result->last();
+
+    // Default values in case no books are found
+    $mostUsedBookDetails = null;
+    $leastUsedBookDetails = null;
+    $mostUsedBookImage = null;
+    $leastUsedBookImage = null;
+
+    // Retrieve book details for most and least used books if they exist
+    if ($mostUsedBook) {
+        $mostUsedBookDetails = Flipbook::find($mostUsedBook->flipbook_id);
+        // Extract the first image from the 'images' field (assuming comma-separated image paths)
+        $mostUsedBookImage = $mostUsedBookDetails->images ? explode(',', $mostUsedBookDetails->images)[0] : null;
+    }
+
+    if ($leastUsedBook) {
+        $leastUsedBookDetails = Flipbook::find($leastUsedBook->flipbook_id);
+        // Extract the first image from the 'images' field (assuming comma-separated image paths)
+        $leastUsedBookImage = $leastUsedBookDetails->images ? explode(',', $leastUsedBookDetails->images)[0] : null;
+    }
+
+    return [
+        'most_used_book' => $mostUsedBookDetails,
+        'least_used_book' => $leastUsedBookDetails,
+        'most_used_count' => $mostUsedBook ? $mostUsedBook->usage_count : 0,
+        'least_used_count' => $leastUsedBook ? $leastUsedBook->usage_count : 0,
+        'most_used_book_image' => $mostUsedBookImage,
+        'least_used_book_image' => $leastUsedBookImage,
+    ];
+}
+   private function getQuizTakenData($period)
     {
         $query = DB::table('quiz_results')
             ->join('childrens', 'quiz_results.child_id', '=', 'childrens.id')
