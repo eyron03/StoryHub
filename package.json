@@ -16,7 +16,10 @@
     "dependencies": {
         "animejs": "^3.2.2",
         "bootstrap": "^5.3.3",
+        "espeak": "^0.0.3",
         "fabric": "^5.3.0",
+        "fs": "^0.0.1-security",
+        "playht": "^0.14.0",
         "three": "^0.164.1"
     }
 }
