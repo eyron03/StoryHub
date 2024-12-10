@@ -145,7 +145,7 @@
                 </div>
                 <div class="col-lg-9">
                     <div class="subtitles-container">
-                        @foreach (explode(',', $flipbook->subtitles) as $index => $subtitle)
+                        @foreach (explode(';', $flipbook->subtitles) as $index => $subtitle)
                         <div class="subtitle-group">
                             <label for="subtitles[{{ $index }}]">Subtitle {{ $index + 1 }}</label>
                             <input class="input-block-level" type="text" name="subtitles[{{ $index }}]" value="{{ old('subtitles.' . $index, $subtitle) }}" placeholder="Subtitle {{ $index + 1 }}">

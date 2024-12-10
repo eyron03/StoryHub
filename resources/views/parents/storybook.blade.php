@@ -25,7 +25,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/parents.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pagination.css') }}" rel="stylesheet">
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,6 +89,66 @@
             background-color: white;
             color: black;
         }
+    /* Make the circles larger and more fun */
+.circle {
+    width: 100px;  /* Bigger size for easier tapping */
+    height: 100px;  /* Maintain equal width and height for a round shape */
+    border-radius: 50%;  /* Round shape */
+    display: inline-block;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Comic Sans MS', sans-serif;  /* Fun, child-friendly font */
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s ease; /* Animation effect */
+}
+
+.white {
+    background-color: #ffffff;
+    border: 3px solid #B0B0B0;
+    color: #333;
+}
+
+.yellow {
+    background-color: #F9D342;
+    border: 3px solid #F9A900;
+    color: #fff;
+}
+
+.green {
+    background-color: #4CAF50;
+    border: 3px solid #388E3C;
+    color: #fff;
+}
+
+/* Add icons with larger size and fun font */
+.icon {
+    font-size: 36px;  /* Larger icon size */
+    margin-bottom: 8px; /* Space between icon and text */
+}
+
+/* Text styles to make it more readable */
+.text {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Hover/Active effect to make the circles interactive */
+.circle:hover {
+    transform: scale(1.1);  /* Slightly enlarge on hover */
+}
+
+.circle:active {
+    transform: scale(0.9);  /* Shrink slightly when clicked */
+}
+
+/* Optional: Add a shadow effect to make the circles pop */
+.circle {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 
     </style>
 
@@ -154,11 +214,25 @@
             </form>
 
 
+            <div class="mt-4 pagination-wrapper d-flex justify-content-center">
+            <div class="circle white" title="Not Started">
+                <span class="icon">&#x1F622;</span> <!-- Use an emoji or icon -->
+                <span class="text">Not Started</span>
+            </div>
+            <div class="circle yellow" title="In Progress">
+                <span class="icon">&#x23F3;</span> <!-- Emoji or icon for in progress -->
+                <span class="text">In Progress</span>
+            </div>
+            <div class="circle green" title="Completed">
+                <span class="icon">&#x2705;</span> <!-- Emoji or icon for completed -->
+                <span class="text">Completed</span>
+            </div>
 
+</div>
 
-            <div class="text-center starter-template">
-                <h1 style="margin-left:-60px;">Read and Learn</h1>
-                <p  style="margin-left:-60px;" class="lead">Enjoy Reading! 😊</p>
+            <div class="text-center starter-template justify-content-center">
+                <h1> Read and Learn</h1>
+                <p  class="lead">Enjoy Reading! 😊</p>
             </div>
             <div class="row" id="bookList">
     @foreach($flipbooks as $fb)

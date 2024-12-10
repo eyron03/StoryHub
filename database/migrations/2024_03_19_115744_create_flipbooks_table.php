@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('book_name');
             $table->longText('desc');
             $table->longText('subtitles')->nullable();
-           
+
             $table->string('images', 3000);
 
 

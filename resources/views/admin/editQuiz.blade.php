@@ -103,83 +103,83 @@ q
 
 
         </div>
-        <form class="register-form" method="POST" action="{{ route('admin.updateQuiz', $flipbooks->id) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            <div class="container">
-                <h2>Update Quiz</h2>
-                <hr>
 
-                <!-- Loop through existing quizzes -->
-                @foreach($flipbooks->quizzes as $index => $quiz)
-                <div class="card mb-4" id="quiz_{{ $index }}">
-                    <div class="card-header">
-                        <strong>Quiz {{ $index + 1 }}</strong>
-                    </div>
-                    <div class="card-body">
+            <form class="register-form" method="POST" action="{{ route('admin.updateQuiz', $flipbooks->id) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="container">
+                    <h2>Update Quiz</h2>
+                    <hr>
 
-                        <!-- Quiz Question -->
-                        <div class="form-group row">
-                            <label for="quiz_question_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Quiz Question</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="quiz_question[]" id="quiz_question_{{ $index }}" class="form-control" value="{{ old('quiz_question.'.$index, $quiz->quiz_question) }}" required>
-                            </div>
+                    <!-- Loop through existing quizzes -->
+                    @foreach($flipbooks->quizzes as $index => $quiz)
+                    <div class="card mb-4" id="quiz_{{ $index }}">
+                        <div class="card-header">
+                            <strong>Quiz {{ $index + 1 }}</strong>
                         </div>
-
-                        <!-- Quiz Options -->
-                        @foreach(['A' => 'option_a', 'B' => 'option_b', 'C' => 'option_c', 'D' => 'option_d'] as $label => $name)
-                        <div class="form-group row">
-                            <label for="{{ $name }}_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Option {{ $label }}</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="{{ $name }}[]" id="{{ $name }}_{{ $index }}" class="form-control" value="{{ old("$name.$index", $quiz->$name) }}" required>
-                            </div>
-                        </div>
-                        @endforeach
-
-                        <!-- Correct Answer -->
-                        <div class="form-group row">
-                            <label for="correct_answer_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Correct Answer</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="correct_answer[]" id="correct_answer_{{ $index }}" class="form-control" value="{{ old('correct_answer.'.$index, $quiz->correct_answer) }}" required>
-                            </div>
-                        </div>
-
-                        <!-- Image Handling -->
-                        <div class="form-group row">
-                            <label for="images_{{ $index }}" class="col-lg-3 col-form-label">Quiz Image</label>
-                            <div class="col-lg-9">
-                                @if(!empty($quiz->images))
-                                <div class="mb-2">
-                                    <img src="{{ asset($quiz->images) }}" alt="Quiz Image" class="img-thumbnail" style="max-width: 200px;">
+                        <div class="card-body">
+                            <!-- Quiz Question -->
+                            <div class="form-group row">
+                                <label for="quiz_question_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Quiz Question</label>
+                                <div class="col-lg-9">
+                                    <input type="text" name="quiz_question[]" id="quiz_question_{{ $index }}" class="form-control" value="{{ old('quiz_question.'.$index, $quiz->quiz_question) }}" required>
                                 </div>
-                            @endif
+                            </div>
 
-                            <!-- File upload input -->
-                            <input type="file" name="images[]" id="images_{{ $index }}" class="form-control-file" accept="image/*">
+                            <!-- Quiz Options -->
+                            @foreach(['A' => 'option_a', 'B' => 'option_b', 'C' => 'option_c', 'D' => 'option_d'] as $label => $name)
+                            <div class="form-group row">
+                                <label for="{{ $name }}_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Option {{ $label }}</label>
+                                <div class="col-lg-9">
+                                    <input type="text" name="{{ $name }}[]" id="{{ $name }}_{{ $index }}" class="form-control" value="{{ old("$name.$index", $quiz->$name) }}" required>
+                                </div>
+                            </div>
+                            @endforeach
+
+                            <!-- Correct Answer -->
+                            <div class="form-group row">
+                                <label for="correct_answer_{{ $index }}" class="col-lg-3 col-form-label"><span class="required">*</span> Correct Answer</label>
+                                <div class="col-lg-9">
+                                    <input type="text" name="correct_answer[]" id="correct_answer_{{ $index }}" class="form-control" value="{{ old('correct_answer.'.$index, $quiz->correct_answer) }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Image Handling -->
+                            <div class="form-group row">
+                                <label for="images_{{ $index }}" class="col-lg-3 col-form-label">Quiz Image</label>
+                                <div class="col-lg-9">
+                                    @if(!empty($quiz->images))
+                                    <div class="mb-2">
+                                        <img src="{{ asset($quiz->images) }}" alt="Quiz Image" class="img-thumbnail" style="max-width: 200px;">
+                                    </div>
+                                    @endif
+                                    <input type="file" name="images[]" id="images_{{ $index }}" class="form-control-file" accept="image/*">
+                                </div>
+                            </div>
+
                         </div>
+                    </div>
+                    @endforeach
+
+                    <!-- Button to add more questions -->
+                    <div class="form-group row">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="button" id="add_question" class="btn btn-sm btn-primary">Add More Quiz</button>
                         </div>
+                    </div>
 
+                    <hr>
+
+                    <!-- Submit Button -->
+                    <div class="form-group row">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-lg btn-primary" style="background-color: orange;">Update Quiz</button>
+                        </div>
                     </div>
                 </div>
-                @endforeach
+            </form>
 
-                <!-- Button to add more questions -->
-                <div class="form-group row">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <button type="button" id="add_question" class="btn btn-sm btn-primary">Add More Quiz</button>
-                    </div>
-                </div>
 
-                <hr>
-
-                <!-- Submit Button -->
-                <div class="form-group row">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <button type="submit" class="btn btn-lg btn-primary" style="background-color: orange;">Update Quiz</button>
-                    </div>
-                </div>
-            </div>
-        </form>
 
 
         <hr>
@@ -196,73 +196,86 @@ q
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#add_question").on('click', function() {
-            counter++; // Increment the counter
-            $("#counter").val(counter);
+   $(document).ready(function() {
+    let counter = {{ count($flipbooks->quizzes) }}; // Initialize counter to existing quiz count
 
-            // Create a new quiz question form
-            let newQuestionHtml = `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <strong>Quiz ${counter + 1}</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="quiz_question_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Quiz Question</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="quiz_question[]" id="quiz_question_${counter}" class="form-control" required>
-                            </div>
-                        </div>
+    $("#add_question").on('click', function() {
+        counter++; // Increment the counter for new quiz
 
-                        <div class="form-group row">
-                            <label for="option_a_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option A</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="option_a[]" id="option_a_${counter}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="option_b_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option B</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="option_b[]" id="option_b_${counter}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="option_c_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option C</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="option_c[]" id="option_c_${counter}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="option_d_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option D</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="option_d[]" id="option_d_${counter}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="correct_answer_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Correct Answer</label>
-                            <div class="col-lg-9">
-                                <input type="text" name="correct_answer[]" id="correct_answer_${counter}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="images_${counter}" class="col-lg-3 col-form-label">Quiz Image</label>
-                            <div class="col-lg-9">
-                                <input type="file" name="images[]" id="images_${counter}" class="form-control-file" accept="image/*">
-                            </div>
+        // Create a new quiz question form
+        let newQuestionHtml = `
+            <div class="card mb-4" id="quiz_${counter}">
+                <div class="card-header">
+                    <strong>Quiz ${counter }</strong>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="quiz_question_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Quiz Question</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="quiz_question[]" id="quiz_question_${counter}" class="form-control" required>
                         </div>
                     </div>
-                </div>`;
 
-            // Append the new question form to the form container
-            $('form.register-form').append(newQuestionHtml);
-        });
+                    <!-- Option A -->
+                    <div class="form-group row">
+                        <label for="option_a_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option A</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="option_a[]" id="option_a_${counter}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Option B -->
+                    <div class="form-group row">
+                        <label for="option_b_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option B</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="option_b[]" id="option_b_${counter}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Option C -->
+                    <div class="form-group row">
+                        <label for="option_c_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option C</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="option_c[]" id="option_c_${counter}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Option D -->
+                    <div class="form-group row">
+                        <label for="option_d_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Option D</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="option_d[]" id="option_d_${counter}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Correct Answer -->
+                    <div class="form-group row">
+                        <label for="correct_answer_${counter}" class="col-lg-3 col-form-label"><span class="required">*</span> Correct Answer</label>
+                        <div class="col-lg-9">
+                            <input type="text" name="correct_answer[]" id="correct_answer_${counter}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Image Input -->
+                    <div class="form-group row">
+                        <label for="images_${counter}" class="col-lg-3 col-form-label">Quiz Image</label>
+                        <div class="col-lg-9">
+                            <input type="file" name="images[]" id="images_${counter}" class="form-control-file" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Append the new question to the form
+        $(".register-form").append(newQuestionHtml);
+
+        // Keep the Add More Quiz button at the bottom
+        $("html, body").animate({ scrollTop: $(document).height() }, 100);
     });
+});
+
+
 </script>
 
 </script>

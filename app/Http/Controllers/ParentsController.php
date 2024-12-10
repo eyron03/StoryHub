@@ -158,29 +158,23 @@ public function storytime(Request $request)
 }
 public function storybook(Request $request, $childId)
 {
-    // Retrieve the logged-in parent's ID
     $parentId = $request->session()->get('logged_in_parent_id');
     $parent = Parents::find($parentId);
-    $child=Children::find($childId);
-    // Retrieve the child associated with the logged-in parent
     $child = $parent ? $parent->children()->find($childId) : null;
 
-    // Retrieve the search term, if available
     $search = $request->input('search');
 
-    // Fetch flipbooks, applying the search term if provided
     $flipbooks = FlipBook::when($search, function ($query, $search) {
             return $query->where('book_name', 'like', '%' . $search . '%');
         })
         ->paginate(12);
 
-    // Get children's quiz progress, filtering by the logged-in parent's child
     $childrenProgress = DB::table('quiz_results')
         ->join('flipbooks', 'quiz_results.flipbook_id', '=', 'flipbooks.id')
         ->join('childrens', 'quiz_results.child_id', '=', 'childrens.id')
         ->leftJoin('grade_levels', 'quiz_results.grade_level_id', '=', 'grade_levels.id')
         ->where('childrens.parent_id', $parentId)
-        ->where('quiz_results.child_id', $childId)  // Filter for the specific child
+        ->where('quiz_results.child_id', $childId)
         ->when($search, function ($query, $search) {
             return $query->where(function ($q) use ($search) {
                 $q->where('childrens.childFirstName', 'like', '%' . $search . '%')
@@ -190,6 +184,7 @@ public function storybook(Request $request, $childId)
         })
         ->select(
             'childrens.childFirstName as child_name',
+            'childrens.id as child_id',
             DB::raw('COALESCE(grade_levels.GradeLvl, "N/A") as grade_level'),
             'flipbooks.book_name',
             'flipbooks.id as flipbook_id',
@@ -206,25 +201,38 @@ public function storybook(Request $request, $childId)
         )
         ->get()
         ->map(function ($result) {
+            // Get the total score for the child and flipbook
+            $totalScore = DB::table('quiz_results')
+                ->where('flipbook_id', $result->flipbook_id)
+                ->where('child_id', $result->child_id)  // Use child_id here
+                ->sum('total_score');
 
-            // Define the perfect score (adjust based on your requirements)
-            $perfectScore = 5; // Adjust this based on your scoring system (e.g., 100 or total possible points)
+            // Calculate the perfect score (total questions)
+            $totalQuestions = DB::table('quizzes')
+                ->where('flipbook_id', $result->flipbook_id)
+                ->count();
 
-            // Determine the background color class based on the total score
-            if ($result->total_score == $perfectScore) {
-                $result->bgColorClass = 'bg-success'; // Green for perfect score
-            } elseif ($result->total_score > 0) {
-                $result->bgColorClass = 'bg-warning'; // Yellow for in-progress
+            $perfectScore = $totalQuestions;  // Assuming 1 point per question
+
+            // Check the score for setting background color
+            if ($totalScore == 10) {
+                // Perfect score
+                $result->bgColorClass = 'bg-success';  // Green for perfect score
+            } elseif ($totalScore > 0 ) {
+                // If the score is 4 or greater but less than perfect, treat 4 as 3
+                $result->bgColorClass = 'bg-warning';  // Yellow for in-progress (4 treated as 3)
             } else {
-                $result->bgColorClass = 'bg-light'; // White for no score
+                // Low or no score
+                $result->bgColorClass = 'bg-light';  // White for no score or low score
             }
 
             return $result;
         });
 
-    // Return the view with the relevant data
     return view('parents.storybook', compact('flipbooks', 'child', 'childId', 'childrenProgress', 'search'));
 }
+
+
 
 
 public function bookshow(Request $request, $id,$child)
@@ -235,10 +243,10 @@ public function bookshow(Request $request, $id,$child)
     $today = now()->toDateString();
     // Retrieve the parent ID from the session
     $parentId = $request->session()->get('logged_in_parent_id');
-  $subtitles = explode(",", $flipbook->subtitles);
+
     // Retrieve the child associated with the parent and flipbook
     $childId=Children::find($child);
-
+    $subtitles = explode(",", $flipbook->subtitles);
     // Extract images from the flipbook
     $images = explode(",", optional($flipbook)->images);
     $readingProgress = $request->session()->get('readingProgress');

@@ -242,6 +242,7 @@
                                 </div>
                             @endif
                         @endforeach
+
                         </div>
                     </div>
                 </div>
@@ -276,6 +277,50 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        function speakText(text) {
+       const speech = new SpeechSynthesisUtterance(text);
+
+       // Check if any voices are available, and select a female voice
+       const voices = window.speechSynthesis.getVoices();
+       let selectedVoice = null;
+
+       // Try to pick a female voice (based on available voices)
+       for (let i = 0; i < voices.length; i++) {
+         // Look for female voices (most voices have 'female' in their name)
+         if (voices[i].name.toLowerCase().includes('female')) {
+           selectedVoice = voices[i];
+           break;
+         }
+       }
+
+       // If no female voice is found, fall back to a default English female voice
+       if (!selectedVoice) {
+         selectedVoice = voices.find(voice => voice.lang === 'en-US' && voice.gender === 'female') || voices[0];
+       }
+
+       // Set the selected voice for speech
+       speech.voice = selectedVoice;
+       speech.lang = selectedVoice.lang; // Use the selected voice's language
+       speech.volume = 1; // Full volume
+       speech.rate = 0.7; // Slower rate for a storytelling feel
+       speech.pitch = 1; // Neutral pitch for storytelling
+
+       // Add a slight pause between sentences
+       const sentences = text.split('.');
+       for (let i = 0; i < sentences.length - 1; i++) {
+         sentences[i] += '.'; // Add period back
+         sentences[i] += ' '; // Add a space
+
+       }
+       text = sentences.join('');
+
+       speech.text = text;
+
+       // Speak the text
+       window.speechSynthesis.speak(speech);
+     }
+     </script>
     <script>
         $(document).ready(function() {
             var childId = "{{ $childId }}";

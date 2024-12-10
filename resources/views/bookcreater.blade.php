@@ -82,7 +82,6 @@
     </div>
 
     <div id="gifLoader" class="text-center mb-3 d-none justify-content-center min-vh-100"></div>
-
     <form id="bookForm" class="register-form" method="POST" action="{{ route('flipbookstore') }}" enctype="multipart/form-data">
         @csrf
         <div class="row">
@@ -111,7 +110,6 @@
                     <div class="col-lg-9">
                         <input type="file" name="images[]" required multiple />
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-lg-3">
@@ -133,6 +131,8 @@
             </div>
         </div>
     </form>
+
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

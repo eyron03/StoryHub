@@ -96,7 +96,7 @@
 <div class="quiz-container container mt-4">
     <!-- Show the total score -->
     <div class="alert alert-success d-flex justify-content-between align-items-center mb-3">
-        <strong>Score:</strong> <span class="fs-4">{{ $quizResult->total_score }} / {{ $totalQuestions }}</span>
+        <strong>Score:</strong> <span class="fs-4">{{ $quizResult->total_score }} / 10</span>
     </div>
 
     <!-- Show the questions and answers -->

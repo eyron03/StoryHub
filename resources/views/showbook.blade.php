@@ -71,30 +71,6 @@
     background-color: #ff7b00;
 }
 
-.subtitle {
-    position: absolute;
-    bottom: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5rem;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-}
-
-/* You can customize styles further for different pages */
-.page-0 .subtitle {
-    bottom: 15%; /* Adjust for first page */
-}
-
-.page-1 .subtitle {
-    bottom: 20%; /* Adjust for second page */
-}
-
-
 
 </style>
 </head>
@@ -128,16 +104,19 @@
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                     @if($currentSubtitle)
-                                                                                        <!-- Centered Container -->
-                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
-                        <span style="font-family: 'Dancing Script', 'Playfair Display', serif; font-size: 25px;  text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+                                        <!-- Centered Container -->
+                                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                                            <span class="absolute bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl sm:text-xl md:text-md lg:text-3md md:text-3xl lg:text-4xl"
+                                                  style="font-family: 'Dancing Script', 'Playfair Display', serif; text-shadow: 2px 2px 3px #FF0000;">
+                                                {{ $currentSubtitle }}
+                                            </span>
 
-                        <!-- Centered Speaker Button -->
-                        <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
-                            🔊
-                        </button>
-                    </div>
-
+                                            <!-- Centered Speaker Button -->
+                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2"
+                                                    onclick="speakText('{{ $currentSubtitle }}')">
+                                                🔊
+                                            </button>
+                                        </div>
                                     @endif
                                 </div>
                             @elseif($index === count($images) - 1)
@@ -145,16 +124,19 @@
                                 <div class="flex items-center justify-center w-full h-full hard" style="background-image: url({{ asset($page) }}); background-size: contain; background-position: center; background-repeat: no-repeat;">
                                     <img src="{{ asset($page) }}" alt="Page Image" class="object-cover w-full h-full" />
                                     @if($currentSubtitle)
-                                                <!-- Centered Container -->
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
-                    <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000;" class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+                                        <!-- Centered Container -->
+                                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-opacity-50 p-6 rounded text-white text-lg font-semibold">
+                                            <span class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl"
+                                                  style="font-family: 'Dancing Script', 'Playfair Display', serif; text-shadow: 2px 2px 3px #FF0000;">
+                                                {{ $currentSubtitle }}
+                                            </span>
 
-                    <!-- Centered Speaker Button -->
-                    <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
-                        🔊
-                    </button>
-                </div>
-
+                                            <!-- Centered Speaker Button -->
+                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2"
+                                                    onclick="speakText('{{ $currentSubtitle }}')">
+                                                🔊
+                                            </button>
+                                        </div>
                                     @endif
                                 </div>
                             @else
@@ -164,19 +146,21 @@
 
                                     @if($currentSubtitle)
                                         <div class="absolute left-1/2 transform -translate-x-1/2 bg-opacity-50 p-4 rounded text-white text-lg font-semibold">
-                                            <span style="font-family: 'Dancing Script', 'Playfair Display', serif;  font-size: 25px; text-shadow: 2px 2px 3px #FF0000; " class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ $currentSubtitle }}</span>
+                                            <span class="absolute bottom-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl"
+                                                  style="font-family: 'Dancing Script', 'Playfair Display', serif; text-shadow: 2px 2px 3px #FF0000;">
+                                                {{ $currentSubtitle }}
+                                            </span>
 
-                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full  bg-green-500 shadow-lg fixed bottom-0 right-40 transform -translate-x-1/2" onclick="speakText('{{ $currentSubtitle }}')">
+                                            <!-- Centered Speaker Button -->
+                                            <button class="speaker text-xl text-white m-4 p-2 rounded-full bg-green-500 shadow-lg fixed bottom-0 right-40 transform -translate-x-1/2"
+                                                    onclick="speakText('{{ $currentSubtitle }}')">
                                                 🔊
                                             </button>
-
                                         </div>
                                     @endif
                                 </div>
                             @endif
-                        @endforeach
-
-
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -188,57 +172,56 @@
             </div>
 
             <a href="{{ route('showquiz', ['id' => $flipbooks->id]) }}" class="btn btn-primary" id="quizButton">Next</a>
-        </div>
-    </div>
+
 
 <!-- JavaScript for Flipbook and Responsiveness -->
 <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="https://www.turnjs.com/lib/turn.min.js"></script>
 <!-- Add JavaScript for Speech Synthesis -->
 <script>
-   function speakText(text) {
-  const speech = new SpeechSynthesisUtterance(text);
+    function speakText(text) {
+   const speech = new SpeechSynthesisUtterance(text);
 
-  // Check if any voices are available, and select a female voice
-  const voices = window.speechSynthesis.getVoices();
-  let selectedVoice = null;
+   // Check if any voices are available, and select a female voice
+   const voices = window.speechSynthesis.getVoices();
+   let selectedVoice = null;
 
-  // Try to pick a female voice (based on available voices)
-  for (let i = 0; i < voices.length; i++) {
-    // Look for female voices (most voices have 'female' in their name)
-    if (voices[i].name.toLowerCase().includes('female')) {
-      selectedVoice = voices[i];
-      break;
-    }
-  }
+   // Try to pick a female voice (based on available voices)
+   for (let i = 0; i < voices.length; i++) {
+     // Look for female voices (most voices have 'female' in their name)
+     if (voices[i].name.toLowerCase().includes('female')) {
+       selectedVoice = voices[i];
+       break;
+     }
+   }
 
-  // If no female voice is found, fall back to a default English female voice
-  if (!selectedVoice) {
-    selectedVoice = voices.find(voice => voice.lang === 'en-US' && voice.gender === 'female') || voices[0];
-  }
+   // If no female voice is found, fall back to a default English female voice
+   if (!selectedVoice) {
+     selectedVoice = voices.find(voice => voice.lang === 'en-US' && voice.gender === 'female') || voices[0];
+   }
 
-  // Set the selected voice for speech
-  speech.voice = selectedVoice;
-  speech.lang = selectedVoice.lang; // Use the selected voice's language
-  speech.volume = 1; // Full volume
-  speech.rate = 0.7; // Slower rate for a storytelling feel
-  speech.pitch = 1; // Neutral pitch for storytelling
+   // Set the selected voice for speech
+   speech.voice = selectedVoice;
+   speech.lang = selectedVoice.lang; // Use the selected voice's language
+   speech.volume = 1; // Full volume
+   speech.rate = 0.7; // Slower rate for a storytelling feel
+   speech.pitch = 1; // Neutral pitch for storytelling
 
-  // Add a slight pause between sentences
-  const sentences = text.split('.');
-  for (let i = 0; i < sentences.length - 1; i++) {
-    sentences[i] += '.'; // Add period back
-    sentences[i] += ' '; // Add a space
-    sentences[i] += '<break time="0.5s"/>'; // Add a 0.5 second pause
-  }
-  text = sentences.join('');
+   // Add a slight pause between sentences
+   const sentences = text.split('.');
+   for (let i = 0; i < sentences.length - 1; i++) {
+     sentences[i] += '.'; // Add period back
+     sentences[i] += ' '; // Add a space
 
-  speech.text = text;
+   }
+   text = sentences.join('');
 
-  // Speak the text
-  window.speechSynthesis.speak(speech);
-}
-</script>
+   speech.text = text;
+
+   // Speak the text
+   window.speechSynthesis.speak(speech);
+ }
+ </script>
 
 <script>
     function loadApp() {

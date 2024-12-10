@@ -80,7 +80,7 @@ class FlipbookController extends Controller
 
     // Store images and subtitles as a serialized string or in a related database table
     $input['images'] = implode(',', $images);
-    $input['subtitles'] = implode(',', $subtitles);// Convert images array to a comma-separated string
+    $input['subtitles'] = implode(';', $subtitles);// Convert images array to a comma-separated string
    // Convert subtitles to a comma-separated string
 
     // Create the flipbook record
@@ -152,7 +152,7 @@ public function show($id)
 
     // Decode the subtitles JSON
 
-    $subtitles = explode(",", $flipbooks->subtitles);
+    $subtitles = explode(";", $flipbooks->subtitles);
     // Split the images string into an array
     $images = explode(",", $flipbooks->images);
 
@@ -172,7 +172,7 @@ public function show($id)
         $quiz = Quiz::with('flipbooks')->findOrFail($id);
         $flipbook = Flipbook::with('quizzes')->findOrFail($id);
         $images = explode(",", $flipbook->images);
-        $subtitles = explode(',', $flipbook->subtitles);
+        $subtitles = explode(";", $flipbook->subtitles);
         return view('editbook', compact('flipbook', 'images','quiz','subtitles'));
     }
 
@@ -209,7 +209,7 @@ public function show($id)
         // Update flipbook fields
         $flipbook->book_name = $request->input('book_name');
         $flipbook->desc = $request->input('desc');
-        $flipbook->subtitles = implode(',', $subtitles); // Store subtitles as a comma-separated string
+        $flipbook->subtitles = implode(';', $subtitles); // Store subtitles as a comma-separated string
         if (!empty($images)) {
             $existingImages = explode(',', $flipbook->images);
             $flipbook->images = implode(',', array_merge($existingImages, $images));
