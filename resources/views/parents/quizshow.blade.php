@@ -194,8 +194,8 @@
             @endif
         </div>
 <br><br><br><br>
-        <div class="container quiz-container my-5">
-            <h1 class="text-center my-4">Fun Quiz!</h1>
+        <div class="container my-5 quiz-container">
+            <h1 class="my-4 text-center">Fun Quiz!</h1>
 
             <form id="quizForm" method="POST" action="{{ route('quiz.submit', ['id' => $flipbookId, 'childId' => $childId]) }}">
                 @csrf
@@ -206,7 +206,7 @@
 
                 @foreach($quizQuestions as $key => $question)
                 <div class="quiz-question" id="question-{{ $key }}" style="display: {{ $key === 0 ? 'block' : 'none' }};">
-                    <div class="row mb-4">
+                    <div class="mb-4 row">
                         @if($question['images']) <!-- Check if image exists -->
                         <div class="col-12 col-md-6">
                             <div class="cloud-box" style="background-image: url('{{ asset($question['images']) }}');"></div>
@@ -234,7 +234,7 @@
                 @endforeach
 
                 <!-- Navigation Buttons -->
-                <div class="d-flex justify-content-between my-4">
+                <div class="my-4 d-flex justify-content-between">
                     <button type="button" id="prevButton" class="btn btn-secondary btn-md">Previous</button>
                     <button type="button" id="nextButton" class="btn btn-primary btn-md ">Next</button>
                 </div>
@@ -355,7 +355,7 @@
         document.getElementById('quizForm').appendChild(input);
     });
     event.preventDefault();
-    // SweetAlert to show the score and provide a "View Results" button
+    // SweetAlert to show the sscore and provide a "View Results" button
     Swal.fire({
     title: 'Quiz Submitted!',
     text: `You scored ${score} out of ${totalQuestions}!`,
