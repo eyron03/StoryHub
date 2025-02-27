@@ -355,7 +355,7 @@
         document.getElementById('quizForm').appendChild(input);
     });
     event.preventDefault();
-    // SweetAlert to show the sscore and provide a "View Results" button
+    // SweetAlert to shsow the sscore and provide a "View Results" button
     Swal.fire({
     title: 'Quiz Submitted!',
     text: `You scored ${score} out of ${totalQuestions}!`,
